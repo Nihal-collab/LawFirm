@@ -87,6 +87,14 @@ const Login = () => {
                 {showPassword ? <EyeOff size={16} strokeWidth={1.5} /> : <Eye size={16} strokeWidth={1.5} />}
               </button>
             </div>
+            <div className="text-right mt-2">
+              <Link
+                to="/forgot-password"
+                className="text-xs font-semibold text-[#8B6B57] hover:text-[#171717] dark:hover:text-[#F8F5F0] transition-colors"
+              >
+                Forgot Password?
+              </Link>
+            </div>
           </div>
 
           <button
@@ -97,13 +105,6 @@ const Login = () => {
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
-
-        {/* Credentials hints */}
-        <div className="border-t border-[#DDD5C8]/40 dark:border-slate-850 pt-4 text-center text-xs text-[#6D6258] dark:text-[#C9C1B5] space-y-1 font-light">
-          <p>
-            <strong className="font-medium text-[#171717] dark:text-white">Default SuperAdmin:</strong> admin@sr4ipr.com / adminpassword123
-          </p>
-        </div>
       </div>
     </div>
   );

@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema(
     lastName: { type: String, trim: true },
     phone: { type: String, trim: true },
     refreshToken: { type: String, select: false },
+    resetPasswordToken: { type: String },
+    resetPasswordExpires: { type: Date },
   },
   { timestamps: true }
 );

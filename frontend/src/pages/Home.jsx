@@ -8,6 +8,7 @@ import { blogs as blogsData } from '../data/blogs';
 import { homeContent } from '../data/pageContent';
 import { ShieldCheck, Cpu, Scale, FileText, ChevronRight, MessageSquare, PhoneCall, Award, Users, Globe2, Play, ArrowLeft, ArrowRight, X } from 'lucide-react';
 import { motion } from 'framer-motion';
+import FeaturedVideoSection from '../components/FeaturedVideoSection';
 
 // Mapping icons by string from the backend model
 const iconMap = {
@@ -17,6 +18,14 @@ const iconMap = {
   Cpu: Cpu,
   Globe: Globe2,
   Scale: Scale,
+};
+
+// Fallback video shown when no videos are returned from the API
+const FALLBACK_VIDEO = {
+  title: 'Understanding Intellectual Property Rights',
+  description: 'A brief overview of how SR4IPR Partners protects innovation through patents, trademarks, and copyrights.',
+  youtube_video_id: 'dQw4w9WgXcQ',
+  is_active: true,
 };
 
 const Home = () => {
@@ -30,7 +39,6 @@ const Home = () => {
 
   // Video State
   const [videos, setVideos] = useState([]);
-  const [activeVideo, setActiveVideo] = useState(null);
 
 
 
@@ -115,9 +123,6 @@ const Home = () => {
             >
               <Link to="/book-consultation" className="btn-gold shadow-md hover:shadow-lg">
                 Schedule Strategy Session <ChevronRight size={14} />
-              </Link>
-              <Link to="/calculator" className="px-6 py-3.5 border border-[#DDD5C8] dark:border-slate-800 text-[#171717] dark:text-[#F8F5F0] hover:border-[#8B6B57] dark:hover:border-[#8B6B57] rounded-full text-xs font-semibold uppercase tracking-wider transition-all duration-300 transform hover:-translate-y-0.5 whitespace-nowrap">
-                Interactive Calculator
               </Link>
             </motion.div>
 
@@ -642,64 +647,9 @@ const Home = () => {
       </section>
 
       {/* 9.5. Featured Video Briefing */}
-      {displayVideos.length > 0 && (() => {
-        const featuredVideo = displayVideos.find(v => v.is_active) || displayVideos[0];
-        return (
-          <section className="py-24 bg-[#F8F5F0] dark:bg-[#121110] border-t border-[#DDD5C8]/80 dark:border-slate-850">
-            <div className="max-w-7xl mx-auto px-6 sm:px-8">
-              <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
-                
-                {/* Left side text briefing */}
-                <div className="lg:col-span-5 space-y-6">
-                  <span className="text-[#8B6B57] uppercase tracking-[0.2em] font-semibold text-xs block">Featured Video Briefing</span>
-                  <h2 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] leading-tight font-serif">
-                    {featuredVideo.title}
-                  </h2>
-                  {featuredVideo.description && (
-                    <p className="text-sm sm:text-base text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal">
-                      {featuredVideo.description}
-                    </p>
-                  )}
-                  <div className="pt-4">
-                    <button
-                      onClick={() => setActiveVideo(featuredVideo)}
-                      className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#8B6B57] text-[#F8F5F0] text-xs font-semibold uppercase tracking-widest hover:bg-[#171717] dark:hover:bg-[#F8F5F0] dark:hover:text-[#171717] transition-all rounded-xs cursor-pointer shadow-sm"
-                    >
-                      <Play size={12} className="fill-current" /> Play Briefing
-                    </button>
-                  </div>
-                </div>
-
-                {/* Right side play thumbnail card */}
-                <div className="lg:col-span-7">
-                  <div 
-                    onClick={() => setActiveVideo(featuredVideo)}
-                    className="relative aspect-video w-full rounded-[20px] bg-slate-200 overflow-hidden cursor-pointer group shadow-lg hover:shadow-xl transition-all duration-500"
-                  >
-                    <img 
-                      src={`https://img.youtube.com/vi/${featuredVideo.youtube_video_id}/maxresdefault.jpg`}
-                      alt={featuredVideo.title} 
-                      onError={(e) => {
-                        e.target.src = `https://img.youtube.com/vi/${featuredVideo.youtube_video_id}/hqdefault.jpg`;
-                      }}
-                      className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-700" 
-                    />
-                    {/* Shadow overlay and Glowing Play button */}
-                    <div className="absolute inset-0 bg-black/25 group-hover:bg-black/35 transition-colors duration-500 flex items-center justify-center">
-                      <div className="w-20 h-20 rounded-full bg-[#8B6B57] text-[#F8F5F0] flex items-center justify-center shadow-2xl transform group-hover:scale-110 transition-transform duration-500 relative">
-                        {/* Glow effect */}
-                        <div className="absolute inset-0 rounded-full bg-[#8B6B57] opacity-40 animate-ping"></div>
-                        <Play size={28} className="fill-current ml-1.5 relative z-10" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          </section>
-        );
-      })()}
+      {displayVideos.length > 0 && (
+        <FeaturedVideoSection video={displayVideos.find(v => v.is_active) || displayVideos[0]} />
+      )}
 
       {/* 10. Action CTA & Consultation Banner */}
       <section className="bg-[#171717] text-white py-20 text-center border-t border-[#8B6B57] relative overflow-hidden">
@@ -713,9 +663,6 @@ const Home = () => {
             <Link to="/book-consultation" className="btn-gold !bg-[#F8F5F0] !text-[#171717] hover:!bg-[#8B6B57] hover:!text-white">
               Schedule Consultation <ChevronRight size={14} />
             </Link>
-            <Link to="/calculator" className="btn-navy !border-[#C9C1B5]/30 !text-white hover:!bg-[#F8F5F0] hover:!text-[#171717]">
-              Estimate Registration Cost
-            </Link>
           </div>
           <div className="flex justify-center items-center gap-6 text-xs text-[#C9C1B5]/60 pt-6 border-t border-slate-800 max-w-md mx-auto">
             <a href="https://wa.me/912255430980" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#8B6B57] transition-colors">
@@ -728,37 +675,6 @@ const Home = () => {
           </div>
         </div>
       </section>
-
-      {/* 11. Lightbox video player */}
-      {activeVideo && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/85 backdrop-blur-xs p-4 cursor-pointer"
-          onClick={() => setActiveVideo(null)}
-        >
-          <div 
-            className="relative w-full max-w-4xl aspect-video bg-[#171717] rounded-lg overflow-hidden border border-[#8B6B57]/30 shadow-2xl cursor-default"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setActiveVideo(null)}
-              className="absolute top-4 right-4 text-white hover:text-[#8B6B57] bg-black/60 p-2.5 rounded-full transition-colors z-10 cursor-pointer"
-              aria-label="Close Player"
-            >
-              <X size={18} />
-            </button>
-            <iframe
-              width="100%"
-              height="100%"
-              src={`https://www.youtube.com/embed/${activeVideo.youtube_video_id}?autoplay=1`}
-              title={activeVideo.title}
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-              allowFullScreen
-              className="w-full h-full"
-            ></iframe>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

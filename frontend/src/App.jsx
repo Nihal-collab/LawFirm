@@ -21,11 +21,13 @@ import BlogList from './pages/BlogList';
 import BlogDetail from './pages/BlogDetail';
 import FaqList from './pages/FaqList';
 import BookConsultation from './pages/BookConsultation';
-import CostCalculator from './pages/CostCalculator';
 import Contact from './pages/Contact';
+
 import Login from './pages/Login';
 import Gallery from './pages/Gallery';
 import ClientSuccess from './pages/ClientSuccess';
+import Forgot from './pages/Forgot';
+import Reset from './pages/Reset';
 
 // Portals
 import AdminDashboard from './admin/AdminDashboard';
@@ -66,10 +68,10 @@ function App() {
                 <Route path="/blog/:slug" element={<BlogDetail />} />
                 <Route path="/faqs" element={<FaqList />} />
                 <Route path="/book-consultation" element={<BookConsultation />} />
-                <Route path="/calculator" element={<CostCalculator />} />
-                <Route path="/cost-estimator" element={<CostCalculator />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/forgot-password" element={<Forgot />} />
+                <Route path="/reset-password/:token" element={<Reset />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/client-success" element={<ClientSuccess />} />
 

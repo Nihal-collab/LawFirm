@@ -77,8 +77,8 @@ const Navbar = () => {
             <Link to="/gallery" className={`font-medium link-underline transition-colors whitespace-nowrap ${location.pathname === '/gallery' ? 'text-[#8B6B57]' : 'text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'}`}>Gallery</Link>
             <Link to="/client-success" className={`font-medium link-underline transition-colors whitespace-nowrap ${location.pathname === '/client-success' ? 'text-[#8B6B57]' : 'text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'}`}>Outcomes</Link>
             <Link to="/faqs" className={`font-medium link-underline transition-colors whitespace-nowrap ${location.pathname === '/faqs' ? 'text-[#8B6B57]' : 'text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'}`}>FAQs</Link>
-            <Link to="/calculator" className={`font-medium link-underline transition-colors whitespace-nowrap ${location.pathname === '/calculator' ? 'text-[#8B6B57]' : 'text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'}`}>Calculator</Link>
           </div>
+
 
           {/* Action Area (right aligned) */}
           <div className="hidden xl:flex w-1/4 justify-end items-center xl:space-x-3 2xl:space-x-5 flex-shrink-0">
@@ -153,7 +153,6 @@ const Navbar = () => {
           <Link to="/gallery" onClick={() => setMenuOpen(false)} className="block py-2 text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]">Gallery</Link>
           <Link to="/client-success" onClick={() => setMenuOpen(false)} className="block py-2 text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]">Client Success</Link>
           <Link to="/faqs" onClick={() => setMenuOpen(false)} className="block py-2 text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]">FAQs</Link>
-          <Link to="/calculator" onClick={() => setMenuOpen(false)} className="block py-2 text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]">Cost Estimator</Link>
           <div className="border-t border-[#DDD5C8] dark:border-slate-800 pt-3 flex flex-col gap-2">
             {user ? (
               <>

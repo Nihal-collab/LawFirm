@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   login, refreshToken, logout, getProfile, changePassword,
-  listUsers, deleteUser, updateUserRole,
+  listUsers, deleteUser, updateUserRole, forgotPassword, resetPassword,
 } = require('../controllers/auth.controller');
 const { protect, requireAdmin, requireSuperAdmin } = require('../middlewares/auth.middleware');
 const { authLimiter } = require('../middlewares/rateLimiter.middleware');
@@ -10,6 +10,8 @@ const { authLimiter } = require('../middlewares/rateLimiter.middleware');
 // Public routes
 router.post('/login', authLimiter, login);
 router.post('/refresh', authLimiter, refreshToken);
+router.post('/forgot-password', authLimiter, forgotPassword);
+router.post('/reset-password/:token', authLimiter, resetPassword);
 
 // Protected routes (requires valid JWT)
 router.post('/logout', protect, logout);

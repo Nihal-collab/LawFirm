@@ -1,6 +1,8 @@
 const User = require('../models/User');
 const asyncHandler = require('../utils/asyncHandler');
 const { generateAccessToken, generateRefreshToken, verifyRefreshToken } = require('../utils/token');
+const crypto = require('crypto');
+const { sendEmail } = require('../services/email.service');
 
 // POST /api/auth/login
 const login = asyncHandler(async (req, res) => {
@@ -137,4 +139,75 @@ const updateUserRole = asyncHandler(async (req, res) => {
   res.status(200).json(user);
 });
 
-module.exports = { login, refreshToken, logout, getProfile, changePassword, listUsers, deleteUser, updateUserRole };
+// POST /api/auth/forgot-password
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ detail: 'Email is required.' });
+  }
+
+  const user = await User.findOne({ email: email.toLowerCase() });
+  
+  // Generic response for email privacy
+  const genericResponse = { detail: 'If that email address is registered, a password reset link has been sent.' };
+
+  if (!user) {
+    return res.status(200).json(genericResponse);
+  }
+
+  const resetToken = crypto.randomBytes(32).toString('hex');
+  user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
+  user.resetPasswordExpires = Date.now() + 3600000; // 1 hour expires
+
+  await user.save({ validateBeforeSave: false });
+
+  const resetUrl = `${req.headers.origin || 'http://localhost:5173'}/reset-password/${resetToken}`;
+  const message = `You are receiving this because you (or someone else) have requested the reset of the password for your account.\n\nPlease click on the following link, or paste this into your browser to complete the process within one hour:\n\n${resetUrl}\n\nIf you did not request this, please ignore this email.\n`;
+
+  await sendEmail({
+    to: user.email,
+    subject: 'SR4IPR Partners - Password Reset',
+    text: message
+  });
+
+  res.status(200).json(genericResponse);
+});
+
+// POST /api/auth/reset-password/:token
+const resetPassword = asyncHandler(async (req, res) => {
+  const { token } = req.params;
+  const { password, confirm_password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ detail: 'New password is required.' });
+  }
+
+  if (password.length < 6) {
+    return res.status(400).json({ detail: 'Password must be at least 6 characters.' });
+  }
+
+  if (password !== confirm_password) {
+    return res.status(400).json({ detail: 'Passwords do not match.' });
+  }
+
+  const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+  const user = await User.findOne({
+    resetPasswordToken: hashedToken,
+    resetPasswordExpires: { $gt: Date.now() }
+  });
+
+  if (!user) {
+    return res.status(400).json({ detail: 'Password reset token is invalid or has expired.' });
+  }
+
+  user.password = password;
+  user.resetPasswordToken = undefined;
+  user.resetPasswordExpires = undefined;
+  await user.save();
+
+  res.status(200).json({ detail: 'Password reset successful.' });
+});
+
+module.exports = { login, refreshToken, logout, getProfile, changePassword, listUsers, deleteUser, updateUserRole, forgotPassword, resetPassword };
