@@ -1,5 +1,5 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 
 // Providers
 import { AuthProvider } from './context/AuthContext';
@@ -22,18 +22,30 @@ import BlogDetail from './pages/BlogDetail';
 import FaqList from './pages/FaqList';
 import BookConsultation from './pages/BookConsultation';
 import CostCalculator from './pages/CostCalculator';
-import PatentChecker from './pages/PatentChecker';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import Gallery from './pages/Gallery';
+import ClientSuccess from './pages/ClientSuccess';
 
 // Portals
-import ClientDashboard from './client/ClientDashboard';
 import AdminDashboard from './admin/AdminDashboard';
 import SEOManager from './components/SEOManager';
+
+// Scroll to top helper component on route change
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
 
 function App() {
   return (
     <Router>
+      <ScrollToTop />
       <SEOManager />
       <AuthProvider>
         <ToastProvider>
@@ -56,19 +68,10 @@ function App() {
                 <Route path="/book-consultation" element={<BookConsultation />} />
                 <Route path="/calculator" element={<CostCalculator />} />
                 <Route path="/cost-estimator" element={<CostCalculator />} />
-                <Route path="/patent-checker" element={<PatentChecker />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Login />} />
-
-                {/* Client Portal Dashboard */}
-                <Route
-                  path="/client"
-                  element={
-                    <ProtectedRoute allowedRoles={['CLIENT']}>
-                      <ClientDashboard />
-                    </ProtectedRoute>
-                  }
-                />
+                <Route path="/gallery" element={<Gallery />} />
+                <Route path="/client-success" element={<ClientSuccess />} />
 
                 {/* Admin CMS Panel */}
                 <Route

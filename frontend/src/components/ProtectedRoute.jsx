@@ -22,7 +22,7 @@ const ProtectedRoute = ({ children, allowedRoles }) => {
     if (user.role === 'ADMIN' || user.role === 'SUPERADMIN') {
       return <Navigate to="/admin" replace />;
     }
-    return <Navigate to="/client" replace />;
+    return <Navigate to="/" replace />;
   }
 
   return children;

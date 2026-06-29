@@ -9,30 +9,34 @@ export default {
     extend: {
       colors: {
         navy: {
-          light: '#1E2B3E',
-          DEFAULT: '#0A192F',
-          dark: '#030E1E',
-          accent: '#172A45',
+          light: '#EFE8DD',
+          DEFAULT: '#171717',
+          dark: '#171717',
+          accent: '#1C1B1A',
         },
         gold: {
-          light: '#F3E5AB',
-          DEFAULT: '#D4AF37',
-          dark: '#AA7C11',
-          shimmer: '#FFD700',
+          light: '#EFE8DD',
+          DEFAULT: '#8B6B57',
+          dark: '#7A5E4C',
+          shimmer: '#8B6B57',
         },
         slate: {
-          light: '#F8F9FA',
-          DEFAULT: '#64748B',
-          dark: '#334155',
-        }
+          light: '#F8F5F0',
+          DEFAULT: '#6D6258',
+          dark: '#171717',
+        },
+        primary: '#F8F5F0',
+        secondary: '#EFE8DD',
+        accent: '#8B6B57',
+        borderElegant: '#DDD5C8',
       },
       fontFamily: {
-        serif: ['"Playfair Display"', 'serif'],
-        sans: ['Outfit', 'Inter', 'sans-serif'],
+        serif: ['"Cormorant Garamond"', 'serif'],
+        sans: ['Inter', 'sans-serif'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.6s ease-out forwards',
-        'slide-up': 'slideUp 0.6s ease-out forwards',
+        'fade-in': 'fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
+        'slide-up': 'slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards',
       },
       keyframes: {
         fadeIn: {
@@ -40,7 +44,7 @@ export default {
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { transform: 'translateY(20px)', opacity: '0' },
+          '0%': { transform: 'translateY(30px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
         }
       }

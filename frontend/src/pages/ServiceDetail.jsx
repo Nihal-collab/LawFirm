@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import API from '../utils/api';
+import { services as servicesData } from '../data/services';
 import { ShieldCheck, Cpu, Scale, FileText, Award, Globe2, ArrowLeft, Mail, Calendar } from 'lucide-react';
 
 const iconMap = {
@@ -71,35 +71,26 @@ const ServiceDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    API.get(`cms/services/${slug}/`)
-      .then((res) => {
-        setService(res.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        // Fallback
-        if (defaultServices[slug]) {
-          setService(defaultServices[slug]);
-        }
-        setLoading(false);
-      });
+    const foundService = servicesData.find((s) => s.slug === slug) || defaultServices[slug];
+    setService(foundService || null);
+    setLoading(false);
   }, [slug]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-dark">
-        <div className="w-12 h-12 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F5F0] dark:bg-[#121110]">
+        <div className="w-10 h-10 border-2 border-[#8B6B57] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!service) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-navy-dark p-6 text-center">
-        <h2 className="text-2xl font-serif font-bold text-navy dark:text-white mb-2">Practice Area Not Found</h2>
-        <p className="text-slate-500 mb-6">The requested service directory could not be located.</p>
-        <Link to="/services" className="px-6 py-2 bg-navy text-white rounded font-semibold flex items-center gap-2">
-          <ArrowLeft size={16} /> Back to Services
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F0] dark:bg-[#121110] p-6 text-center">
+        <h2 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] mb-2">Practice Area Not Found</h2>
+        <p className="text-[#6D6258] dark:text-[#C9C1B5] mb-6 font-light text-sm">The requested service directory could not be located.</p>
+        <Link to="/services" className="btn-gold">
+          <ArrowLeft size={14} /> Back to Services
         </Link>
       </div>
     );
@@ -108,23 +99,23 @@ const ServiceDetail = () => {
   const Icon = iconMap[service.icon] || ShieldCheck;
 
   return (
-    <div className="font-sans py-12 bg-slate-50 dark:bg-navy-dark min-h-screen dark:text-slate-100">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="page-enter py-24 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-8">
         
         {/* Back Link */}
-        <Link to="/services" className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-gold transition-colors">
-          <ArrowLeft size={16} /> Back to Practices
+        <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#6D6258] hover:text-[#8B6B57] transition-colors">
+          <ArrowLeft size={14} /> Back to Practices
         </Link>
 
         {/* Hero Area */}
-        <div className="bg-navy text-white rounded-lg p-8 border-b border-gold-dark/40 shadow-xl flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="bg-[#171717] dark:bg-[#151413] text-white rounded-[20px] p-10 border border-[#8B6B57]/30 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-3">
-            <span className="text-gold uppercase tracking-[0.25em] text-xs font-semibold">{service.category} SECTOR</span>
-            <h1 className="text-3xl sm:text-4xl font-serif font-bold">{service.name}</h1>
-            <p className="text-slate-300 text-sm max-w-2xl">{service.short_desc}</p>
+            <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">{service.category} SECTOR</span>
+            <h1 className="text-3xl sm:text-4xl font-serif font-medium text-[#F8F5F0]">{service.name}</h1>
+            <p className="text-[#C9C1B5] text-sm max-w-2xl font-light leading-relaxed">{service.short_desc}</p>
           </div>
-          <div className="p-4 bg-navy-accent border border-slate-700 text-gold rounded-full shrink-0">
-            <Icon size={36} />
+          <div className="p-4 bg-[#8B6B57]/10 border border-[#8B6B57]/20 text-[#8B6B57] rounded-full shrink-0">
+            <Icon size={32} strokeWidth={1.5} />
           </div>
         </div>
 
@@ -132,17 +123,17 @@ const ServiceDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Main info */}
-          <div className="lg:col-span-8 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-8 space-y-6 shadow-sm">
-            <h3 className="text-2xl font-serif font-bold text-navy dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">Practice Overview</h3>
-            <p className="text-slate-600 dark:text-slate-300 leading-relaxed text-sm whitespace-pre-wrap">
+          <div className="lg:col-span-8 card-premium">
+            <h3 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] border-b border-[#DDD5C8]/40 pb-3">Practice Overview</h3>
+            <p className="text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed text-sm whitespace-pre-wrap font-light">
               {service.long_desc || service.short_desc}
             </p>
 
-            <h4 className="text-xl font-serif font-bold text-navy dark:text-white pt-4">Sub-Practice Areas & Offerings</h4>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <h4 className="text-xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] pt-6">Sub-Practice Areas & Offerings</h4>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               {service.details_list.map((point, idx) => (
-                <li key={idx} className="flex items-center gap-2.5 text-sm text-slate-600 dark:text-slate-300">
-                  <span className="w-1.5 h-1.5 bg-gold rounded-full shrink-0"></span>
+                <li key={idx} className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] font-light">
+                  <span className="w-1.5 h-1.5 bg-[#8B6B57] rounded-full shrink-0"></span>
                   {point}
                 </li>
               ))}
@@ -150,29 +141,22 @@ const ServiceDetail = () => {
           </div>
 
           {/* Sidebar CTA */}
-          <div className="lg:col-span-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 space-y-6 shadow-sm h-fit">
-            <h4 className="text-xl font-serif font-bold text-navy dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3">Initiate File</h4>
-            <p className="text-slate-500 text-xs leading-relaxed">
+          <div className="lg:col-span-4 card-premium h-fit space-y-6">
+            <h4 className="text-xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] border-b border-[#DDD5C8]/40 pb-3">Initiate File</h4>
+            <p className="text-[#6D6258] dark:text-[#C9C1B5] text-xs leading-relaxed font-light">
               Submit technological disclosures or scheduling requests. All briefs are protected under client-attorney confidentiality.
             </p>
-            <div className="space-y-3 pt-2">
+            <div className="pt-2">
               <Link
                 to={`/book-consultation?service=${encodeURIComponent(service.name)}`}
-                className="w-full py-3 bg-gradient-to-r from-gold-dark to-gold text-navy-dark font-bold rounded shadow text-center block text-sm transition-all transform hover:-translate-y-0.5"
+                className="btn-gold w-full py-4 uppercase font-sans text-xs tracking-widest font-semibold cursor-pointer"
               >
-                <Calendar className="inline-block mr-1.5" size={16} /> Book Strategy Session
-              </Link>
-              <Link
-                to="/patent-checker"
-                className="w-full py-3 border border-slate-300 dark:border-slate-700 hover:border-gold dark:hover:border-gold text-slate-700 dark:text-slate-300 font-semibold rounded text-center block text-sm transition-all"
-              >
-                Evaluate Patent Eligibility
+                <Calendar className="inline-block" size={14} strokeWidth={1.5} /> Book Strategy Session
               </Link>
             </div>
           </div>
 
         </div>
-
       </div>
     </div>
   );

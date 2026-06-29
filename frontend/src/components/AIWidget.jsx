@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import API from '../utils/api';
 import { MessageSquare, X, Send, Bot, ShieldAlert, Cpu } from 'lucide-react';
 
@@ -14,6 +15,7 @@ const AIWidget = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const location = useLocation();
   const chatEndRef = useRef(null);
 
   useEffect(() => {
@@ -61,6 +63,10 @@ const AIWidget = () => {
     "Copyright protection term?",
     "Book a Zoom strategy session"
   ];
+
+  if (location.pathname.startsWith('/admin')) {
+    return null;
+  }
 
   return (
     <div className="fixed bottom-6 right-6 z-50 font-sans">

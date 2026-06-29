@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import API from '../utils/api';
+import React from 'react';
+import { team } from '../data/team';
 import { Mail, Award, Clock } from 'lucide-react';
 
 const LinkedinIcon = ({ size = 16 }) => (
@@ -17,116 +17,74 @@ const TwitterIcon = ({ size = 16 }) => (
 );
 
 const Team = () => {
-  const [members, setMembers] = useState([]);
-
-  useEffect(() => {
-    API.get('cms/team/')
-      .then((res) => setMembers(res.data))
-      .catch(() => {});
-  }, []);
-
-  const displayMembers = members.length > 0 ? members : [
-    {
-      name: "Siddharth Rao, Esq.",
-      role: "Senior Managing Partner",
-      image_url: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300",
-      bio: "Siddharth has over 20 years of experience in patent prosecution and technological joint-venture licensing. He regularly advises Fortune 100 technology corporations on global IP strategy.",
-      qualifications: "L.L.M (IP Law) - Georgetown University, B.Tech (Computer Science)",
-      experience: "22 Years",
-      linkedin_url: "https://linkedin.com",
-      twitter_url: "https://twitter.com",
-      email: "s.rao@sr4ipr.com"
-    },
-    {
-      name: "Dr. Aradhana Sen",
-      role: "Head of Biotechnology & Patent Agent",
-      image_url: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&q=80&w=300",
-      bio: "Dr. Sen is a registered patent agent managing pharmaceutical, biochemical, and agricultural gene-patenting applications. She is highly skilled in drafting complex cell cultures.",
-      qualifications: "Ph.D in Molecular Biology - Stanford University, Registered Patent Agent",
-      experience: "14 Years",
-      linkedin_url: "https://linkedin.com",
-      twitter_url: "https://twitter.com",
-      email: "a.sen@sr4ipr.com"
-    },
-    {
-      name: "Marcus Vance",
-      role: "Lead Litigation Counsel",
-      image_url: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&q=80&w=300",
-      bio: "Marcus oversees our litigation and enforcement group, focusing on patent infringement, trademark oppositions, DMCA takedowns, and licensing disputes.",
-      qualifications: "J.D. - Harvard Law School, BS in Mechanical Engineering",
-      experience: "16 Years",
-      linkedin_url: "https://linkedin.com",
-      twitter_url: "https://twitter.com",
-      email: "m.vance@sr4ipr.com"
-    }
-  ];
+  const displayMembers = team;
 
   return (
-    <div className="font-sans py-12 bg-slate-50 dark:bg-navy-dark min-h-screen dark:text-slate-100">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="page-enter py-16 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-16">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <span className="text-gold uppercase tracking-[0.25em] text-xs font-semibold">Our Specialists</span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-navy dark:text-white">IP Lawyers & Technical Agents</h1>
-          <p className="text-slate-500 text-sm max-w-2xl mx-auto">Combining PhD-level scientific depth with elite legal training to secure client innovations.</p>
+          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Our Specialists</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">IP Lawyers & Technical Agents</h1>
+          <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-2xl mx-auto font-normal leading-relaxed">Combining PhD-level scientific depth with elite legal training to secure client innovations.</p>
         </div>
 
         {/* Members Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pt-4">
           {displayMembers.map((m) => (
-            <div key={m.name} className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden shadow-sm flex flex-col justify-between">
+            <div key={m.name} className="card-premium p-0 flex flex-col justify-between overflow-hidden group">
               
               {/* Photo Area */}
-              <div className="space-y-4">
-                <div className="aspect-[4/3] w-full bg-slate-200">
+              <div>
+                <div className="aspect-[4/3] w-full bg-slate-200 overflow-hidden relative">
                   <img
                     src={m.image_url || "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=300"}
                     alt={m.name}
-                    className="w-full h-full object-cover"
+                    className="w-full h-full object-cover transition-transform duration-750 group-hover:scale-103"
                   />
                 </div>
                 
                 {/* Info Text */}
-                <div className="p-6 space-y-3">
+                <div className="p-8 space-y-4">
                   <div className="space-y-1">
-                    <h3 className="text-xl font-serif font-bold text-navy dark:text-white">{m.name}</h3>
-                    <p className="text-gold font-semibold text-xs uppercase tracking-wider">{m.role}</p>
+                    <h3 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] transition-colors duration-300 group-hover:text-[#8B6B57]">{m.name}</h3>
+                    <p className="text-[#8B6B57] font-semibold text-xs uppercase tracking-wider">{m.role}</p>
                   </div>
-                  <p className="text-slate-500 dark:text-slate-400 text-xs leading-relaxed line-clamp-3">
+                  <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal">
                     {m.bio}
                   </p>
                   
                   {/* Stats list */}
-                  <div className="border-t border-slate-100 dark:border-slate-800/80 pt-3 space-y-1.5 text-xs text-slate-500">
-                    <div className="flex items-center gap-1.5">
-                      <Award size={14} className="text-gold shrink-0" />
-                      <span>{m.qualifications}</span>
+                  <div className="border-t border-[#DDD5C8]/40 dark:border-slate-850 pt-4 space-y-2.5 text-xs text-[#6D6258] dark:text-[#C9C1B5]">
+                    <div className="flex items-start gap-2">
+                      <Award size={14} className="text-[#8B6B57] shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <span className="font-normal">{m.qualifications}</span>
                     </div>
-                    <div className="flex items-center gap-1.5">
-                      <Clock size={14} className="text-gold shrink-0" />
-                      <span>{m.experience} experience</span>
+                    <div className="flex items-center gap-2">
+                      <Clock size={14} className="text-[#8B6B57] shrink-0" strokeWidth={1.5} />
+                      <span className="font-normal">{m.experience} experience</span>
                     </div>
                   </div>
                 </div>
               </div>
 
               {/* Contacts Row */}
-              <div className="px-6 py-4 bg-slate-50 dark:bg-navy border-t border-slate-100 dark:border-slate-850 flex items-center justify-between text-slate-500">
+              <div className="px-8 py-5 border-t border-[#DDD5C8]/40 dark:border-slate-850 flex items-center justify-between text-[#6D6258] dark:text-[#C9C1B5] mt-auto">
                 {m.email && (
-                  <a href={`mailto:${m.email}`} className="text-xs hover:text-gold flex items-center gap-1">
-                    <Mail size={14} /> {m.email}
+                  <a href={`mailto:${m.email}`} className="text-xs hover:text-[#8B6B57] transition-colors flex items-center gap-1.5 font-light">
+                    <Mail size={13} strokeWidth={1.5} /> {m.email}
                   </a>
                 )}
-                <div className="flex gap-2.5">
+                <div className="flex gap-3">
                   {m.linkedin_url && (
-                    <a href={m.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
-                      <LinkedinIcon size={16} />
+                    <a href={m.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#8B6B57] transition-colors text-[#6D6258]/80">
+                      <LinkedinIcon size={14} />
                     </a>
                   )}
                   {m.twitter_url && (
-                    <a href={m.twitter_url} target="_blank" rel="noopener noreferrer" className="hover:text-gold">
-                      <TwitterIcon size={16} />
+                    <a href={m.twitter_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#8B6B57] transition-colors text-[#6D6258]/80">
+                      <TwitterIcon size={14} />
                     </a>
                   )}
                 </div>
@@ -135,7 +93,6 @@ const Team = () => {
             </div>
           ))}
         </div>
-
       </div>
     </div>
   );

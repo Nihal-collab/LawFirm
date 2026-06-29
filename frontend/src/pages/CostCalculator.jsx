@@ -93,52 +93,50 @@ const CostCalculator = () => {
     }).format(val);
   };
 
-  const costs = getActiveCosts();
-
-  return (
-    <div className="font-sans py-12 bg-slate-50 dark:bg-navy-dark min-h-screen dark:text-slate-100">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+  const costs = getActiveCosts();  return (
+    <div className="page-enter py-16 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-12">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <span className="text-gold uppercase tracking-[0.25em] text-xs font-semibold">Cost Estimator</span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-navy dark:text-white">IPR Registry Calculator</h1>
-          <p className="text-slate-500 text-sm max-w-2xl mx-auto">Estimate governmental filing fees and legal professional drafting services charges interactively.</p>
+          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Cost Estimator</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">IPR Registry Calculator</h1>
+          <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-2xl mx-auto font-normal leading-relaxed">Estimate governmental filing fees and legal professional drafting services charges interactively.</p>
         </div>
 
         {/* Tab Selection */}
-        <div className="flex justify-center border-b border-slate-200 dark:border-slate-800">
+        <div className="flex justify-center border-b border-[#DDD5C8]/40 dark:border-slate-850">
           <button
             onClick={() => setActiveTab('patent')}
-            className={`pb-4 px-6 font-serif font-bold text-lg flex items-center gap-1.5 border-b-2 transition-all ${
-              activeTab === 'patent' ? 'border-gold text-gold' : 'border-transparent text-slate-400 hover:text-slate-200'
+            className={`pb-4 px-6 font-serif font-medium text-lg flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'patent' ? 'border-[#8B6B57] text-[#8B6B57]' : 'border-transparent text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'
             }`}
           >
-            <Shield size={18} /> Patents
+            <Shield size={18} strokeWidth={1.5} /> Patents
           </button>
           <button
             onClick={() => setActiveTab('trademark')}
-            className={`pb-4 px-6 font-serif font-bold text-lg flex items-center gap-1.5 border-b-2 transition-all ${
-              activeTab === 'trademark' ? 'border-gold text-gold' : 'border-transparent text-slate-400 hover:text-slate-200'
+            className={`pb-4 px-6 font-serif font-medium text-lg flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'trademark' ? 'border-[#8B6B57] text-[#8B6B57]' : 'border-transparent text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'
             }`}
           >
-            <Award size={18} /> Trademarks
+            <Award size={18} strokeWidth={1.5} /> Trademarks
           </button>
           <button
             onClick={() => setActiveTab('copyright')}
-            className={`pb-4 px-6 font-serif font-bold text-lg flex items-center gap-1.5 border-b-2 transition-all ${
-              activeTab === 'copyright' ? 'border-gold text-gold' : 'border-transparent text-slate-400 hover:text-slate-200'
+            className={`pb-4 px-6 font-serif font-medium text-lg flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'copyright' ? 'border-[#8B6B57] text-[#8B6B57]' : 'border-transparent text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'
             }`}
           >
-            <FileText size={18} /> Copyrights
+            <FileText size={18} strokeWidth={1.5} /> Copyrights
           </button>
           <button
             onClick={() => setActiveTab('design')}
-            className={`pb-4 px-6 font-serif font-bold text-lg flex items-center gap-1.5 border-b-2 transition-all ${
-              activeTab === 'design' ? 'border-gold text-gold' : 'border-transparent text-slate-400 hover:text-slate-200'
+            className={`pb-4 px-6 font-serif font-medium text-lg flex items-center gap-1.5 border-b-2 transition-all cursor-pointer ${
+              activeTab === 'design' ? 'border-[#8B6B57] text-[#8B6B57]' : 'border-transparent text-[#6D6258] dark:text-[#C9C1B5] hover:text-[#8B6B57]'
             }`}
           >
-            <Cpu size={18} /> Designs
+            <Cpu size={18} strokeWidth={1.5} /> Designs
           </button>
         </div>
 
@@ -146,96 +144,96 @@ const CostCalculator = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           
           {/* Controls col */}
-          <div className="lg:col-span-7 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 sm:p-8 space-y-6 shadow-sm">
+          <div className="lg:col-span-7 card-premium space-y-6">
             
             {/* Entity Selector */}
-            <div className="space-y-2">
-              <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
-                Applicant Entity Type (Governs Official Government fees)
+            <div className="space-y-3">
+              <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wider block">
+                Applicant Entity Type (Official Subsidies Apply)
               </label>
               <div className="grid grid-cols-2 gap-3">
                 <button
                   type="button"
                   onClick={() => setEntityType('start-up')}
-                  className={`py-2 px-4 rounded text-sm font-semibold border transition-all ${
+                  className={`py-3 px-4 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${
                     entityType === 'start-up'
-                      ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent shadow'
-                      : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-350 hover:border-gold'
+                      ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
+                      : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'
                   }`}
                 >
-                  Startup / Individual / MSME
+                  Startup / MSME / Individual
                 </button>
                 <button
                   type="button"
                   onClick={() => setEntityType('corporate')}
-                  className={`py-2 px-4 rounded text-sm font-semibold border transition-all ${
+                  className={`py-3 px-4 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${
                     entityType === 'corporate'
-                      ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent shadow'
-                      : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-350 hover:border-gold'
+                      ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
+                      : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'
                   }`}
                 >
-                  Large Corporate Entity
+                  Large Corporate
                 </button>
               </div>
             </div>
 
             {/* Content per Tab */}
             {activeTab === 'patent' && (
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Patent Filing Specification</label>
-                  <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-6 pt-2">
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wider block">Patent Specification Draft</label>
+                  <div className="grid grid-cols-2 gap-3">
                     <button
                       onClick={() => setPatentType('provisional')}
-                      className={`py-2 rounded text-xs font-semibold border ${patentType === 'provisional' ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent' : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-500'}`}
+                      className={`py-3 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${patentType === 'provisional' ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent' : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'}`}
                     >
-                      Provisional Draft (Locks priority date)
+                      Provisional Specification
                     </button>
                     <button
                       onClick={() => setPatentType('complete')}
-                      className={`py-2 rounded text-xs font-semibold border ${patentType === 'complete' ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent' : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-500'}`}
+                      className={`py-3 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${patentType === 'complete' ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent' : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'}`}
                     >
-                      Complete Draft (Formal specification)
+                      Complete Specification
                     </button>
                   </div>
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={patentSearch}
                       onChange={(e) => setPatentSearch(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>Include Prior Art clearance search & Landscaping</span>
+                    <span className="font-normal">Prior art clearance search & landscaping</span>
                   </label>
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={patentDrafting}
                       onChange={(e) => setPatentDrafting(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>Professional attorney drafting & compilation services</span>
+                    <span className="font-normal">Professional attorney drafting & claims compilation</span>
                   </label>
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={internationalPCT}
                       onChange={(e) => setInternationalPCT(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>File WIPO / PCT International entry dossier</span>
+                    <span className="font-normal">File WIPO / PCT International entry dossier</span>
                   </label>
                 </div>
               </div>
             )}
 
             {activeTab === 'trademark' && (
-              <div className="space-y-4 pt-2">
-                <div className="space-y-1">
-                  <div className="flex justify-between items-center text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase">
+              <div className="space-y-6 pt-2">
+                <div className="space-y-3">
+                  <div className="flex justify-between items-center text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wider">
                     <span>Number of brand classes: {trademarkClasses}</span>
                     <span>Max: 10</span>
                   </div>
@@ -245,84 +243,84 @@ const CostCalculator = () => {
                     max="10"
                     value={trademarkClasses}
                     onChange={(e) => setTrademarkClasses(parseInt(e.target.value))}
-                    className="w-full h-1.5 bg-slate-200 dark:bg-slate-700 rounded-lg appearance-none cursor-pointer accent-gold"
+                    className="w-full h-1 bg-[#DDD5C8] dark:bg-slate-800 rounded-lg appearance-none cursor-pointer accent-[#8B6B57]"
                   />
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={trademarkSearch}
                       onChange={(e) => setTrademarkSearch(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>Include Trademark registry compatibility clearance checks</span>
+                    <span className="font-normal">Trademark compatibility clearance checks</span>
                   </label>
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={trademarkExpedited}
                       onChange={(e) => setTrademarkExpedited(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>Expedited examination monitoring filing request</span>
+                    <span className="font-normal">Expedited examination monitoring filing request</span>
                   </label>
                 </div>
               </div>
             )}
 
             {activeTab === 'copyright' && (
-              <div className="space-y-4 pt-2">
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Work Classification</label>
-                  <div className="grid grid-cols-3 gap-2">
+              <div className="space-y-6 pt-2">
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wider block">Work Classification</label>
+                  <div className="grid grid-cols-3 gap-3">
                     <button
                       onClick={() => setCopyrightType('software')}
-                      className={`py-2 rounded text-xs font-semibold border ${copyrightType === 'software' ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent' : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-500'}`}
+                      className={`py-3 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${copyrightType === 'software' ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent' : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'}`}
                     >
-                      Software / Code
+                      Software Code
                     </button>
                     <button
                       onClick={() => setCopyrightType('artistic')}
-                      className={`py-2 rounded text-xs font-semibold border ${copyrightType === 'artistic' ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent' : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-500'}`}
+                      className={`py-3 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${copyrightType === 'artistic' ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent' : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'}`}
                     >
-                      Artistic / Logo
+                      Artistic Logo
                     </button>
                     <button
                       onClick={() => setCopyrightType('literary')}
-                      className={`py-2 rounded text-xs font-semibold border ${copyrightType === 'literary' ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent' : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 text-slate-500'}`}
+                      className={`py-3 rounded text-xs font-semibold uppercase tracking-widest border transition-all cursor-pointer ${copyrightType === 'literary' ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent' : 'bg-[#F8F5F0] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-[#6D6258] dark:text-[#C9C1B5] hover:border-[#8B6B57]'}`}
                     >
-                      Literary / Book
+                      Literary Work
                     </button>
                   </div>
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={copyrightContracts}
                       onChange={(e) => setCopyrightContracts(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>Draft licensing / assignment agreements documentation</span>
+                    <span className="font-normal">Draft licensing / assignment agreements documentation</span>
                   </label>
                 </div>
               </div>
             )}
 
             {activeTab === 'design' && (
-              <div className="space-y-4 pt-2">
+              <div className="space-y-6 pt-2">
                 <div className="space-y-3">
-                  <label className="flex items-center gap-2.5 text-sm dark:text-slate-350 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] cursor-pointer">
                     <input
                       type="checkbox"
                       checked={designDrawings}
                       onChange={(e) => setDesignDrawings(e.target.checked)}
-                      className="rounded border-slate-300 dark:border-slate-700 text-gold focus:ring-0 w-4 h-4"
+                      className="rounded border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] focus:ring-0 w-4 h-4 cursor-pointer"
                     />
-                    <span>Include 3D wireframe / visual layout illustration generation</span>
+                    <span className="font-normal">3D wireframe / visual layout illustration generation</span>
                   </label>
                 </div>
               </div>
@@ -331,41 +329,39 @@ const CostCalculator = () => {
           </div>
 
           {/* Results box col */}
-          <div className="lg:col-span-5 bg-navy text-white rounded-lg p-6 sm:p-8 space-y-6 shadow-xl border border-gold-dark/40 h-fit">
-            <h3 className="text-2xl font-serif font-bold text-center border-b border-slate-700 pb-4">Estimate Breakdown</h3>
+          <div className="lg:col-span-5 bg-[#171717] dark:bg-[#151413] text-[#F8F5F0] rounded-[20px] p-8 space-y-6 shadow-xl border border-[#8B6B57]/30 h-fit">
+            <h3 className="text-2xl font-serif font-medium text-center border-b border-[#DDD5C8]/10 pb-4 text-[#F8F5F0]">Estimate Breakdown</h3>
             
-            <div className="space-y-4 text-sm">
-              <div className="flex justify-between items-center text-slate-300">
+            <div className="space-y-4 text-sm font-light">
+              <div className="flex justify-between items-center text-[#C9C1B5]">
                 <span>Government Registry Fee</span>
-                <span className="font-semibold text-white">{formatCurrency(costs.govt)}</span>
+                <span className="font-medium text-white">{formatCurrency(costs.govt)}</span>
               </div>
-              <div className="flex justify-between items-center text-slate-300">
+              <div className="flex justify-between items-center text-[#C9C1B5]">
                 <span>Professional drafting & search</span>
-                <span className="font-semibold text-white">{formatCurrency(costs.legal)}</span>
+                <span className="font-medium text-white">{formatCurrency(costs.legal)}</span>
               </div>
-              <div className="border-t border-slate-700 pt-4 flex justify-between items-center text-lg font-serif">
-                <span className="text-gold font-bold">Estimated Total</span>
-                <span className="font-bold text-gold text-2xl">{formatCurrency(costs.total)}</span>
+              <div className="border-t border-[#DDD5C8]/10 pt-4 flex justify-between items-center text-lg font-serif">
+                <span className="text-[#8B6B57] font-medium">Estimated Total</span>
+                <span className="font-medium text-[#8B6B57] text-2xl">{formatCurrency(costs.total)}</span>
               </div>
             </div>
 
-            <div className="bg-navy-accent/50 p-4 border border-slate-800 rounded text-center text-xs text-slate-400 space-y-2">
-              <p>Government fees fluctuate according to applicant classification. Startup entities receive 80% subsidies.</p>
-              <p className="font-semibold text-gold">NDA Confidentiality protects all pricing reviews.</p>
+            <div className="bg-[#8B6B57]/5 p-5 border border-[#8B6B57]/10 rounded-[12px] text-center text-xs text-[#C9C1B5] space-y-2 font-light leading-relaxed">
+              <p>Government official fees fluctuate according to applicant entity classification. Startup entities receive 80% subsidies.</p>
+              <p className="font-semibold text-[#8B6B57] uppercase tracking-wider text-[10px]">NDA Confidentiality protected</p>
             </div>
 
             <div className="pt-2">
               <Link
                 to={`/book-consultation?service=${encodeURIComponent(activeTab === 'patent' ? 'Patent Prosecution' : activeTab === 'trademark' ? 'Trademark Portfolio Management' : activeTab === 'copyright' ? 'Copyright Registration' : 'Industrial Design Registration')}`}
-                className="w-full py-3 bg-gradient-to-r from-gold-dark to-gold text-navy-dark font-bold rounded shadow text-center block text-sm hover:opacity-90 transition-all transform hover:-translate-y-0.5"
+                className="btn-gold w-full py-4 uppercase font-sans text-xs tracking-widest font-semibold cursor-pointer text-center block"
               >
                 Submit Estimate & Book Briefing
               </Link>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   );

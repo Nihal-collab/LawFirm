@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import API from '../utils/api';
+import { blogs as blogData } from '../data/blogs';
 import { ArrowLeft, Calendar, User, Tag, Clock } from 'lucide-react';
 
 const defaultBlogs = {
@@ -36,34 +36,26 @@ const BlogDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    API.get(`cms/blogs/${slug}/`)
-      .then((res) => {
-        setBlog(res.data);
-        setLoading(false);
-      })
-      .catch(() => {
-        if (defaultBlogs[slug]) {
-          setBlog(defaultBlogs[slug]);
-        }
-        setLoading(false);
-      });
+    const foundBlog = blogData.find((b) => b.slug === slug) || defaultBlogs[slug];
+    setBlog(foundBlog || null);
+    setLoading(false);
   }, [slug]);
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-navy-dark">
-        <div className="w-12 h-12 border-4 border-gold border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#F8F5F0] dark:bg-[#121110]">
+        <div className="w-10 h-10 border-2 border-[#8B6B57] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!blog) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-navy-dark p-6 text-center">
-        <h2 className="text-2xl font-serif font-bold text-navy dark:text-white mb-2">Briefing Not Found</h2>
-        <p className="text-slate-500 mb-6">The requested publication could not be loaded.</p>
-        <Link to="/blog" className="px-6 py-2 bg-navy text-white rounded font-semibold flex items-center gap-2">
-          <ArrowLeft size={16} /> Back to Knowledge Center
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F0] dark:bg-[#121110] p-6 text-center">
+        <h2 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] mb-2">Briefing Not Found</h2>
+        <p className="text-[#6D6258] dark:text-[#C9C1B5] mb-6 font-light text-sm">The requested publication could not be loaded.</p>
+        <Link to="/blog" className="btn-gold">
+          <ArrowLeft size={14} /> Back to Blogs
         </Link>
       </div>
     );
@@ -79,58 +71,58 @@ const BlogDetail = () => {
   };
 
   return (
-    <div className="font-sans py-12 bg-slate-50 dark:bg-navy-dark min-h-screen dark:text-slate-100">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
+    <div className="page-enter py-24 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+      <div className="max-w-4xl mx-auto px-6 sm:px-8 space-y-8">
         
         {/* Back navigation */}
-        <Link to="/blog" className="inline-flex items-center gap-1.5 text-sm text-slate-500 hover:text-gold transition-colors">
-          <ArrowLeft size={16} /> Back to Knowledge Center
+        <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#6D6258] hover:text-[#8B6B57] transition-colors">
+          <ArrowLeft size={14} /> Back to Blogs
         </Link>
-
+ 
         {/* Feature Image */}
-        <div className="aspect-[21/9] w-full rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800 shadow-md">
+        <div className="aspect-[21/9] w-full rounded-[20px] overflow-hidden border border-[#DDD5C8] dark:border-slate-800 shadow-xs">
           <img
             src={blog.image_url || "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800"}
             alt={blog.title}
             className="w-full h-full object-cover"
           />
         </div>
-
+ 
         {/* Article Metadata */}
-        <div className="space-y-4">
-          <div className="flex flex-wrap items-center gap-4 text-xs text-slate-500 border-b border-slate-200 dark:border-slate-800 pb-4">
-            <span className="bg-gold/10 text-gold-dark dark:text-gold px-3 py-1 rounded-md font-bold uppercase tracking-wider">
+        <div className="space-y-6">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[#6D6258] dark:text-[#C9C1B5] border-b border-[#DDD5C8]/40 dark:border-slate-850 pb-6">
+            <span className="bg-white dark:bg-[#1C1A19] border border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] px-3.5 py-1 rounded-full uppercase tracking-wider font-semibold text-[9px]">
               {blog.category}
             </span>
-            <span className="flex items-center gap-1.5">
-              <Calendar size={14} /> {formatDate(blog.published_at)}
+            <span className="flex items-center gap-1.5 font-light">
+              <Calendar size={13} strokeWidth={1.5} /> {formatDate(blog.published_at)}
             </span>
-            <span className="flex items-center gap-1.5">
-              <User size={14} /> SR4IPR Partners Editorial
+            <span className="flex items-center gap-1.5 font-light">
+              <User size={13} strokeWidth={1.5} /> SR4IPR Partners Editorial
             </span>
           </div>
-
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-bold text-navy dark:text-white leading-tight">
+ 
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] leading-tight">
             {blog.title}
           </h1>
-
-          <p className="text-slate-500 dark:text-slate-400 font-sans italic text-sm border-l-4 border-gold pl-4 py-1 leading-relaxed">
+ 
+          <p className="text-[#6D6258] dark:text-[#C9C1B5] font-sans italic text-sm border-l-2 border-[#8B6B57] pl-4 py-1 leading-relaxed font-light">
             {blog.summary}
           </p>
         </div>
-
+ 
         {/* Main Post Body */}
-        <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-8 shadow-sm">
-          <div className="prose dark:prose-invert max-w-none text-slate-700 dark:text-slate-350 text-sm leading-relaxed whitespace-pre-wrap space-y-4 font-sans">
+        <div className="card-premium">
+          <div className="prose dark:prose-invert max-w-none text-[#6D6258] dark:text-[#C9C1B5] text-sm leading-relaxed whitespace-pre-wrap space-y-4 font-sans font-light">
             {blog.content}
           </div>
         </div>
-
+ 
         {/* Disclaimer footer inside reader */}
-        <div className="text-xs text-slate-400 dark:text-slate-500 italic bg-slate-100 dark:bg-navy p-4 rounded border border-slate-200 dark:border-slate-850">
+        <div className="text-xs text-[#6D6258]/80 dark:text-[#C9C1B5]/85 italic bg-white/80 dark:bg-[#1C1A19]/80 p-5 rounded-[12px] border border-[#DDD5C8]/70 dark:border-slate-800/80 leading-relaxed font-light">
           Disclaimer: This strategic briefing is compiled for educational references only. Individual patent descriptions or mechanical drawings require specific prior art assessment. Standard consultation is recommended prior to filing applications.
         </div>
-
+ 
       </div>
     </div>
   );

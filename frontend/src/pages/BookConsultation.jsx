@@ -24,6 +24,7 @@ const BookConsultation = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [company, setCompany] = useState('');
   const [date, setDate] = useState('');
   const [time, setTime] = useState('10:30 AM');
   const [service, setService] = useState('Patent Prosecution');
@@ -89,6 +90,7 @@ const BookConsultation = () => {
         name,
         email,
         phone,
+        company,
         date,
         time,
         service,
@@ -108,28 +110,28 @@ const BookConsultation = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-[85vh] flex items-center justify-center bg-slate-50 dark:bg-navy-dark px-4 font-sans">
-        <div className="max-w-md w-full bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-8 shadow-2xl text-center space-y-6">
-          <div className="inline-flex p-3 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-500 rounded-full">
-            <CheckCircle size={48} />
+      <div className="min-h-[85vh] flex items-center justify-center bg-[#F8F5F0] dark:bg-[#121110] px-6 font-sans">
+        <div className="max-w-md w-full card-premium text-center space-y-6">
+          <div className="inline-flex p-3.5 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 rounded-full border border-emerald-100 dark:border-emerald-900/50">
+            <CheckCircle size={40} strokeWidth={1.5} />
           </div>
-          <h2 className="text-3xl font-serif font-bold text-navy dark:text-white">Request Received</h2>
-          <p className="text-sm text-slate-500 leading-relaxed">
+          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Request Received</h2>
+          <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-light">
             Thank you, <strong>{name}</strong>. Your appointment request for <strong>{service}</strong> has been logged in our queue.
           </p>
           
-          <div className="bg-slate-50 dark:bg-navy p-4 rounded text-left text-xs space-y-2 border border-slate-100 dark:border-slate-850 dark:text-slate-350">
-            <div><strong>Requested Date:</strong> {date}</div>
-            <div><strong>Requested Time Slot:</strong> {time}</div>
-            <div><strong>Target Practice Area:</strong> {service}</div>
-            <div className="text-[10px] text-slate-400 pt-1 border-t border-slate-200 dark:border-slate-800/80">
-              An confirmation mail has been printed to the console/mailbox. An attorney will verify and send the meeting link (Zoom/Google Meet).
+          <div className="bg-[#F8F5F0] dark:bg-[#1C1A19] p-5 rounded-[12px] text-left text-xs space-y-3 border border-[#DDD5C8] dark:border-slate-800/80 text-[#6D6258] dark:text-[#C9C1B5]">
+            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Date:</strong> {date}</div>
+            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Time Slot:</strong> {time}</div>
+            <div><strong className="font-medium text-[#171717] dark:text-white">Target Practice Area:</strong> {service}</div>
+            <div className="text-[10px] text-[#6D6258]/60 pt-2 border-t border-[#DDD5C8]/50 dark:border-slate-800">
+              A confirmation email has been logged. An attorney will verify and send the coordinates (Zoom or Google Meet).
             </div>
           </div>
           
           <button
             onClick={() => setSubmitted(false)}
-            className="w-full py-2.5 border border-slate-300 dark:border-slate-700 dark:text-slate-350 rounded text-sm hover:border-gold dark:hover:border-gold transition-colors font-semibold"
+            className="w-full py-3.5 border border-[#DDD5C8] hover:border-[#8B6B57] dark:border-slate-800 text-[#171717] dark:text-[#F8F5F0] hover:text-[#8B6B57] dark:hover:text-[#8B6B57] rounded-full text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
           >
             Schedule Another Strategy Session
           </button>
@@ -139,77 +141,88 @@ const BookConsultation = () => {
   }
 
   return (
-    <div className="font-sans py-12 bg-slate-50 dark:bg-navy-dark min-h-screen dark:text-slate-100">
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 space-y-10">
+    <div className="page-enter py-16 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+      <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-12">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <span className="text-gold uppercase tracking-[0.25em] text-xs font-semibold">Schedule Strategy Session</span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-navy dark:text-white">Confidential IPR Evaluation</h1>
-          <p className="text-slate-500 text-sm max-w-xl mx-auto">Book a 30-minute introductory meeting with our managing attorneys. All details submitted are strictly protected under confidentiality protocols.</p>
+          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Schedule Strategy Session</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Confidential IPR Evaluation</h1>
+          <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-xl mx-auto">Book a 30-minute introductory meeting with our managing attorneys. All details submitted are strictly protected under confidentiality protocols.</p>
         </div>
 
         {/* Layout Column */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           
           {/* Booking Form */}
-          <div className="lg:col-span-8 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 sm:p-8 shadow-sm">
-            <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="lg:col-span-8 card-premium">
+            <form onSubmit={handleSubmit} className="space-y-6">
               
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Full Name</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Full Name</label>
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter name"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Email Address</label>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Email Address</label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Phone Number</label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Phone Number</label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 (555) 012-3456"
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
                   />
                 </div>
-                <div className="space-y-1">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">IPR Practice Area</label>
-                  <select
-                    value={service}
-                    onChange={(e) => setService(e.target.value)}
-                    className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
-                  >
-                    {services.map((s) => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
-                  </select>
+                <div className="space-y-2">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Company Name (Optional)</label>
+                  <input
+                    type="text"
+                    value={company}
+                    onChange={(e) => setCompany(e.target.value)}
+                    placeholder="Enter company name"
+                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                  />
                 </div>
               </div>
 
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide block">Preferred Date</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">IPR Practice Area</label>
+                <select
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
+                  className="w-full px-4 py-3 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                >
+                  {services.map((s) => (
+                    <option key={s} value={s}>{s}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="space-y-6">
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Preferred Date</label>
+                  <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                     {availableDates.map((d) => {
                       const yyyy = d.getFullYear();
                       const mm = String(d.getMonth() + 1).padStart(2, '0');
@@ -226,24 +239,24 @@ const BookConsultation = () => {
                           key={dateVal}
                           type="button"
                           onClick={() => setDate(dateVal)}
-                          className={`flex flex-col items-center justify-center p-2.5 border rounded-lg transition-all font-sans ${
+                          className={`flex flex-col items-center justify-center p-3.5 border rounded-[12px] transition-all font-sans cursor-pointer ${
                             isSelected
-                              ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent shadow-md'
-                              : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 hover:border-gold text-slate-700 dark:text-slate-350'
+                              ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
+                              : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
                           }`}
                         >
                           <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
-                          <span className="text-base font-bold my-0.5">{dayNum}</span>
-                          <span className="text-[9px] uppercase">{monthName}</span>
+                          <span className="text-base font-bold my-1">{dayNum}</span>
+                          <span className="text-[9px] uppercase tracking-wide">{monthName}</span>
                         </button>
                       );
                     })}
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide block">Preferred Time Slot</label>
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                <div className="space-y-3">
+                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Preferred Time Slot</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {timeSlots.map((slot) => {
                       const isSelected = time === slot;
                       const isBooked = bookedSlots.includes(slot);
@@ -254,16 +267,16 @@ const BookConsultation = () => {
                           type="button"
                           disabled={isBooked}
                           onClick={() => setTime(slot)}
-                          className={`py-2 px-1 text-[11px] font-sans font-semibold border rounded-lg transition-all text-center ${
+                          className={`py-3 px-2 text-xs font-sans font-semibold border rounded-[12px] transition-all text-center cursor-pointer ${
                             isSelected
-                              ? 'bg-navy dark:bg-gold text-white dark:text-navy-dark border-transparent shadow'
+                              ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
                               : isBooked
-                                ? 'opacity-45 cursor-not-allowed bg-slate-105 dark:bg-navy-dark/10 border-slate-200 dark:border-slate-800 text-slate-400 dark:text-slate-600 line-through'
-                                : 'bg-slate-50 dark:bg-navy border-slate-200 dark:border-slate-700 hover:border-gold text-slate-600 dark:text-slate-350'
+                                ? 'opacity-40 cursor-not-allowed bg-[#EFE8DD] dark:bg-navy-dark/10 border-[#DDD5C8] dark:border-slate-800 text-slate-400 line-through'
+                                : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
                           }`}
                         >
                           {slot}
-                          {isBooked && <span className="block text-[8px] font-bold tracking-tight text-rose-500 font-sans uppercase">Booked</span>}
+                          {isBooked && <span className="block text-[8px] font-bold tracking-tight text-rose-500 font-sans uppercase mt-0.5">Booked</span>}
                         </button>
                       );
                     })}
@@ -271,21 +284,21 @@ const BookConsultation = () => {
                 </div>
               </div>
 
-              <div className="space-y-1">
-                <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">Technology description / briefing</label>
+              <div className="space-y-2">
+                <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Technology description / briefing</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows="4"
                   placeholder="Outline details of patent drafts or trademarks search titles you wish to consult on..."
-                  className="w-full px-3 py-2 text-sm bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold focus:ring-0"
+                  className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
                 ></textarea>
               </div>
 
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-3 bg-gradient-to-r from-gold-dark to-gold text-navy-dark font-bold rounded shadow-md transition-all hover:opacity-90 disabled:opacity-50"
+                className="btn-gold w-full py-4 uppercase font-sans text-xs tracking-widest font-semibold cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? 'Registering Booking request...' : 'Book strategy session'}
               </button>
@@ -293,41 +306,39 @@ const BookConsultation = () => {
           </div>
 
           {/* Guidelines Sidebar */}
-          <div className="lg:col-span-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 space-y-6 shadow-sm text-xs leading-relaxed text-slate-500">
-            <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b border-slate-100 dark:border-slate-800 pb-3 flex items-center gap-1.5">
+          <div className="lg:col-span-4 card-premium text-xs leading-relaxed space-y-6">
+            <h3 className="text-lg font-serif font-medium text-[#171717] dark:text-[#F8F5F0] border-b border-[#DDD5C8]/40 pb-3 flex items-center gap-1.5">
               Booking Guidelines
             </h3>
             
-            <div className="space-y-4">
-              <div className="flex gap-2">
-                <div className="w-5 h-5 bg-gold/10 text-gold rounded flex items-center justify-center shrink-0">
+            <div className="space-y-5">
+              <div className="flex gap-3">
+                <div className="w-5 h-5 bg-[#8B6B57]/10 text-[#8B6B57] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
                   ✓
                 </div>
-                <div>
-                  <strong>NDA Coverage:</strong> All consultations operate under legal privilege. Do not hesitate to discuss mechanisms or code logics.
+                <div className="text-[#6D6258] dark:text-[#C9C1B5] font-light">
+                  <strong className="font-medium text-[#171717] dark:text-white">NDA Coverage:</strong> All consultations operate under legal privilege. Do not hesitate to discuss mechanisms or code logics.
                 </div>
               </div>
-              <div className="flex gap-2">
-                <div className="w-5 h-5 bg-gold/10 text-gold rounded flex items-center justify-center shrink-0">
+              <div className="flex gap-3">
+                <div className="w-5 h-5 bg-[#8B6B57]/10 text-[#8B6B57] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
                   ✓
                 </div>
-                <div>
-                  <strong>Calendly/Zoom Link:</strong> Meeting invitations containing Google Meet or Zoom coordinates are shared via email after admin approval.
+                <div className="text-[#6D6258] dark:text-[#C9C1B5] font-light">
+                  <strong className="font-medium text-[#171717] dark:text-white">Zoom coordinates:</strong> Meeting invitations containing Google Meet or Zoom coordinates are shared via email after admin approval.
                 </div>
               </div>
-              <div className="flex gap-2">
-                <div className="w-5 h-5 bg-gold/10 text-gold rounded flex items-center justify-center shrink-0">
+              <div className="flex gap-3">
+                <div className="w-5 h-5 bg-[#8B6B57]/10 text-[#8B6B57] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
                   ✓
                 </div>
-                <div>
-                  <strong>Rescheduling policy:</strong> You may modify booking requests up to 12 hours prior to scheduled sessions.
+                <div className="text-[#6D6258] dark:text-[#C9C1B5] font-light">
+                  <strong className="font-medium text-[#171717] dark:text-white">Rescheduling:</strong> You may modify booking requests up to 12 hours prior to scheduled sessions.
                 </div>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
     </div>
   );

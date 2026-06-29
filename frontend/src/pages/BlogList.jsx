@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import API from '../utils/api';
+import { blogs as blogData } from '../data/blogs';
 import { Search, Calendar, ChevronRight, BookOpen } from 'lucide-react';
 
 const BlogList = () => {
@@ -9,21 +9,11 @@ const BlogList = () => {
   const [category, setCategory] = useState('All');
 
   useEffect(() => {
-    API.get('cms/blogs/')
-      .then((res) => setBlogs(res.data))
-      .catch(() => {});
+    setBlogs(blogData);
   }, []);
 
-  const displayBlogs = blogs.length > 0 ? blogs : [
-    {
-      title: "Navigating the Patent Cooperation Treaty (PCT) for Global Scale",
-      slug: "navigating-pct-global-patent",
-      summary: "Expanding into international markets requires a strategic approach to patent protection. Learn how the PCT provides a unified procedure for filing patent applications to protect your inventions globally.",
-      category: "Patents",
-      image_url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600",
-      published_at: "2026-06-12T10:00:00Z"
-    }
-  ];
+  const displayBlogs = blogs;
+
 
   const categories = ['All', 'Patents', 'Trademarks', 'Copyrights', 'IPR Updates'];
 
@@ -44,33 +34,33 @@ const BlogList = () => {
   };
 
   return (
-    <div className="font-sans py-12 bg-slate-50 dark:bg-navy-dark min-h-screen dark:text-slate-100">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+    <div className="page-enter py-16 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+      <div className="max-w-6xl mx-auto px-6 sm:px-8 space-y-16">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <span className="text-gold uppercase tracking-[0.25em] text-xs font-semibold">Knowledge Center</span>
-          <h1 className="text-3xl sm:text-5xl font-serif font-bold text-navy dark:text-white">IP Strategy & Law Briefings</h1>
-          <p className="text-slate-500 text-sm max-w-2xl mx-auto">Expert commentary and regular legal updates compiled by our patent agents and trial attorneys.</p>
+          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Blogs</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">IP Strategy & Law Briefings</h1>
+          <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-2xl mx-auto font-normal leading-relaxed">Expert commentary and regular legal updates compiled by our patent agents and trial attorneys.</p>
         </div>
 
         {/* Filters */}
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
           <div className="md:col-span-8 relative">
-            <Search className="absolute left-3 top-3.5 text-slate-400" size={18} />
+            <Search className="absolute left-4 top-4 text-[#6D6258]/70" size={16} strokeWidth={1.5} />
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search strategy publications..."
-              className="w-full pl-10 pr-4 py-3 bg-white dark:bg-navy-accent dark:text-white border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
+              className="w-full pl-11 pr-4 py-3.5 bg-white dark:bg-[#1C1A19] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded-md focus:outline-hidden focus:border-[#8B6B57] transition-all shadow-xs text-sm"
             />
           </div>
           <div className="md:col-span-4">
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full py-3 px-4 bg-white dark:bg-navy-accent dark:text-white border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm text-sm"
+              className="w-full py-3.5 px-4 bg-white dark:bg-[#1C1A19] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded-md focus:outline-hidden focus:border-[#8B6B57] transition-all shadow-xs text-sm cursor-pointer"
             >
               {categories.map((c) => (
                 <option key={c} value={c}>{c === 'All' ? 'Filter by Category' : c}</option>
@@ -83,38 +73,42 @@ const BlogList = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {filteredBlogs.length > 0 ? (
             filteredBlogs.map((b) => (
-              <article key={b.slug} className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg overflow-hidden flex flex-col justify-between shadow-sm hover:shadow-lg transition-all">
+              <article key={b.slug} className="card-premium p-0 flex flex-col justify-between overflow-hidden group">
                 <div className="space-y-4">
-                  <div className="aspect-[16/9] w-full bg-slate-200">
-                    <img src={b.image_url || "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600"} alt={b.title} className="w-full h-full object-cover" />
+                  <div className="aspect-[16/9] w-full bg-slate-200 overflow-hidden relative">
+                    <img 
+                      src={b.image_url || "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600"} 
+                      alt={b.title} 
+                      className="w-full h-full object-cover absolute inset-0 transition-transform duration-750 group-hover:scale-103" 
+                    />
                   </div>
-                  <div className="p-6 space-y-3">
-                    <div className="flex items-center gap-2 text-xs text-slate-500">
-                      <span className="bg-gold/10 text-gold-dark dark:text-gold px-2.5 py-0.5 rounded font-bold uppercase tracking-wider text-[10px]">
+                  <div className="p-8 space-y-4">
+                    <div className="flex items-center gap-4 text-xs text-[#6D6258] dark:text-[#C9C1B5]">
+                      <span className="bg-[#F8F5F0] dark:bg-[#252220] border border-[#DDD5C8] dark:border-slate-800 text-[#8B6B57] px-3.5 py-1 rounded-full uppercase tracking-wider font-semibold text-xs">
                         {b.category}
                       </span>
-                      <span className="flex items-center gap-1">
-                        <Calendar size={12} /> {formatDate(b.published_at)}
+                      <span className="flex items-center gap-1.5 font-normal">
+                        <Calendar size={13} strokeWidth={1.5} /> {formatDate(b.published_at)}
                       </span>
                     </div>
-                    <h2 className="text-xl font-serif font-bold text-navy dark:text-white line-clamp-2 hover:text-gold transition-colors">
+                    <h2 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] line-clamp-2 transition-colors duration-300 group-hover:text-[#8B6B57]">
                       <Link to={`/blog/${b.slug}`}>{b.title}</Link>
                     </h2>
-                    <p className="text-slate-500 dark:text-slate-400 text-sm leading-relaxed line-clamp-3">
+                    <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal line-clamp-3">
                       {b.summary}
                     </p>
                   </div>
                 </div>
                 
-                <div className="px-6 pb-6 pt-2">
-                  <Link to={`/blog/${b.slug}`} className="inline-flex items-center gap-1 text-sm font-semibold text-gold-dark dark:text-gold hover:underline">
+                <div className="px-8 pb-8 pt-2 mt-auto">
+                  <Link to={`/blog/${b.slug}`} className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-[#8B6B57] hover:text-[#171717] dark:hover:text-white transition-colors">
                     Read strategic overview <ChevronRight size={14} />
                   </Link>
                 </div>
               </article>
             ))
           ) : (
-            <div className="col-span-2 text-center py-12 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded text-slate-400 text-sm">
+            <div className="col-span-2 text-center py-20 bg-white dark:bg-[#1C1A19] border border-[#DDD5C8] dark:border-slate-800 rounded-[12px] text-[#6D6258] text-xs uppercase tracking-widest">
               No matching briefings found. Try refining search parameters.
             </div>
           )}

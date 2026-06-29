@@ -22,11 +22,11 @@ const Login = () => {
     setLoading(false);
 
     if (res.success) {
-      showToast(`Welcome back, ${res.user.first_name || 'User'}!`, 'success');
+      showToast(`Welcome back, ${res.user.firstName || res.user.first_name || 'User'}!`, 'success');
       if (res.user.role === 'ADMIN' || res.user.role === 'SUPERADMIN') {
         navigate('/admin');
       } else {
-        navigate('/client');
+        navigate('/');
       }
     } else {
       showToast(res.error, 'error');
@@ -34,57 +34,57 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center bg-slate-50 dark:bg-navy-dark px-4 font-sans">
-      <div className="max-w-md w-full bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-8 shadow-2xl space-y-6">
+    <div className="min-h-[85vh] flex items-center justify-center bg-[#F8F5F0] dark:bg-[#121110] px-6 font-sans">
+      <div className="max-w-md w-full card-premium space-y-6">
         
         {/* Header Logo */}
-        <div className="text-center space-y-2">
-          <div className="inline-flex p-3 bg-gold/10 text-gold rounded-full">
-            <Shield size={32} />
+        <div className="text-center space-y-3">
+          <div className="inline-flex p-3 bg-[#8B6B57]/10 text-[#8B6B57] rounded-full border border-[#8B6B57]/10">
+            <Shield size={28} strokeWidth={1.5} />
           </div>
-          <h2 className="text-2xl font-serif font-bold text-navy dark:text-white">Secure Portal Sign In</h2>
-          <p className="text-sm text-slate-500">Enter credentials to access your IPR files and strategy trackers</p>
+          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Secure Portal Sign In</h2>
+          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter credentials to access your IPR files and strategy trackers</p>
         </div>
 
         {/* Login Form */}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wider block">
               Email Address
             </label>
             <div className="relative">
-              <Mail className="absolute left-3 top-3.5 text-slate-400" size={18} />
+              <Mail className="absolute left-4 top-3.5 text-[#6D6258]/70" size={16} strokeWidth={1.5} />
               <input
                 type="email"
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="email@sr4ipr.com"
-                className="w-full pl-10 pr-4 py-3 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                className="w-full pl-11 pr-4 py-3 bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all text-sm"
               />
             </div>
           </div>
 
-          <div className="space-y-1">
-            <label className="text-xs font-semibold text-slate-600 dark:text-slate-400 uppercase tracking-wide">
+          <div className="space-y-2">
+            <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wider block">
               Password
             </label>
             <div className="relative">
-              <Key className="absolute left-3 top-3.5 text-slate-400" size={18} />
+              <Key className="absolute left-4 top-3.5 text-[#6D6258]/70" size={16} strokeWidth={1.5} />
               <input
                 type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full pl-10 pr-12 py-3 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                className="w-full pl-11 pr-12 py-3 bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all text-sm"
               />
               <button
                 type="button"
                 onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-3 text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                className="absolute right-3.5 top-3 text-[#6D6258] hover:text-[#171717] dark:hover:text-white transition-colors cursor-pointer"
               >
-                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                {showPassword ? <EyeOff size={16} strokeWidth={1.5} /> : <Eye size={16} strokeWidth={1.5} />}
               </button>
             </div>
           </div>
@@ -92,19 +92,16 @@ const Login = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-3 bg-gradient-to-r from-gold-dark to-gold hover:from-gold hover:to-gold-light text-navy-dark font-bold rounded shadow-md transition-all duration-300 transform hover:-translate-y-0.5"
+            className="btn-gold w-full py-4 uppercase font-sans text-xs tracking-widest font-semibold cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
           >
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
 
         {/* Credentials hints */}
-        <div className="border-t border-slate-100 dark:border-slate-800/80 pt-4 text-center text-xs text-slate-500 space-y-1">
+        <div className="border-t border-[#DDD5C8]/40 dark:border-slate-850 pt-4 text-center text-xs text-[#6D6258] dark:text-[#C9C1B5] space-y-1 font-light">
           <p>
-            <strong>Default SuperAdmin:</strong> admin@sr4ipr.com / adminpassword123
-          </p>
-          <p>
-            <strong>Default Client Portal:</strong> client@example.com / clientpassword123
+            <strong className="font-medium text-[#171717] dark:text-white">Default SuperAdmin:</strong> admin@sr4ipr.com / adminpassword123
           </p>
         </div>
       </div>

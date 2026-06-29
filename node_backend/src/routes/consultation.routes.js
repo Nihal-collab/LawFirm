@@ -1,0 +1,19 @@
+const express = require('express');
+const router = express.Router();
+const {
+  createConsultation,
+  listConsultations,
+  updateConsultation,
+  deleteConsultation,
+} = require('../controllers/consultation.controller');
+const { protect, requireAdmin } = require('../middlewares/auth.middleware');
+
+// Public - book a consultation or fetch slots
+router.post('/', createConsultation);
+router.get('/', listConsultations); // Public can fetch availability for date
+
+// Admin protected routes for modifying consultation bookings
+router.patch('/:id', protect, requireAdmin, updateConsultation);
+router.delete('/:id', protect, requireAdmin, deleteConsultation);
+
+module.exports = router;

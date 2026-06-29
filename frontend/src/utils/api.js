@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'http://localhost:5000/api/',
   timeout: 15000,
 });
 
@@ -29,7 +29,7 @@ API.interceptors.response.use(
       const refreshToken = localStorage.getItem('refresh_token');
       if (refreshToken) {
         try {
-          const res = await axios.post('http://localhost:8000/api/auth/refresh/', {
+          const res = await axios.post('http://localhost:5000/api/auth/refresh/', {
             refresh: refreshToken,
           });
           if (res.status === 200) {
