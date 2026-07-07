@@ -75,42 +75,50 @@ const Home = () => {
     <div className="page-enter overflow-x-hidden bg-[#F8F5F0] dark:bg-[#121110]">
       
       {/* 1. Hero Section */}
-      <section className="relative min-h-[90vh] lg:min-h-screen flex items-center bg-[#F8F5F0] dark:bg-[#121110] overflow-hidden pt-12 pb-16">
+      <section className="relative min-h-screen flex items-center bg-[#F8F5F0] dark:bg-[#121110] overflow-hidden">
         
         {/* Background mesh glow - extremely subtle luxury styling */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#8B6B57]/3 dark:bg-[#8B6B57]/5 blur-[160px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[#8B6B57]/3 dark:bg-[#8B6B57]/5 blur-[180px] rounded-full pointer-events-none"></div>
 
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-20 relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-          
-          {/* Left Side Info */}
-          <div className="lg:col-span-6 space-y-8">
+        <div className="absolute inset-0">
+          <img
+            src={content.hero_image}
+            alt="SR4IPR Partners"
+            className="h-full w-full object-cover object-center"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#F8F5F0]/95 via-[#F8F5F0]/70 to-[#F8F5F0]/20 dark:from-[#121110]/92 dark:via-[#121110]/70 dark:to-[#121110]/25" />
+          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F8F5F0]/20 dark:to-[#121110]/30" />
+        </div>
+
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-24 sm:py-28 lg:py-32">
+          <div className="max-w-3xl space-y-8 text-center lg:text-left lg:mx-auto xl:mx-0 xl:max-w-4xl">
             <div className="space-y-2">
               <motion.span 
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-[#8B6B57] tracking-[0.25em] text-xs font-semibold uppercase block"
+                className="text-[#8B6B57] tracking-[0.35em] text-xs sm:text-sm font-semibold uppercase block"
               >
                 SR4IPR Partners
               </motion.span>
-              <span className="text-[10px] tracking-[0.3em] text-[#6D6258]/80 dark:text-[#C9C1B5]/80 uppercase font-semibold block">Elite IP Rights Counsel</span>
+              <span className="text-[11px] sm:text-sm tracking-[0.3em] text-[#6D6258]/90 dark:text-[#C9C1B5]/90 uppercase font-semibold block">Elite IP Rights Counsel</span>
             </div>
-            
+
             <motion.h1 
               initial={{ opacity: 0, y: 25, filter: 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.8, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-[4.5rem] font-serif text-[#171717] dark:text-[#F8F5F0] leading-[0.95] tracking-tight font-medium"
+              className="font-serif text-5xl sm:text-6xl lg:text-[5.5rem] leading-[0.92] tracking-tight font-medium text-[#171717] dark:text-[#F8F5F0] max-w-4xl"
             >
               {content.hero_title}
             </motion.h1>
-            
+
             <motion.p 
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
-              className="text-[#6D6258] dark:text-[#C9C1B5] text-base sm:text-lg leading-relaxed max-w-xl font-normal"
+              className="text-[#6D6258] dark:text-[#C9C1B5] text-lg sm:text-xl lg:text-2xl leading-[1.8] max-w-3xl mx-auto lg:mx-0"
             >
               {content.hero_subtitle}
             </motion.p>
@@ -119,7 +127,7 @@ const Home = () => {
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="flex flex-wrap gap-4 pt-2"
+              className="flex flex-wrap justify-center lg:justify-start gap-4 pt-2"
             >
               <Link to="/book-consultation" className="btn-gold shadow-md hover:shadow-lg">
                 Schedule Strategy Session <ChevronRight size={14} />
@@ -130,72 +138,12 @@ const Home = () => {
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.5 }}
-              className="flex flex-wrap gap-4 text-[10px] text-[#6D6258]/80 dark:text-[#C9C1B5]/80 uppercase tracking-widest pt-4"
+              className="flex flex-wrap justify-center lg:justify-start gap-4 text-xs sm:text-sm text-[#6D6258]/85 dark:text-[#C9C1B5]/85 uppercase tracking-widest pt-4"
             >
               <span className="flex items-center gap-1.5 font-medium"><ShieldCheck size={13} className="text-[#8B6B57]" /> NDA Protected</span>
               <span className="text-[#DDD5C8] dark:text-slate-800">•</span>
               <span className="flex items-center gap-1.5 font-medium"><Globe2 size={13} className="text-[#8B6B57]" /> WIPO Certified</span>
             </motion.div>
-          </div>
-
-          {/* Right Side 2x2 Grid */}
-          <div className="lg:col-span-6 relative">
-            <div className="grid grid-cols-2 gap-4 sm:gap-6 relative">
-              {/* Column 1 */}
-              <div className="space-y-4 sm:space-y-6">
-                {displayServices.slice(0, 2).map((s, idx) => {
-                  const Icon = iconMap[s.icon] || ShieldCheck;
-                  return (
-                    <motion.div 
-                      key={s.slug}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.2 + idx * 0.15 }}
-                      className={`card-premium p-6 sm:p-8 flex flex-col justify-between aspect-[1/1.05] transition-all duration-500 hover:-translate-y-2 hover:border-[#8B6B57] group cursor-pointer ${idx === 1 ? 'mt-6 sm:mt-8' : ''}`}
-                      onClick={() => navigate(`/services/${s.slug}`)}
-                    >
-                      <div className="space-y-4">
-                        <div className="inline-flex p-3 bg-[#F8F5F0] dark:bg-[#252220] text-[#8B6B57] rounded-full border border-[#DDD5C8]/85 dark:border-slate-800 group-hover:bg-[#8B6B57] group-hover:text-white transition-colors duration-300">
-                          <Icon size={18} strokeWidth={1.5} />
-                        </div>
-                        <h3 className="font-serif font-medium text-base sm:text-lg text-[#171717] dark:text-[#F8F5F0] group-hover:text-[#8B6B57] transition-colors duration-300">{s.name}</h3>
-                        <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed line-clamp-3 font-normal">{s.short_desc}</p>
-                      </div>
-                      <div className="text-[10px] font-semibold text-[#8B6B57] uppercase tracking-wider pt-4 border-t border-[#DDD5C8]/30 group-hover:text-[#171717] dark:group-hover:text-white transition-colors">
-                        Explore practice &rarr;
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-              {/* Column 2 */}
-              <div className="space-y-4 sm:space-y-6 lg:translate-y-12">
-                {displayServices.slice(2, 4).map((s, idx) => {
-                  const Icon = iconMap[s.icon] || ShieldCheck;
-                  return (
-                    <motion.div 
-                      key={s.slug}
-                      initial={{ opacity: 0, y: 40 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.8, delay: 0.3 + idx * 0.15 }}
-                      className="card-premium p-6 sm:p-8 flex flex-col justify-between aspect-[1/1.05] transition-all duration-500 hover:-translate-y-2 hover:border-[#8B6B57] group cursor-pointer"
-                      onClick={() => navigate(`/services/${s.slug}`)}
-                    >
-                      <div className="space-y-4">
-                        <div className="inline-flex p-3 bg-[#F8F5F0] dark:bg-[#252220] text-[#8B6B57] rounded-full border border-[#DDD5C8]/85 dark:border-slate-800 group-hover:bg-[#8B6B57] group-hover:text-white transition-colors duration-300">
-                          <Icon size={18} strokeWidth={1.5} />
-                        </div>
-                        <h3 className="font-serif font-medium text-base sm:text-lg text-[#171717] dark:text-[#F8F5F0] group-hover:text-[#8B6B57] transition-colors duration-300">{s.name}</h3>
-                        <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed line-clamp-3 font-normal">{s.short_desc}</p>
-                      </div>
-                      <div className="text-[10px] font-semibold text-[#8B6B57] uppercase tracking-wider pt-4 border-t border-[#DDD5C8]/30 group-hover:text-[#171717] dark:group-hover:text-white transition-colors">
-                        Explore practice &rarr;
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -235,57 +183,49 @@ const Home = () => {
 
       {/* 4. Services Overview Grid */}
       <section className="py-20 bg-[#F8F5F0] dark:bg-[#121110]">
-        <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
-            
-            {/* Left Sticky Header Panel */}
-            <div className="lg:col-span-4 lg:sticky lg:top-28 space-y-6">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 text-center">
+          <div className="space-y-10 flex flex-col items-center">
+            <div className="max-w-3xl space-y-4 mx-auto">
               <span className="text-[#8B6B57] uppercase tracking-[0.25em] font-semibold text-xs block">Core Specializations</span>
               <h2 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] leading-tight">IPR Practice Directory</h2>
               <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm leading-relaxed font-normal">
                 We provide tailored intellectual property counsel structured to protect software registries, biotech compounds, global brand identity networks, and industrial hardware parameters.
               </p>
-              <div className="pt-4">
+              <div className="pt-2">
                 <Link to="/services" className="inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-widest text-[#8B6B57] hover:text-[#171717] dark:hover:text-white transition-colors group">
                   Explore full capabilities <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             </div>
 
-            {/* Right Staggered Columns */}
-            <div className="lg:col-span-8">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8">
-                {displayServices.map((s, idx) => {
-                  const ServiceIcon = iconMap[s.icon] || ShieldCheck;
-                  return (
-                    <motion.div 
-                      key={s.slug} 
-                      initial={{ opacity: 0, y: 30 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ duration: 0.7, delay: idx * 0.1 }}
-                      className={`card-premium flex flex-col justify-between group cursor-pointer ${
-                        idx % 2 === 1 ? 'md:translate-y-8 lg:translate-y-12' : ''
-                      }`}
-                      onClick={() => navigate(`/services/${s.slug}`)}
-                    >
-                      <div className="space-y-6">
-                        <div className="inline-flex p-3.5 bg-[#F8F5F0] dark:bg-[#252220] text-[#8B6B57] rounded-full border border-[#DDD5C8]/80 dark:border-slate-800 transition-colors duration-300">
-                          <ServiceIcon size={20} strokeWidth={1.5} />
-                        </div>
-                        <h3 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] transition-colors duration-300 group-hover:text-[#8B6B57]">{s.name}</h3>
-                        <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal">{s.short_desc}</p>
+            <div className="w-full max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-5 lg:gap-6 justify-items-center">
+              {displayServices.map((s, idx) => {
+                const ServiceIcon = iconMap[s.icon] || ShieldCheck;
+                return (
+                  <motion.div 
+                    key={s.slug} 
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.7, delay: idx * 0.1 }}
+                    className="card-premium flex flex-col justify-between group cursor-pointer p-6 sm:p-7 w-full max-w-[360px] text-left"
+                    onClick={() => navigate(`/services/${s.slug}`)}
+                  >
+                    <div className="space-y-5">
+                      <div className="inline-flex p-3 bg-[#F8F5F0] dark:bg-[#252220] text-[#8B6B57] rounded-full border border-[#DDD5C8]/80 dark:border-slate-800 transition-colors duration-300">
+                        <ServiceIcon size={20} strokeWidth={1.5} />
                       </div>
-                      <div className="pt-8 border-t border-[#DDD5C8]/30 dark:border-slate-850 mt-6 flex justify-between items-center text-[#8B6B57] group-hover:text-[#171717] dark:group-hover:text-white transition-colors">
-                        <span className="text-xs font-semibold uppercase tracking-wider">Practice Details</span>
-                        <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+                      <h3 className="text-xl lg:text-[1.35rem] font-serif font-medium text-[#171717] dark:text-[#F8F5F0] transition-colors duration-300 group-hover:text-[#8B6B57]">{s.name}</h3>
+                      <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal max-w-sm">{s.short_desc}</p>
+                    </div>
+                    <div className="pt-6 border-t border-[#DDD5C8]/30 dark:border-slate-850 mt-5 flex justify-between items-center text-[#8B6B57] group-hover:text-[#171717] dark:group-hover:text-white transition-colors">
+                      <span className="text-xs font-semibold uppercase tracking-wider">Practice Details</span>
+                      <ChevronRight size={14} className="group-hover:translate-x-1 transition-transform" />
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
-
           </div>
         </div>
       </section>

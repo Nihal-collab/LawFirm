@@ -1,18 +1,28 @@
-require('dotenv').config();
-const app = require('./app');
-const connectDB = require('./src/config/db');
+require("dotenv").config();
+
+const app = require("./app");
+const connectDB = require("./src/config/db");
 
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-  await connectDB();
+  try {
+    // Connect to MongoDB
+    await connectDB();
 
-  app.listen(PORT, () => {
-    console.log(`\n🚀 SR4IPR Partners API running on port ${PORT}`);
-    console.log(`📍 Environment: ${process.env.NODE_ENV || 'development'}`);
-    console.log(`🌐 API Base: http://localhost:${PORT}/api`);
-    console.log(`💚 Health: http://localhost:${PORT}/api/health\n`);
-  });
+    // Start Express server
+    app.listen(PORT, () => {
+      console.log("=================================");
+      console.log(`🚀 Server running on port ${PORT}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`📡 API: http://localhost:${PORT}`);
+      console.log("=================================");
+    });
+  } catch (error) {
+    console.error("❌ Failed to start server");
+    console.error(error);
+    process.exit(1);
+  }
 };
 
 startServer();

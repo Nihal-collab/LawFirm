@@ -147,14 +147,16 @@ const AdminDashboard = () => {
   const [settingsLinkedin, setSettingsLinkedin] = useState('');
   const [settingsTwitter, setSettingsTwitter] = useState('');
   const [settingsFacebook, setSettingsFacebook] = useState('');
+  const [consultationDailyLimit, setConsultationDailyLimit] = useState(3);
 
   // Fetch all management records
   const loadAdminData = async () => {
     setLoading(true);
     try {
-      const [consRes, videoRes] = await Promise.all([
+      const [consRes, videoRes, consultSettingsRes] = await Promise.all([
         API.get('consultations/'),
-        API.get('videos/all').catch(() => ({ data: [] }))
+        API.get('videos/all').catch(() => ({ data: [] })),
+        API.get('consultations/settings/').catch(() => ({ data: { dailyLimit: 3 } }))
       ]);
 
       setConsultations(consRes.data);
@@ -194,6 +196,7 @@ const AdminDashboard = () => {
       setSettingsLinkedin(staticSettings.linkedin_url || '');
       setSettingsTwitter(staticSettings.twitter_url || '');
       setSettingsFacebook(staticSettings.facebook_url || '');
+      setConsultationDailyLimit(consultSettingsRes.data.dailyLimit || 3);
 
       setStats({
         consultations: consRes.data.length,
@@ -699,6 +702,20 @@ const AdminDashboard = () => {
   const handleSaveSettings = (e) => {
     e.preventDefault();
     showToast('Global settings updated (In-Memory Preview). Note: Edit pageContent.js for permanent changes.', 'success');
+  };
+
+  const handleSaveConsultationLimit = async (e) => {
+    e.preventDefault();
+
+    try {
+      const res = await API.patch('consultations/settings/', {
+        dailyLimit: consultationDailyLimit,
+      });
+      setConsultationDailyLimit(res.data.dailyLimit);
+      showToast('Consultation booking limit updated.', 'success');
+    } catch (err) {
+      showToast(err.response?.data?.detail || 'Failed to update consultation limit.', 'error');
+    }
   };
 
   const handleAdminLogout = async () => {
@@ -2057,6 +2074,29 @@ const AdminDashboard = () => {
           <div className="space-y-8 animate-fade-in">
             <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Global Site Settings</h1>
             
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-lg shadow-sm max-w-3xl">
+              <form onSubmit={handleSaveConsultationLimit} className="space-y-4 text-xs font-sans">
+                <div className="space-y-1">
+                  <label className="text-[10px] uppercase font-bold text-slate-550 font-sans">Daily Consultation Booking Limit</label>
+                  <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    value={consultationDailyLimit}
+                    onChange={(e) => setConsultationDailyLimit(Number(e.target.value))}
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                  />
+                </div>
+
+                <button
+                  type="submit"
+                  className="px-6 py-2.5 bg-gold text-navy-dark font-bold rounded shadow hover:opacity-90"
+                >
+                  Save Consultation Limit
+                </button>
+              </form>
+            </div>
+
             <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-lg shadow-sm max-w-3xl">
               <form onSubmit={handleSaveSettings} className="space-y-6 text-xs font-sans">
                 

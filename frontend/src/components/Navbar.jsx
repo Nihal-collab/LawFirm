@@ -109,12 +109,6 @@ const Navbar = () => {
             ) : (
               <div className="flex items-center gap-3.5">
                 <Link
-                  to="/login"
-                  className="px-4 py-2 border border-[#DDD5C8] dark:border-slate-800 rounded-full text-[10px] font-semibold uppercase tracking-wider transition-all duration-300 hover:border-[#8B6B57] text-[#171717] dark:text-[#F8F5F0]"
-                >
-                  Login
-                </Link>
-                <Link
                   to="/book-consultation"
                   className="px-5 py-2 bg-[#171717] dark:bg-[#F8F5F0] text-white dark:text-[#171717] hover:bg-[#8B6B57] dark:hover:bg-[#8B6B57] hover:text-white dark:hover:text-white font-sans text-[10px] font-semibold tracking-widest uppercase rounded-full shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.01] whitespace-nowrap"
                 >
@@ -172,13 +166,6 @@ const Navbar = () => {
               </>
             ) : (
               <>
-                <Link
-                  to="/login"
-                  onClick={() => setMenuOpen(false)}
-                  className="block text-center py-2.5 border border-[#DDD5C8] dark:border-slate-800 text-[#171717] dark:text-[#F8F5F0] rounded-full text-xs font-semibold"
-                >
-                  Login
-                </Link>
                 <Link
                   to="/book-consultation"
                   onClick={() => setMenuOpen(false)}

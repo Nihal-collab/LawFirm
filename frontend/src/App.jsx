@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 
 // Providers
 import { AuthProvider } from './context/AuthContext';
@@ -69,9 +69,10 @@ function App() {
                 <Route path="/faqs" element={<FaqList />} />
                 <Route path="/book-consultation" element={<BookConsultation />} />
                 <Route path="/contact" element={<Contact />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/forgot-password" element={<Forgot />} />
-                <Route path="/reset-password/:token" element={<Reset />} />
+                <Route path="/login" element={<Navigate to="/admin/login" replace />} />
+                <Route path="/admin/login" element={<Login adminOnly />} />
+                <Route path="/forgot-password" element={<Forgot adminOnly />} />
+                <Route path="/reset-password/:token" element={<Reset adminOnly />} />
                 <Route path="/gallery" element={<Gallery />} />
                 <Route path="/client-success" element={<ClientSuccess />} />
 

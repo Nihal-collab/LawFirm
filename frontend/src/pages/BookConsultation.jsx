@@ -34,6 +34,8 @@ const BookConsultation = () => {
   const [submitted, setSubmitted] = useState(false);
   const [availableDates, setAvailableDates] = useState([]);
   const [bookedSlots, setBookedSlots] = useState([]);
+  const [dateAvailability, setDateAvailability] = useState({});
+  const [selectedDateAvailability, setSelectedDateAvailability] = useState(null);
 
   useEffect(() => {
     // Generate dates for the next 10 days (excluding Sundays)
@@ -56,21 +58,47 @@ const BookConsultation = () => {
   }, []);
 
   useEffect(() => {
+    const loadAvailability = async () => {
+      if (availableDates.length === 0) return;
+
+      try {
+        const entries = await Promise.all(
+          availableDates.map(async (currentDate) => {
+            const yyyy = currentDate.getFullYear();
+            const mm = String(currentDate.getMonth() + 1).padStart(2, '0');
+            const dd = String(currentDate.getDate()).padStart(2, '0');
+            const dateValue = `${yyyy}-${mm}-${dd}`;
+
+            const res = await API.get(`consultations/availability/?date=${dateValue}`);
+            return [dateValue, res.data];
+          })
+        );
+
+        setDateAvailability(Object.fromEntries(entries));
+      } catch (error) {
+        console.error('Failed to load consultation availability.', error);
+      }
+    };
+
+    loadAvailability();
+  }, [availableDates]);
+
+  useEffect(() => {
     if (date) {
-      API.get(`consultations/?date=${date}`)
+      API.get(`consultations/availability/?date=${date}`)
         .then((res) => {
-          const booked = res.data
-            .filter(c => c.status !== 'CLOSED')
-            .map(c => c.time);
-          setBookedSlots(booked);
-          
-          // Select first available slot
-          const nextSlot = timeSlots.find(slot => !booked.includes(slot));
-          if (nextSlot) {
+          setSelectedDateAvailability(res.data);
+          setBookedSlots(res.data.bookedSlots || []);
+
+          const nextSlot = timeSlots.find(slot => !(res.data.bookedSlots || []).includes(slot));
+          if (nextSlot && res.data.isAvailable) {
             setTime(nextSlot);
           }
         })
-        .catch(() => {});
+        .catch(() => {
+          setSelectedDateAvailability(null);
+          setBookedSlots([]);
+        });
     }
   }, [date]);
 
@@ -233,21 +261,27 @@ const BookConsultation = () => {
                       const dayNum = d.getDate();
                       const monthName = d.toLocaleDateString('en-US', { month: 'short' });
                       const isSelected = date === dateVal;
+                      const availability = dateAvailability[dateVal];
+                      const isFullyBooked = availability && !availability.isAvailable;
 
                       return (
                         <button
                           key={dateVal}
                           type="button"
+                          disabled={isFullyBooked}
                           onClick={() => setDate(dateVal)}
                           className={`flex flex-col items-center justify-center p-3.5 border rounded-[12px] transition-all font-sans cursor-pointer ${
                             isSelected
                               ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
-                              : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
+                              : isFullyBooked
+                                ? 'bg-[#EFE8DD] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-slate-400 opacity-60 cursor-not-allowed'
+                                : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
                           }`}
                         >
                           <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
                           <span className="text-base font-bold my-1">{dayNum}</span>
                           <span className="text-[9px] uppercase tracking-wide">{monthName}</span>
+                          {isFullyBooked && <span className="mt-1 text-[8px] font-bold uppercase text-rose-500">Full</span>}
                         </button>
                       );
                     })}
@@ -260,18 +294,21 @@ const BookConsultation = () => {
                     {timeSlots.map((slot) => {
                       const isSelected = time === slot;
                       const isBooked = bookedSlots.includes(slot);
+                      const isDateFull = selectedDateAvailability && !selectedDateAvailability.isAvailable;
 
                       return (
                         <button
                           key={slot}
                           type="button"
-                          disabled={isBooked}
+                          disabled={isBooked || isDateFull}
                           onClick={() => setTime(slot)}
                           className={`py-3 px-2 text-xs font-sans font-semibold border rounded-[12px] transition-all text-center cursor-pointer ${
                             isSelected
                               ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
                               : isBooked
                                 ? 'opacity-40 cursor-not-allowed bg-[#EFE8DD] dark:bg-navy-dark/10 border-[#DDD5C8] dark:border-slate-800 text-slate-400 line-through'
+                                : isDateFull
+                                  ? 'opacity-40 cursor-not-allowed bg-[#EFE8DD] dark:bg-navy-dark/10 border-[#DDD5C8] dark:border-slate-800 text-slate-400'
                                 : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
                           }`}
                         >
@@ -282,6 +319,13 @@ const BookConsultation = () => {
                     })}
                   </div>
                 </div>
+                {selectedDateAvailability && (
+                  <div className={`text-[10px] uppercase tracking-wider font-semibold ${selectedDateAvailability.isAvailable ? 'text-emerald-600 dark:text-emerald-400' : 'text-rose-500'}`}>
+                    {selectedDateAvailability.isAvailable
+                      ? `${selectedDateAvailability.remainingSlots} of ${selectedDateAvailability.dailyLimit} slots available for this date`
+                      : 'This date is fully booked'}
+                  </div>
+                )}
               </div>
 
               <div className="space-y-2">
@@ -297,7 +341,7 @@ const BookConsultation = () => {
 
               <button
                 type="submit"
-                disabled={loading}
+                disabled={loading || (selectedDateAvailability && !selectedDateAvailability.isAvailable)}
                 className="btn-gold w-full py-4 uppercase font-sans text-xs tracking-widest font-semibold cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
               >
                 {loading ? 'Registering Booking request...' : 'Book strategy session'}

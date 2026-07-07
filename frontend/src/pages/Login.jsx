@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext';
 import { useToast } from '../context/ToastContext';
 import { Key, Mail, Shield, Eye, EyeOff } from 'lucide-react';
 
-const Login = () => {
+const Login = ({ adminOnly = false }) => {
   const { login } = useAuth();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -22,8 +22,15 @@ const Login = () => {
     setLoading(false);
 
     if (res.success) {
+      const isAdmin = res.user.role === 'ADMIN' || res.user.role === 'SUPERADMIN';
+
+      if (adminOnly && !isAdmin) {
+        showToast('This portal is for admins only.', 'error');
+        return;
+      }
+
       showToast(`Welcome back, ${res.user.firstName || res.user.first_name || 'User'}!`, 'success');
-      if (res.user.role === 'ADMIN' || res.user.role === 'SUPERADMIN') {
+      if (isAdmin) {
         navigate('/admin');
       } else {
         navigate('/');
@@ -42,8 +49,8 @@ const Login = () => {
           <div className="inline-flex p-3 bg-[#8B6B57]/10 text-[#8B6B57] rounded-full border border-[#8B6B57]/10">
             <Shield size={28} strokeWidth={1.5} />
           </div>
-          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Secure Portal Sign In</h2>
-          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter credentials to access your IPR files and strategy trackers</p>
+          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Admin Portal Sign In</h2>
+          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter admin credentials to access the dashboard</p>
         </div>
 
         {/* Login Form */}

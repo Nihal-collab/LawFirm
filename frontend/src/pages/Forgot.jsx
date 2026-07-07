@@ -4,7 +4,7 @@ import { Mail, Shield, ArrowLeft } from 'lucide-react';
 import API from '../utils/api';
 import { useToast } from '../context/ToastContext';
 
-const Forgot = () => {
+const Forgot = ({ adminOnly = false }) => {
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -18,7 +18,7 @@ const Forgot = () => {
     try {
       const res = await API.post('auth/forgot-password', { email });
       showToast(res.data?.detail || 'If that email address is registered, a password reset link has been sent.', 'success');
-      navigate('/login');
+      navigate(adminOnly ? '/admin/login' : '/admin/login');
     } catch (err) {
       showToast(err.response?.data?.detail || 'Something went wrong. Please try again.', 'error');
     } finally {
@@ -35,8 +35,8 @@ const Forgot = () => {
           <div className="inline-flex p-3 bg-[#8B6B57]/10 text-[#8B6B57] rounded-full border border-[#8B6B57]/10">
             <Shield size={28} strokeWidth={1.5} />
           </div>
-          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Reset Access Credentials</h2>
-          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter your registered email address below, and we will send you a secure link to reset your account credentials.</p>
+          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Reset Admin Credentials</h2>
+          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter your admin email address below, and we will send you a secure link to reset your credentials.</p>
         </div>
 
         {/* Forgot Form */}
@@ -70,7 +70,7 @@ const Forgot = () => {
         {/* Back Link */}
         <div className="border-t border-[#DDD5C8]/40 dark:border-slate-850 pt-4 text-center">
           <Link
-            to="/login"
+            to="/admin/login"
             className="inline-flex items-center gap-2 text-xs font-semibold text-[#8B6B57] hover:text-[#171717] dark:hover:text-[#F8F5F0] transition-colors"
           >
             <ArrowLeft size={14} /> Back to Sign In

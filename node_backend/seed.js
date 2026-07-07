@@ -6,6 +6,7 @@ require('dotenv').config();
 const mongoose = require('mongoose');
 const User = require('./src/models/User');
 const Video = require('./src/models/Video');
+const ConsultationSettings = require('./src/models/ConsultationSettings');
 
 const seed = async () => {
   try {
@@ -74,6 +75,13 @@ const seed = async () => {
     } else {
       console.log('ℹ️  Video library already populated.');
     }
+
+    const settings = await ConsultationSettings.getSingleton();
+    if (!settings.dailyLimit || settings.dailyLimit < 1) {
+      settings.dailyLimit = 3;
+      await settings.save();
+    }
+    console.log(`✅ Consultation daily limit is set to ${settings.dailyLimit}.`);
 
     console.log('\n🎉 Seed complete!');
     process.exit(0);

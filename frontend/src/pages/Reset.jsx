@@ -4,7 +4,7 @@ import { Key, Shield, Eye, EyeOff, CheckCircle } from 'lucide-react';
 import API from '../utils/api';
 import { useToast } from '../context/ToastContext';
 
-const Reset = () => {
+const Reset = ({ adminOnly = false }) => {
   const { token } = useParams();
   const { showToast } = useToast();
   const navigate = useNavigate();
@@ -36,7 +36,7 @@ const Reset = () => {
         confirm_password: confirmPassword
       });
       showToast(res.data?.detail || 'Password reset successfully.', 'success');
-      navigate('/login');
+      navigate(adminOnly ? '/admin/login' : '/admin/login');
     } catch (err) {
       showToast(err.response?.data?.detail || 'Password reset failed. Token may be invalid or expired.', 'error');
     } finally {
@@ -53,8 +53,8 @@ const Reset = () => {
           <div className="inline-flex p-3 bg-[#8B6B57]/10 text-[#8B6B57] rounded-full border border-[#8B6B57]/10">
             <Shield size={28} strokeWidth={1.5} />
           </div>
-          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Create New Password</h2>
-          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter and confirm your new secure password below to finalize credential recovery.</p>
+          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Create New Admin Password</h2>
+          <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] font-light leading-relaxed">Enter and confirm your new secure password below to finalize admin credential recovery.</p>
         </div>
 
         {/* Reset Form */}

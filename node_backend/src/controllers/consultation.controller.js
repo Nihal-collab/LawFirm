@@ -1,6 +1,16 @@
 const Contact = require('../models/Contact');
+const ConsultationSettings = require('../models/ConsultationSettings');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendContactNotification } = require('../services/email.service');
+
+const ACTIVE_CONSULTATION_STATUSES = ['NEW', 'PENDING', 'CONTACTED', 'COMPLETED'];
+
+const isValidDateString = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value || '');
+
+const getDailyLimit = async () => {
+  const settings = await ConsultationSettings.getSingleton();
+  return Math.max(Number(settings.dailyLimit) || 1, 1);
+};
 
 // Helper to map DB Consultation schema to frontend expectations
 const mapConsultation = (doc) => {
@@ -30,13 +40,54 @@ const createConsultation = asyncHandler(async (req, res) => {
     name, email, phone, company, date, time, service, message
   } = req.body;
 
-  if (!name || !email || !message) {
-    return res.status(400).json({ detail: 'Name, email, and message are required.' });
+  if (!name || !email || !date || !time || !message) {
+    return res.status(400).json({ detail: 'Name, email, date, time, and message are required.' });
+  }
+
+  if (!isValidDateString(date)) {
+    return res.status(400).json({ detail: 'Please select a valid consultation date.' });
+  }
+
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const selectedDate = new Date(`${date}T00:00:00`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    return res.status(400).json({ detail: 'Consultation date must be in the future.' });
+  }
+
+  const [dailyLimit, duplicateBooking, activeBookingCount] = await Promise.all([
+    getDailyLimit(),
+    Contact.findOne({
+      type: 'CONSULTATION',
+      email: normalizedEmail,
+      consultationDate: date,
+      consultationTime: time,
+      status: { $ne: 'CLOSED' },
+    }),
+    Contact.countDocuments({
+      type: 'CONSULTATION',
+      consultationDate: date,
+      status: { $in: ACTIVE_CONSULTATION_STATUSES },
+    }),
+  ]);
+
+  if (duplicateBooking) {
+    return res.status(409).json({ detail: 'You already booked this date and time.' });
+  }
+
+  if (activeBookingCount >= dailyLimit) {
+    return res.status(409).json({
+      detail: 'This date is fully booked. Please choose another date.',
+      dailyLimit,
+      bookedCount: activeBookingCount,
+    });
   }
 
   const consultation = await Contact.create({
     name,
-    email,
+    email: normalizedEmail,
     phone,
     company,
     consultationDate: date,
@@ -51,6 +102,34 @@ const createConsultation = asyncHandler(async (req, res) => {
   sendContactNotification(consultation).catch(() => {});
 
   res.status(201).json(mapConsultation(consultation));
+});
+
+// GET /api/consultations/availability?date=YYYY-MM-DD (public)
+const getConsultationAvailability = asyncHandler(async (req, res) => {
+  const { date } = req.query;
+
+  if (!date || !isValidDateString(date)) {
+    return res.status(400).json({ detail: 'Please provide a valid date.' });
+  }
+
+  const dailyLimit = await getDailyLimit();
+  const consultations = await Contact.find({
+    type: 'CONSULTATION',
+    consultationDate: date,
+    status: { $in: ACTIVE_CONSULTATION_STATUSES },
+  }).select('consultationTime status');
+
+  const bookedSlots = consultations.map((consultation) => consultation.consultationTime);
+  const bookedCount = consultations.length;
+
+  res.status(200).json({
+    date,
+    dailyLimit,
+    bookedCount,
+    remainingSlots: Math.max(dailyLimit - bookedCount, 0),
+    isAvailable: bookedCount < dailyLimit,
+    bookedSlots,
+  });
 });
 
 // GET /api/consultations (admin or public slot lookup)
@@ -101,9 +180,35 @@ const deleteConsultation = asyncHandler(async (req, res) => {
   res.status(200).json({ detail: 'Consultation deleted.' });
 });
 
+// GET /api/consultations/settings (admin)
+const getConsultationSettings = asyncHandler(async (req, res) => {
+  const settings = await ConsultationSettings.getSingleton();
+  res.status(200).json({
+    dailyLimit: settings.dailyLimit,
+  });
+});
+
+// PATCH /api/consultations/settings (admin)
+const updateConsultationSettings = asyncHandler(async (req, res) => {
+  const nextDailyLimit = Number(req.body.dailyLimit);
+
+  if (!Number.isInteger(nextDailyLimit) || nextDailyLimit < 1) {
+    return res.status(400).json({ detail: 'Daily consultation limit must be a whole number greater than 0.' });
+  }
+
+  const settings = await ConsultationSettings.getSingleton();
+  settings.dailyLimit = nextDailyLimit;
+  await settings.save();
+
+  res.status(200).json({ dailyLimit: settings.dailyLimit });
+});
+
 module.exports = {
   createConsultation,
+  getConsultationAvailability,
   listConsultations,
   updateConsultation,
-  deleteConsultation
+  deleteConsultation,
+  getConsultationSettings,
+  updateConsultationSettings,
 };
