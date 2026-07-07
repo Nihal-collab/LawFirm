@@ -9,7 +9,7 @@ const AIWidget = () => {
     {
       id: 'welcome',
       role: 'assistant',
-      content: 'Welcome to SR4IPR Partners AI Legal Assistant. How can I help you protect your innovation today?',
+      content: 'Welcome to ROOTSIP Partners AI Legal Assistant. How can I help you protect your innovation today?',
       isDisclaimered: false,
     },
   ]);
@@ -49,7 +49,7 @@ const AIWidget = () => {
         {
           id: errorMsgId,
           role: 'assistant',
-          content: 'Sorry, I am experiencing temporary difficulty. Please email us at consult@sr4ipr.com or schedule a consultation directly.'
+          content: 'Sorry, I am experiencing temporary difficulty. Please email us at consult@rootsip.com or schedule a consultation directly.'
         }
       ]);
     } finally {

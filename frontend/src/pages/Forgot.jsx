@@ -52,7 +52,7 @@ const Forgot = ({ adminOnly = false }) => {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="email@sr4ipr.com"
+                placeholder="email@rootsip.com"
                 className="w-full pl-11 pr-4 py-3 bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all text-sm"
               />
             </div>

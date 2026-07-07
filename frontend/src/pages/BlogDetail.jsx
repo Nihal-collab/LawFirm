@@ -98,7 +98,7 @@ const BlogDetail = () => {
               <Calendar size={13} strokeWidth={1.5} /> {formatDate(blog.published_at)}
             </span>
             <span className="flex items-center gap-1.5 font-light">
-              <User size={13} strokeWidth={1.5} /> SR4IPR Partners Editorial
+              <User size={13} strokeWidth={1.5} /> ROOTSIP Partners Editorial
             </span>
           </div>
  

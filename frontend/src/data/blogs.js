@@ -21,7 +21,7 @@ The PCT is an international treaty with more than 150 contracting states. It is 
     category: "Patents",
     image_url: "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=600",
     status: "PUBLISHED",
-    seo_title: "PCT International Patent Filing Strategy | SR4IPR Partners",
+    seo_title: "PCT International Patent Filing Strategy | ROOTSIP Partners",
     seo_description: "Learn the advantages of the Patent Cooperation Treaty (PCT) to file international patent applications and save on foreign registration costs.",
     published_at: "2024-03-01T00:00:00Z",
     created_at: "2024-03-01T00:00:00Z"

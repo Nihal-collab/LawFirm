@@ -13,7 +13,7 @@ const SEOManager = () => {
         const data = res.data;
 
         // 1. Update Document Title
-        document.title = data.title || 'SR4IPR Partners | Elite IP Rights Legal Counsel';
+        document.title = data.title || 'ROOTSIP Partners | Elite IP Rights Legal Counsel';
 
         // Helper to set or create meta tag
         const setMetaTag = (attrName, attrValue, content) => {
@@ -80,12 +80,12 @@ const SEOManager = () => {
           schemaObject = {
             "@context": "https://schema.org",
             "@type": "LegalService",
-            "name": "SR4IPR Partners",
+            "name": "ROOTSIP Partners",
             "description": data.meta_description,
-            "url": "https://www.sr4ipr.com",
-            "logo": "https://www.sr4ipr.com/logo.png",
+            "url": "https://www.rootsip.com",
+            "logo": "https://www.rootsip.com/logo.png",
             "telephone": "+91 22 5543-0980",
-            "email": "consult@sr4ipr.com",
+            "email": "consult@rootsip.com",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "Level 14, Nariman Point",
@@ -95,8 +95,8 @@ const SEOManager = () => {
               "addressCountry": "IN"
             },
             "sameAs": [
-              "https://linkedin.com/company/sr4ipr",
-              "https://twitter.com/sr4ipr"
+              "https://linkedin.com/company/rootsip",
+              "https://twitter.com/rootsip"
             ]
           };
         } else if (currentPath.startsWith('/services/')) {
@@ -108,8 +108,8 @@ const SEOManager = () => {
             "description": data.meta_description,
             "provider": {
               "@type": "LegalService",
-              "name": "SR4IPR Partners",
-              "url": "https://www.sr4ipr.com"
+              "name": "ROOTSIP Partners",
+              "url": "https://www.rootsip.com"
             }
           };
         } else if (currentPath.startsWith('/blog/')) {
@@ -122,14 +122,14 @@ const SEOManager = () => {
             "url": window.location.href,
             "author": {
               "@type": "Organization",
-              "name": "SR4IPR Partners"
+              "name": "ROOTSIP Partners"
             },
             "publisher": {
               "@type": "LegalService",
-              "name": "SR4IPR Partners",
+              "name": "ROOTSIP Partners",
               "logo": {
                 "@type": "ImageObject",
-                "url": "https://www.sr4ipr.com/logo.png"
+                "url": "https://www.rootsip.com/logo.png"
               }
             }
           };

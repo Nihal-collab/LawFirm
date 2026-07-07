@@ -15,7 +15,7 @@ const About = () => {
         
         {/* Title Header */}
         <div className="text-center space-y-3">
-          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">About SR4IPR Partners</span>
+          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">About ROOTSIP Partners</span>
           <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Securing Intellectual Innovation</h1>
           <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-2xl mx-auto font-normal leading-relaxed">Providing elite statutory counsel and technology auditing to establish defendable corporate parameters.</p>
         </div>

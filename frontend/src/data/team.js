@@ -9,7 +9,7 @@ export const team = [
     experience: "22 Years",
     linkedin_url: "https://linkedin.com",
     twitter_url: "https://twitter.com",
-    email: "s.rao@sr4ipr.com"
+    email: "s.rao@rootsip.com"
   },
   {
     id: 2,
@@ -21,7 +21,7 @@ export const team = [
     experience: "14 Years",
     linkedin_url: "https://linkedin.com",
     twitter_url: "https://twitter.com",
-    email: "a.sen@sr4ipr.com"
+    email: "a.sen@rootsip.com"
   },
   {
     id: 3,
@@ -33,6 +33,6 @@ export const team = [
     experience: "16 Years",
     linkedin_url: "https://linkedin.com",
     twitter_url: "https://twitter.com",
-    email: "m.vance@sr4ipr.com"
+    email: "m.vance@rootsip.com"
   }
 ];

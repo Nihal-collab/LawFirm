@@ -44,7 +44,7 @@ const Footer = () => {
           {/* Brand Col */}
           <div className="space-y-6">
             <div className="flex flex-col">
-              <span className="font-serif text-2xl font-bold tracking-wider text-white">SR4IPR Partners</span>
+              <span className="font-serif text-2xl font-bold tracking-wider text-white">ROOTSIP Partners</span>
               <span className="text-[9px] tracking-[0.25em] text-[#8B6B57] uppercase font-semibold">Intellectual Property Counsel</span>
             </div>
             <p className="text-sm text-[#C9C1B5] leading-relaxed">
@@ -101,7 +101,7 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail size={16} className="text-[#8B6B57] shrink-0" />
-                <span className="text-[#C9C1B5]">{settings?.email || "consult@sr4ipr.com"}</span>
+                <span className="text-[#C9C1B5]">{settings?.email || "consult@rootsip.com"}</span>
               </div>
             </div>
           </div>
@@ -109,7 +109,7 @@ const Footer = () => {
 
         {/* Footer Bottom */}
         <div className="border-t border-[#2D2A28] mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-[#C9C1B5]/60 gap-4">
-          <p>&copy; {currentYear} {settings?.copyright || "SR4IPR Partners. All Rights Reserved."}</p>
+          <p>&copy; {currentYear} {settings?.copyright || "ROOTSIP Partners. All Rights Reserved."}</p>
           <div className="flex items-center gap-4">
             <Link to="/faqs" className="hover:text-white">Disclaimer & Cookie Policy</Link>
             <span>|</span>

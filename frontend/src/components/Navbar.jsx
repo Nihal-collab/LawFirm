@@ -62,7 +62,7 @@ const Navbar = () => {
           {/* Logo Branding (left aligned) */}
           <div className="w-1/4 flex justify-start flex-shrink-0">
             <Link to="/" className="flex flex-col justify-center group">
-              <span className="font-serif text-xl 2xl:text-2xl font-bold tracking-wider gradient-gold whitespace-nowrap transition-transform duration-300 group-hover:scale-[1.01]">SR4IPR Partners</span>
+              <span className="font-serif text-xl 2xl:text-2xl font-bold tracking-wider gradient-gold whitespace-nowrap transition-transform duration-300 group-hover:scale-[1.01]">ROOTSIP Partners</span>
               <span className="text-[8px] tracking-[0.25em] text-[#6D6258] dark:text-[#C9C1B5] font-sans uppercase whitespace-nowrap">Intellectual Property Counsel</span>
             </Link>
           </div>

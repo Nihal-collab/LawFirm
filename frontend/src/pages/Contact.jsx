@@ -58,7 +58,7 @@ const Contact = () => {
         {/* Header */}
         <div className="text-center space-y-3">
           <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Contact Us</span>
-          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Connect with SR4IPR Partners</h1>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Connect with ROOTSIP Partners</h1>
           <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-xl mx-auto">Enquire about trademark protection terms or software registries. Our representatives respond within 24 business hours.</p>
         </div>
 
@@ -96,7 +96,7 @@ const Contact = () => {
                   <Mail size={18} className="text-[#8B6B57] mt-1 shrink-0" strokeWidth={1.5} />
                   <div>
                     <h4 className="font-serif font-medium text-[#171717] dark:text-[#F8F5F0] text-base">Email Communications</h4>
-                    <p className="text-[#6D6258] dark:text-[#C9C1B5] text-xs mt-1 leading-relaxed font-light">{settings?.email || "consult@sr4ipr.com"} (IP Enquiries)</p>
+                    <p className="text-[#6D6258] dark:text-[#C9C1B5] text-xs mt-1 leading-relaxed font-light">{settings?.email || "consult@rootsip.com"} (IP Enquiries)</p>
                   </div>
                 </div>
               </div>

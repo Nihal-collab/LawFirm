@@ -23,7 +23,7 @@ const iconMap = {
 // Fallback video shown when no videos are returned from the API
 const FALLBACK_VIDEO = {
   title: 'Understanding Intellectual Property Rights',
-  description: 'A brief overview of how SR4IPR Partners protects innovation through patents, trademarks, and copyrights.',
+  description: 'A brief overview of how ROOTSIP Partners protects innovation through patents, trademarks, and copyrights.',
   youtube_video_id: 'dQw4w9WgXcQ',
   is_active: true,
 };
@@ -84,7 +84,7 @@ const Home = () => {
         <div className="absolute inset-0">
           <img
             src={content.hero_image}
-            alt="SR4IPR Partners"
+            alt="ROOTSIP Partners"
             className="h-full w-full object-cover object-center"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#F8F5F0]/95 via-[#F8F5F0]/70 to-[#F8F5F0]/20 dark:from-[#121110]/92 dark:via-[#121110]/70 dark:to-[#121110]/25" />
@@ -100,7 +100,7 @@ const Home = () => {
                 transition={{ duration: 0.6 }}
                 className="text-[#8B6B57] tracking-[0.35em] text-xs sm:text-sm font-semibold uppercase block"
               >
-                SR4IPR Partners
+                ROOTSIP Partners
               </motion.span>
               <span className="text-[11px] sm:text-sm tracking-[0.3em] text-[#6D6258]/90 dark:text-[#C9C1B5]/90 uppercase font-semibold block">Elite IP Rights Counsel</span>
             </div>

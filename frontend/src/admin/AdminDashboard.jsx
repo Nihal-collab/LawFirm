@@ -751,13 +751,13 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab('homepage_cms')}
               className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'homepage_cms' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
             >
-              <Settings size={16} /> Homepage copy CMS
+              <Settings size={16} /> Homepage copy
             </button>
             <button
               onClick={() => setActiveTab('about_cms')}
               className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'about_cms' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
             >
-              <Settings size={16} /> About Us CMS
+              <Settings size={16} /> About Us
             </button>
             <button
               onClick={() => setActiveTab('services')}
@@ -775,13 +775,13 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab('blogs')}
               className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'blogs' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
             >
-              <FileText size={16} /> Blogs CMS
+              <FileText size={16} /> Blogs
             </button>
             <button
               onClick={() => setActiveTab('gallery')}
               className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'gallery' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
             >
-              <ImageIcon size={16} /> Gallery CMS
+              <ImageIcon size={16} /> Gallery
             </button>
             <button
               onClick={() => setActiveTab('success_stories')}
@@ -805,7 +805,7 @@ const AdminDashboard = () => {
               onClick={() => setActiveTab('faqs')}
               className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'faqs' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
             >
-              <HelpCircle size={16} /> FAQs CMS
+              <HelpCircle size={16} /> FAQs
             </button>
             <button
               onClick={() => setActiveTab('settings')}
@@ -1355,7 +1355,7 @@ const AdminDashboard = () => {
                         type="email"
                         value={teamEmail}
                         onChange={(e) => setTeamEmail(e.target.value)}
-                        placeholder="s.rao@sr4ipr.com"
+                        placeholder="s.rao@rootsip.com"
                         className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none"
                       />
                     </div>
@@ -2108,7 +2108,7 @@ const AdminDashboard = () => {
                       required
                       value={settingsEmail}
                       onChange={(e) => setSettingsEmail(e.target.value)}
-                      placeholder="consult@sr4ipr.com"
+                      placeholder="consult@rootsip.com"
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
                     />
                   </div>
