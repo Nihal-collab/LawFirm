@@ -12,6 +12,7 @@ const aiRoutes = require('./src/routes/ai.routes');
 const contactRoutes = require('./src/routes/contact.routes');
 const consultationRoutes = require('./src/routes/consultation.routes');
 const videoRoutes = require('./src/routes/video.routes');
+const analyticsRoutes = require('./src/routes/analytics.routes');
 
 const app = express();
 
@@ -77,6 +78,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/consultations', consultationRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api', analyticsRoutes);
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {

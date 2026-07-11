@@ -12,7 +12,7 @@ const contactSchema = new mongoose.Schema(
     },
     phone: { type: String, trim: true },
     subject: { type: String, trim: true },
-    message: { type: String, required: true, trim: true },
+    message: { type: String, trim: true },
     // For consultation requests (from BookConsultation page)
     type: {
       type: String,
@@ -25,12 +25,24 @@ const contactSchema = new mongoose.Schema(
     company: { type: String, trim: true },
     status: {
       type: String,
-      enum: ['NEW', 'CONTACTED', 'RESOLVED', 'PENDING', 'COMPLETED', 'CLOSED'],
+      enum: ['NEW', 'CONTACTED', 'RESOLVED', 'PENDING', 'COMPLETED', 'CLOSED', 'Pending Payment', 'Payment Successful', 'Payment Failed', 'Payment Cancelled'],
       default: 'NEW',
     },
     adminNotes: { type: String },
     assigned_lawyer: { type: String, trim: true },
     notes: { type: String, trim: true },
+    
+    // PayPal Payment Fields
+    paypalTransactionId: { type: String },
+    paypalOrderId: { type: String },
+    paymentStatus: { type: String },
+    paymentMethod: { type: String, default: 'PayPal' },
+    paymentAmount: { type: Number },
+    paymentCurrency: { type: String },
+    paymentDate: { type: Date },
+    payerName: { type: String },
+    payerEmail: { type: String },
+    paypalCaptureId: { type: String },
   },
   { timestamps: true }
 );

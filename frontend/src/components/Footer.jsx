@@ -97,11 +97,11 @@ const Footer = () => {
               </div>
               <div className="flex items-center gap-2.5 pt-2">
                 <Phone size={16} className="text-[#8B6B57] shrink-0" />
-                <span className="text-[#C9C1B5]">{settings?.phone || "+91 22 5543-0980"}</span>
+                <span className="text-[#C9C1B5]">{settings?.phone || "+91 7731023446"}</span>
               </div>
               <div className="flex items-center gap-2.5">
                 <Mail size={16} className="text-[#8B6B57] shrink-0" />
-                <span className="text-[#C9C1B5]">{settings?.email || "consult@rootsip.com"}</span>
+                <span className="text-[#C9C1B5]">{settings?.email || "gnihal4321@gmail.com"}</span>
               </div>
             </div>
           </div>

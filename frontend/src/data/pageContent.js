@@ -1,6 +1,6 @@
 export const siteSettings = {
-  email: "consult@rootsip.com",
-  phone: "+91 22 5543-0980",
+  email: "gnihal4321@gmail.com",
+  phone: "+91 7731023446",
   hq_address: "Level 14, Nariman Point, Mumbai - 400021, India",
   liaison_address: "Canary Wharf, London E14, United Kingdom",
   copyright: "ROOTSIP Partners. All Rights Reserved.",

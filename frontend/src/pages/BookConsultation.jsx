@@ -36,6 +36,10 @@ const BookConsultation = () => {
   const [bookedSlots, setBookedSlots] = useState([]);
   const [dateAvailability, setDateAvailability] = useState({});
   const [selectedDateAvailability, setSelectedDateAvailability] = useState(null);
+  const [bookedName, setBookedName] = useState('');
+  const [bookedService, setBookedService] = useState('');
+  const [bookedDate, setBookedDate] = useState('');
+  const [bookedTime, setBookedTime] = useState('');
 
   useEffect(() => {
     // Generate dates for the next 10 days (excluding Sundays)
@@ -125,7 +129,29 @@ const BookConsultation = () => {
         message
       });
       if (res.status === 201) {
+        if (res.data.approveUrl) {
+          // Redirect the user to PayPal checkout
+          window.location.href = res.data.approveUrl;
+          return;
+        }
         showToast('Consultation request submitted successfully!', 'success');
+        setBookedName(name);
+        setBookedService(service);
+        setBookedDate(date);
+        setBookedTime(time);
+
+        setName('');
+        setEmail('');
+        setPhone('');
+        setCompany('');
+        setMessage('');
+        if (availableDates.length > 0) {
+          const yyyy = availableDates[0].getFullYear();
+          const mm = String(availableDates[0].getMonth() + 1).padStart(2, '0');
+          const dd = String(availableDates[0].getDate()).padStart(2, '0');
+          setDate(`${yyyy}-${mm}-${dd}`);
+        }
+
         setSubmitted(true);
       }
     } catch (err) {
@@ -145,13 +171,13 @@ const BookConsultation = () => {
           </div>
           <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Request Received</h2>
           <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-light">
-            Thank you, <strong>{name}</strong>. Your appointment request for <strong>{service}</strong> has been logged in our queue.
+            Thank you, <strong>{bookedName}</strong>. Your appointment request for <strong>{bookedService}</strong> has been logged in our queue.
           </p>
           
           <div className="bg-[#F8F5F0] dark:bg-[#1C1A19] p-5 rounded-[12px] text-left text-xs space-y-3 border border-[#DDD5C8] dark:border-slate-800/80 text-[#6D6258] dark:text-[#C9C1B5]">
-            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Date:</strong> {date}</div>
-            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Time Slot:</strong> {time}</div>
-            <div><strong className="font-medium text-[#171717] dark:text-white">Target Practice Area:</strong> {service}</div>
+            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Date:</strong> {bookedDate}</div>
+            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Time Slot:</strong> {bookedTime}</div>
+            <div><strong className="font-medium text-[#171717] dark:text-white">Target Practice Area:</strong> {bookedService}</div>
             <div className="text-[10px] text-[#6D6258]/60 pt-2 border-t border-[#DDD5C8]/50 dark:border-slate-800">
               A confirmation email has been logged. An attorney will verify and send the coordinates (Zoom or Google Meet).
             </div>
@@ -329,7 +355,7 @@ const BookConsultation = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Technology description / briefing</label>
+                <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Technology description / briefing (Optional)</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}

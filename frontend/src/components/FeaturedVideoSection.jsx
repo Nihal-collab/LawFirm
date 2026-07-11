@@ -10,13 +10,13 @@ import { extractYoutubeId, getYoutubeEmbedUrl, getYoutubeThumbnailUrl } from '..
  * @param {Object} props.video - The active video object from DB/state
  */
 export default function FeaturedVideoSection({ video }) {
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(true);
   const [thumbnailUrl, setThumbnailUrl] = useState('');
   const playButtonRef = useRef(null);
 
-  // Reset play state if the video object changes (e.g. admin switches active video)
+  // Autoplay video on load or if the active video changes
   useEffect(() => {
-    setIsPlaying(false);
+    setIsPlaying(true);
   }, [video]);
 
   if (!video) return null;

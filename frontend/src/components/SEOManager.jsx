@@ -84,8 +84,8 @@ const SEOManager = () => {
             "description": data.meta_description,
             "url": "https://www.rootsip.com",
             "logo": "https://www.rootsip.com/logo.png",
-            "telephone": "+91 22 5543-0980",
-            "email": "consult@rootsip.com",
+            "telephone": "+91 7731023446",
+            "email": "gnihal4321@gmail.com",
             "address": {
               "@type": "PostalAddress",
               "streetAddress": "Level 14, Nariman Point",

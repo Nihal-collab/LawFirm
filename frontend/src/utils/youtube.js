@@ -40,7 +40,8 @@ export const extractYoutubeId = (url) => {
 export const getYoutubeEmbedUrl = (videoId, autoplay = true) => {
   if (!videoId) return '';
   const autoplayParam = autoplay ? '1' : '0';
-  return `https://www.youtube.com/embed/${videoId}?autoplay=${autoplayParam}&rel=0`;
+  const muteParam = autoplay ? '&mute=1' : '';
+  return `https://www.youtube.com/embed/${videoId}?autoplay=${autoplayParam}${muteParam}&rel=0`;
 };
 
 /**

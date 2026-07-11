@@ -28,6 +28,9 @@ const FALLBACK_VIDEO = {
   is_active: true,
 };
 
+// Global session flag to prevent double-incrementing visit during React 18 Strict Mode double-render in dev
+let hasRecordedVisit = false;
+
 const Home = () => {
   const navigate = useNavigate();
   const [content, setContent] = useState(homeContent);
@@ -43,6 +46,19 @@ const Home = () => {
 
 
   useEffect(() => {
+    // Record visit on page load - only once per page load
+    if (!hasRecordedVisit) {
+      hasRecordedVisit = true;
+      const recordVisit = async () => {
+        try {
+          await API.post('analytics/visit');
+        } catch (err) {
+          console.error('Failed to log visitor analytics:', err);
+        }
+      };
+      recordVisit();
+    }
+
     setContent(homeContent);
     setServices(servicesData);
     setTeam(teamData);
@@ -75,23 +91,15 @@ const Home = () => {
     <div className="page-enter overflow-x-hidden bg-[#F8F5F0] dark:bg-[#121110]">
       
       {/* 1. Hero Section */}
-      <section className="relative min-h-screen flex items-center bg-[#F8F5F0] dark:bg-[#121110] overflow-hidden">
+      <section className="relative min-h-screen flex items-center bg-gradient-to-b from-[#faf8f4] to-[#f3efe8] dark:from-[#181614] dark:to-[#121110] overflow-hidden">
         
         {/* Background mesh glow - extremely subtle luxury styling */}
         <div className="absolute top-1/4 left-1/4 w-[500px] h-[500px] bg-[#8B6B57]/3 dark:bg-[#8B6B57]/5 blur-[160px] rounded-full pointer-events-none"></div>
         <div className="absolute bottom-1/4 right-1/4 w-[600px] h-[600px] bg-[#8B6B57]/3 dark:bg-[#8B6B57]/5 blur-[180px] rounded-full pointer-events-none"></div>
 
-        <div className="absolute inset-0">
-          <img
-            src={content.hero_image}
-            alt="ROOTSIP Partners"
-            className="h-full w-full object-cover object-center"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#F8F5F0]/95 via-[#F8F5F0]/70 to-[#F8F5F0]/20 dark:from-[#121110]/92 dark:via-[#121110]/70 dark:to-[#121110]/25" />
-          <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#F8F5F0]/20 dark:to-[#121110]/30" />
-        </div>
+        {/* Lady Justice statue background image removed per requirements to use clean professional color instead */}
 
-        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-24 sm:py-28 lg:py-32">
+        <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-32 sm:py-36 lg:py-40">
           <div className="max-w-3xl space-y-8 text-center lg:text-left lg:mx-auto xl:mx-0 xl:max-w-4xl">
             <div className="space-y-2">
               <motion.span 
@@ -605,11 +613,11 @@ const Home = () => {
             </Link>
           </div>
           <div className="flex justify-center items-center gap-6 text-xs text-[#C9C1B5]/60 pt-6 border-t border-slate-800 max-w-md mx-auto">
-            <a href="https://wa.me/912255430980" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#8B6B57] transition-colors">
+            <a href="https://wa.me/917731023446" target="_blank" rel="noopener noreferrer" className="flex items-center gap-2 hover:text-[#8B6B57] transition-colors">
               <MessageSquare size={14} strokeWidth={1.5} /> Chat on WhatsApp
             </a>
             <span>•</span>
-            <a href="tel:+912255430980" className="flex items-center gap-2 hover:text-[#8B6B57] transition-colors">
+            <a href="tel:+917731023446" className="flex items-center gap-2 hover:text-[#8B6B57] transition-colors">
               <PhoneCall size={14} strokeWidth={1.5} /> Direct Hotline
             </a>
           </div>

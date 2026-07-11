@@ -33,6 +33,14 @@ const AdminDashboard = () => {
     success: 0
   });
 
+  // Website Analytics State
+  const [analytics, setAnalytics] = useState({
+    today: 0,
+    thisMonth: 0,
+    thisYear: 0,
+    totalVisitors: 0
+  });
+
   // Data lists
   const [consultations, setConsultations] = useState([]);
   const [blogs, setBlogs] = useState([]);
@@ -153,10 +161,11 @@ const AdminDashboard = () => {
   const loadAdminData = async () => {
     setLoading(true);
     try {
-      const [consRes, videoRes, consultSettingsRes] = await Promise.all([
+      const [consRes, videoRes, consultSettingsRes, analyticsRes] = await Promise.all([
         API.get('consultations/'),
         API.get('videos/all').catch(() => ({ data: [] })),
-        API.get('consultations/settings/').catch(() => ({ data: { dailyLimit: 3 } }))
+        API.get('consultations/settings/').catch(() => ({ data: { dailyLimit: 3 } })),
+        API.get('admin/analytics').catch(() => ({ data: { today: 0, thisMonth: 0, thisYear: 0, totalVisitors: 0 } }))
       ]);
 
       setConsultations(consRes.data);
@@ -168,6 +177,7 @@ const AdminDashboard = () => {
       setServices(staticServices);
       setGallery(staticGallery);
       setSuccessStories(staticSuccess);
+      setAnalytics(analyticsRes.data);
 
       setCmsHome({
         hero_title: staticHome.hero_title || '',
@@ -861,6 +871,31 @@ const AdminDashboard = () => {
               <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-5 rounded-lg shadow-sm">
                 <div className="text-2xl font-serif font-bold text-gold">{stats.testimonials}</div>
                 <div className="text-[10px] font-semibold text-slate-500 uppercase mt-1">Testimonials</div>
+              </div>
+            </div>
+
+            {/* Website Visitor Analytics */}
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 shadow-sm space-y-4">
+              <h2 className="text-lg font-serif font-bold text-navy dark:text-white border-b pb-2">
+                Website Analytics
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center font-sans">
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Today's Visitors</div>
+                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.today}</div>
+                </div>
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Monthly Visitors</div>
+                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.thisMonth}</div>
+                </div>
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Yearly Visitors</div>
+                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.thisYear}</div>
+                </div>
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                  <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Total Visitors</div>
+                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.totalVisitors}</div>
+                </div>
               </div>
             </div>
 
@@ -1874,6 +1909,10 @@ const AdminDashboard = () => {
                 <option value="PENDING">Pending</option>
                 <option value="CONTACTED">Contacted</option>
                 <option value="COMPLETED">Completed</option>
+                <option value="Pending Payment">Pending Payment</option>
+                <option value="Payment Successful">Payment Successful</option>
+                <option value="Payment Failed">Payment Failed</option>
+                <option value="Payment Cancelled">Payment Cancelled</option>
               </select>
               <select
                 value={consultationService}
@@ -1913,6 +1952,14 @@ const AdminDashboard = () => {
                         <div className="font-semibold text-slate-800 dark:text-slate-100">{c.name}</div>
                         <div className="text-[10px] text-slate-450">{c.email} • {c.phone}</div>
                         {c.message && <div className="text-[10px] text-slate-500 mt-1 max-w-[250px] truncate" title={c.message}>"{c.message}"</div>}
+                        {c.paypalTransactionId && (
+                          <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-500 space-y-0.5">
+                            <div className="font-semibold text-[#8B6B57]">PayPal Payment Details:</div>
+                            <div>Transaction ID: <span className="font-mono">{c.paypalTransactionId}</span></div>
+                            <div>Amount: {c.paymentCurrency === 'INR' ? 'INR ' : '$'}{c.paymentAmount} {c.paymentCurrency}</div>
+                            {c.payerEmail && <div>Payer: {c.payerEmail}</div>}
+                          </div>
+                        )}
                       </td>
                       <td className="p-3 font-semibold text-slate-600 dark:text-slate-350">{c.company || 'N/A'}</td>
                       <td className="p-3 font-medium text-slate-700 dark:text-slate-350">{c.date} • {c.time}</td>
@@ -1926,6 +1973,10 @@ const AdminDashboard = () => {
                           <option value="PENDING">Pending</option>
                           <option value="CONTACTED">Contacted</option>
                           <option value="COMPLETED">Completed</option>
+                          <option value="Pending Payment">Pending Payment</option>
+                          <option value="Payment Successful">Payment Successful</option>
+                          <option value="Payment Failed">Payment Failed</option>
+                          <option value="Payment Cancelled">Payment Cancelled</option>
                         </select>
                       </td>
                       <td className="p-3">

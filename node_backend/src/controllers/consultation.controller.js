@@ -2,8 +2,9 @@ const Contact = require('../models/Contact');
 const ConsultationSettings = require('../models/ConsultationSettings');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendContactNotification } = require('../services/email.service');
+const paypalService = require('../services/paypal.service');
 
-const ACTIVE_CONSULTATION_STATUSES = ['NEW', 'PENDING', 'CONTACTED', 'COMPLETED'];
+const ACTIVE_CONSULTATION_STATUSES = ['NEW', 'PENDING', 'CONTACTED', 'COMPLETED', 'Payment Successful'];
 
 const isValidDateString = (value) => /^\d{4}-\d{2}-\d{2}$/.test(value || '');
 
@@ -30,7 +31,19 @@ const mapConsultation = (doc) => {
     assigned_lawyer: doc.assigned_lawyer,
     notes: doc.notes,
     createdAt: doc.createdAt,
-    updatedAt: doc.updatedAt
+    updatedAt: doc.updatedAt,
+    
+    // PayPal Payment Fields
+    paypalTransactionId: doc.paypalTransactionId,
+    paypalOrderId: doc.paypalOrderId,
+    paymentStatus: doc.paymentStatus,
+    paymentMethod: doc.paymentMethod,
+    paymentAmount: doc.paymentAmount,
+    paymentCurrency: doc.paymentCurrency,
+    paymentDate: doc.paymentDate,
+    payerName: doc.payerName,
+    payerEmail: doc.payerEmail,
+    paypalCaptureId: doc.paypalCaptureId,
   };
 };
 
@@ -40,8 +53,8 @@ const createConsultation = asyncHandler(async (req, res) => {
     name, email, phone, company, date, time, service, message
   } = req.body;
 
-  if (!name || !email || !date || !time || !message) {
-    return res.status(400).json({ detail: 'Name, email, date, time, and message are required.' });
+  if (!name || !email || !date || !time) {
+    return res.status(400).json({ detail: 'Name, email, date, and time are required.' });
   }
 
   if (!isValidDateString(date)) {
@@ -57,6 +70,8 @@ const createConsultation = asyncHandler(async (req, res) => {
     return res.status(400).json({ detail: 'Consultation date must be in the future.' });
   }
 
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+
   const [dailyLimit, duplicateBooking, activeBookingCount] = await Promise.all([
     getDailyLimit(),
     Contact.findOne({
@@ -64,12 +79,18 @@ const createConsultation = asyncHandler(async (req, res) => {
       email: normalizedEmail,
       consultationDate: date,
       consultationTime: time,
-      status: { $ne: 'CLOSED' },
+      $or: [
+        { status: { $in: ACTIVE_CONSULTATION_STATUSES } },
+        { status: 'Pending Payment', createdAt: { $gte: fifteenMinutesAgo } }
+      ]
     }),
     Contact.countDocuments({
       type: 'CONSULTATION',
       consultationDate: date,
-      status: { $in: ACTIVE_CONSULTATION_STATUSES },
+      $or: [
+        { status: { $in: ACTIVE_CONSULTATION_STATUSES } },
+        { status: 'Pending Payment', createdAt: { $gte: fifteenMinutesAgo } }
+      ]
     }),
   ]);
 
@@ -85,23 +106,46 @@ const createConsultation = asyncHandler(async (req, res) => {
     });
   }
 
-  const consultation = await Contact.create({
-    name,
-    email: normalizedEmail,
-    phone,
-    company,
-    consultationDate: date,
-    consultationTime: time,
-    serviceArea: service,
-    message,
-    type: 'CONSULTATION',
-    status: 'PENDING', // Consultations default to PENDING
-  });
+  let consultation;
+  try {
+    consultation = await Contact.create({
+      name,
+      email: normalizedEmail,
+      phone,
+      company,
+      consultationDate: date,
+      consultationTime: time,
+      serviceArea: service,
+      message,
+      type: 'CONSULTATION',
+      status: 'Pending Payment', // Consultations start as Pending Payment
+    });
 
-  // Send email notification (async, non-blocking)
-  sendContactNotification(consultation).catch(() => {});
+    const frontendOrigin = process.env.FRONTEND_ORIGIN || req.headers.origin || 'http://localhost:5173';
+    const returnUrl = `${frontendOrigin}/book-consultation/success?bookingId=${consultation._id}`;
+    const cancelUrl = `${frontendOrigin}/book-consultation/cancel?bookingId=${consultation._id}`;
 
-  res.status(201).json(mapConsultation(consultation));
+    const amount = process.env.CONSULTATION_FEE || '100.00';
+    const currency = process.env.CONSULTATION_CURRENCY || 'USD';
+
+    // Initiate PayPal checkout order
+    const paypalOrder = await paypalService.createPayPalOrder(amount, currency, returnUrl, cancelUrl);
+
+    consultation.paypalOrderId = paypalOrder.id;
+    await consultation.save();
+
+    res.status(201).json({
+      booking: mapConsultation(consultation),
+      approveUrl: paypalOrder.approveUrl,
+    });
+  } catch (error) {
+    console.error('Failed to initiate consultation booking payment:', error);
+    if (consultation) {
+      consultation.status = 'Payment Failed';
+      await consultation.save().catch(() => {});
+    }
+    res.status(500).json({ detail: error.message || 'Failed to initiate PayPal checkout. Please try again.' });
+  }
 });
 
 // GET /api/consultations/availability?date=YYYY-MM-DD (public)
@@ -113,10 +157,15 @@ const getConsultationAvailability = asyncHandler(async (req, res) => {
   }
 
   const dailyLimit = await getDailyLimit();
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+
   const consultations = await Contact.find({
     type: 'CONSULTATION',
     consultationDate: date,
-    status: { $in: ACTIVE_CONSULTATION_STATUSES },
+    $or: [
+      { status: { $in: ACTIVE_CONSULTATION_STATUSES } },
+      { status: 'Pending Payment', createdAt: { $gte: fifteenMinutesAgo } }
+    ]
   }).select('consultationTime status');
 
   const bookedSlots = consultations.map((consultation) => consultation.consultationTime);
@@ -129,6 +178,98 @@ const getConsultationAvailability = asyncHandler(async (req, res) => {
     remainingSlots: Math.max(dailyLimit - bookedCount, 0),
     isAvailable: bookedCount < dailyLimit,
     bookedSlots,
+  });
+});
+
+// POST /api/consultations/capture (public — verifies payment from PayPal)
+const captureConsultationPayment = asyncHandler(async (req, res) => {
+  const { orderId, bookingId } = req.body;
+
+  if (!orderId || !bookingId) {
+    return res.status(400).json({ detail: 'Order ID and Booking ID are required.' });
+  }
+
+  const booking = await Contact.findOne({ _id: bookingId, type: 'CONSULTATION' });
+  if (!booking) {
+    return res.status(404).json({ detail: 'Booking not found.' });
+  }
+
+  // Prevent duplicate capturing
+  if (booking.status === 'Payment Successful') {
+    return res.status(200).json({
+      detail: 'Payment already verified.',
+      booking: mapConsultation(booking)
+    });
+  }
+
+  try {
+    const captureResult = await paypalService.capturePayPalOrder(orderId);
+
+    // Verify successful status
+    const status = captureResult.status;
+    if (status !== 'COMPLETED') {
+      booking.status = 'Payment Failed';
+      await booking.save();
+      return res.status(400).json({ detail: `PayPal order status is ${status}. Capture failed.` });
+    }
+
+    // Extract payment details safely
+    const purchaseUnit = captureResult.purchaseUnits?.[0] || {};
+    const capture = purchaseUnit.payments?.captures?.[0] || {};
+    const payer = captureResult.payer || {};
+
+    booking.paypalTransactionId = capture.id;
+    booking.paypalOrderId = captureResult.id;
+    booking.paymentStatus = 'Successful';
+    booking.paymentMethod = 'PayPal';
+    booking.paymentAmount = parseFloat(capture.amount?.value || 0);
+    booking.paymentCurrency = capture.amount?.currencyCode || 'USD';
+    booking.paymentDate = new Date(capture.createTime || Date.now());
+    booking.payerName = `${payer.name?.givenName || ''} ${payer.name?.surname || ''}`.trim() || 'N/A';
+    booking.payerEmail = payer.emailAddress || 'N/A';
+    booking.paypalCaptureId = capture.id;
+
+    booking.status = 'Payment Successful';
+    await booking.save();
+
+    // Send confirmation emails (async, non-blocking but handled here now)
+    sendContactNotification(booking).catch((err) => {
+      console.error('Failed to send consultation confirmation emails:', err);
+    });
+
+    res.status(200).json({
+      detail: 'Payment verified and consultation booked successfully.',
+      booking: mapConsultation(booking)
+    });
+  } catch (error) {
+    console.error('Payment capture failed:', error);
+    booking.status = 'Payment Failed';
+    await booking.save();
+    res.status(500).json({ detail: error.message || 'Payment capture failed.' });
+  }
+});
+
+// POST /api/consultations/cancel (public — marks booking payment cancelled)
+const cancelConsultationBooking = asyncHandler(async (req, res) => {
+  const { bookingId } = req.body;
+
+  if (!bookingId) {
+    return res.status(400).json({ detail: 'Booking ID is required.' });
+  }
+
+  const booking = await Contact.findOne({ _id: bookingId, type: 'CONSULTATION' });
+  if (!booking) {
+    return res.status(404).json({ detail: 'Booking not found.' });
+  }
+
+  if (booking.status === 'Pending Payment') {
+    booking.status = 'Payment Cancelled';
+    await booking.save();
+  }
+
+  res.status(200).json({
+    detail: 'Booking status updated to cancelled.',
+    booking: mapConsultation(booking)
   });
 });
 
@@ -206,6 +347,8 @@ const updateConsultationSettings = asyncHandler(async (req, res) => {
 module.exports = {
   createConsultation,
   getConsultationAvailability,
+  captureConsultationPayment,
+  cancelConsultationBooking,
   listConsultations,
   updateConsultation,
   deleteConsultation,

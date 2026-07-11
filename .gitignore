@@ -45,9 +45,10 @@ lib/
 lib64/
 
 # ========================
-# Node / React Frontend
+# Node / React Frontend & Backend
 # ========================
 frontend/node_modules/
+node_backend/node_modules/
 frontend/dist/
 frontend/.vite/
 frontend/build/

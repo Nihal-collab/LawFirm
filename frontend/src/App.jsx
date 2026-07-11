@@ -21,6 +21,8 @@ import BlogList from './pages/BlogList';
 import BlogDetail from './pages/BlogDetail';
 import FaqList from './pages/FaqList';
 import BookConsultation from './pages/BookConsultation';
+import BookConsultationSuccess from './pages/BookConsultationSuccess';
+import BookConsultationCancel from './pages/BookConsultationCancel';
 import Contact from './pages/Contact';
 
 import Login from './pages/Login';
@@ -68,6 +70,8 @@ function App() {
                 <Route path="/blog/:slug" element={<BlogDetail />} />
                 <Route path="/faqs" element={<FaqList />} />
                 <Route path="/book-consultation" element={<BookConsultation />} />
+                <Route path="/book-consultation/success" element={<BookConsultationSuccess />} />
+                <Route path="/book-consultation/cancel" element={<BookConsultationCancel />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/login" element={<Navigate to="/admin/login" replace />} />
                 <Route path="/admin/login" element={<Login adminOnly />} />

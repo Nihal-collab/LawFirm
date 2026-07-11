@@ -3,6 +3,8 @@ const router = express.Router();
 const {
   createConsultation,
   getConsultationAvailability,
+  captureConsultationPayment,
+  cancelConsultationBooking,
   listConsultations,
   updateConsultation,
   deleteConsultation,
@@ -13,6 +15,8 @@ const { protect, requireAdmin } = require('../middlewares/auth.middleware');
 
 // Public - book a consultation or fetch slots
 router.post('/', createConsultation);
+router.post('/capture', captureConsultationPayment);
+router.post('/cancel', cancelConsultationBooking);
 router.get('/', listConsultations); // Public can fetch availability for date
 router.get('/availability', getConsultationAvailability);
 
