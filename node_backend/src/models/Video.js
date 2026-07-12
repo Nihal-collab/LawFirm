@@ -35,4 +35,8 @@ const videoSchema = new mongoose.Schema(
   }
 );
 
+// Indexes for query optimization
+videoSchema.index({ is_active: 1, display_order: 1, createdAt: -1 });
+videoSchema.index({ display_order: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Video', videoSchema);

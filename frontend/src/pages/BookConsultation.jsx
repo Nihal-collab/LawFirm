@@ -164,28 +164,28 @@ const BookConsultation = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-[85vh] flex items-center justify-center bg-[#F8F5F0] dark:bg-[#121110] px-6 font-sans">
+      <div className="min-h-[85vh] flex items-center justify-center bg-[#FFFFFF] dark:bg-[#121110] px-6 font-sans">
         <div className="max-w-md w-full card-premium text-center space-y-6">
           <div className="inline-flex p-3.5 bg-emerald-50 dark:bg-emerald-950/20 text-emerald-600 rounded-full border border-emerald-100 dark:border-emerald-900/50">
             <CheckCircle size={40} strokeWidth={1.5} />
           </div>
-          <h2 className="text-3xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Request Received</h2>
-          <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-light">
+          <h2 className="text-3xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF]">Request Received</h2>
+          <p className="text-sm text-[#444444] dark:text-[#C9C1B5] leading-relaxed font-light">
             Thank you, <strong>{bookedName}</strong>. Your appointment request for <strong>{bookedService}</strong> has been logged in our queue.
           </p>
           
-          <div className="bg-[#F8F5F0] dark:bg-[#1C1A19] p-5 rounded-[12px] text-left text-xs space-y-3 border border-[#DDD5C8] dark:border-slate-800/80 text-[#6D6258] dark:text-[#C9C1B5]">
-            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Date:</strong> {bookedDate}</div>
-            <div><strong className="font-medium text-[#171717] dark:text-white">Requested Time Slot:</strong> {bookedTime}</div>
-            <div><strong className="font-medium text-[#171717] dark:text-white">Target Practice Area:</strong> {bookedService}</div>
-            <div className="text-[10px] text-[#6D6258]/60 pt-2 border-t border-[#DDD5C8]/50 dark:border-slate-800">
+          <div className="bg-[#FFFFFF] dark:bg-[#1C1A19] p-5 rounded-[12px] text-left text-xs space-y-3 border border-[#E5E7EB] dark:border-slate-800/80 text-[#444444] dark:text-[#C9C1B5]">
+            <div><strong className="font-medium text-[#000000] dark:text-white">Requested Date:</strong> {bookedDate}</div>
+            <div><strong className="font-medium text-[#000000] dark:text-white">Requested Time Slot:</strong> {bookedTime}</div>
+            <div><strong className="font-medium text-[#000000] dark:text-white">Target Practice Area:</strong> {bookedService}</div>
+            <div className="text-[10px] text-[#444444]/60 pt-2 border-t border-[#E5E7EB]/50 dark:border-slate-800">
               A confirmation email has been logged. An attorney will verify and send the coordinates (Zoom or Google Meet).
             </div>
           </div>
           
           <button
             onClick={() => setSubmitted(false)}
-            className="w-full py-3.5 border border-[#DDD5C8] hover:border-[#8B6B57] dark:border-slate-800 text-[#171717] dark:text-[#F8F5F0] hover:text-[#8B6B57] dark:hover:text-[#8B6B57] rounded-full text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
+            className="w-full py-3.5 border border-[#E5E7EB] hover:border-[#4BB8E8] dark:border-slate-800 text-[#000000] dark:text-[#FFFFFF] hover:text-[#4BB8E8] dark:hover:text-[#4BB8E8] rounded-full text-xs font-semibold uppercase tracking-wider transition-colors cursor-pointer"
           >
             Schedule Another Strategy Session
           </button>
@@ -195,14 +195,14 @@ const BookConsultation = () => {
   }
 
   return (
-    <div className="page-enter py-16 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+    <div className="page-enter py-16 bg-[#FFFFFF] dark:bg-[#121110] min-h-screen">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-12">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Schedule Strategy Session</span>
-          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">Confidential IPR Evaluation</h1>
-          <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-xl mx-auto">Book a 30-minute introductory meeting with our managing attorneys. All details submitted are strictly protected under confidentiality protocols.</p>
+          <span className="text-[#4BB8E8] uppercase tracking-[0.25em] text-xs font-semibold block">Schedule Strategy Session</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF]">Confidential IPR Evaluation</h1>
+          <p className="text-[#444444] dark:text-[#C9C1B5] text-sm max-w-xl mx-auto">Book a 30-minute introductory meeting with our managing attorneys. All details submitted are strictly protected under confidentiality protocols.</p>
         </div>
 
         {/* Layout Column */}
@@ -214,58 +214,58 @@ const BookConsultation = () => {
               
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Full Name</label>
+                  <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Full Name</label>
                   <input
                     type="text"
                     required
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder="Enter name"
-                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                    className="w-full px-4 py-2.5 text-sm bg-[#FFFFFF] dark:bg-[#252220] text-[#000000] dark:text-white border border-[#E5E7EB] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#4BB8E8] transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Email Address</label>
+                  <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Email Address</label>
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@company.com"
-                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                    className="w-full px-4 py-2.5 text-sm bg-[#FFFFFF] dark:bg-[#252220] text-[#000000] dark:text-white border border-[#E5E7EB] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#4BB8E8] transition-all"
                   />
                 </div>
               </div>
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Phone Number</label>
+                  <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Phone Number</label>
                   <input
                     type="tel"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     placeholder="+1 (555) 012-3456"
-                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                    className="w-full px-4 py-2.5 text-sm bg-[#FFFFFF] dark:bg-[#252220] text-[#000000] dark:text-white border border-[#E5E7EB] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#4BB8E8] transition-all"
                   />
                 </div>
                 <div className="space-y-2">
-                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Company Name (Optional)</label>
+                  <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Company Name (Optional)</label>
                   <input
                     type="text"
                     value={company}
                     onChange={(e) => setCompany(e.target.value)}
                     placeholder="Enter company name"
-                    className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                    className="w-full px-4 py-2.5 text-sm bg-[#FFFFFF] dark:bg-[#252220] text-[#000000] dark:text-white border border-[#E5E7EB] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#4BB8E8] transition-all"
                   />
                 </div>
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">IPR Practice Area</label>
+                <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">IPR Practice Area</label>
                 <select
                   value={service}
                   onChange={(e) => setService(e.target.value)}
-                  className="w-full px-4 py-3 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                  className="w-full px-4 py-3 text-sm bg-[#FFFFFF] dark:bg-[#252220] text-[#000000] dark:text-white border border-[#E5E7EB] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#4BB8E8] transition-all"
                 >
                   {services.map((s) => (
                     <option key={s} value={s}>{s}</option>
@@ -275,7 +275,7 @@ const BookConsultation = () => {
 
               <div className="space-y-6">
                 <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Preferred Date</label>
+                  <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Preferred Date</label>
                   <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                     {availableDates.map((d) => {
                       const yyyy = d.getFullYear();
@@ -298,10 +298,10 @@ const BookConsultation = () => {
                           onClick={() => setDate(dateVal)}
                           className={`flex flex-col items-center justify-center p-3.5 border rounded-[12px] transition-all font-sans cursor-pointer ${
                             isSelected
-                              ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
+                              ? 'bg-[#000000] dark:bg-[#4BB8E8] text-[#FFFFFF] dark:text-[#000000] border-transparent shadow-xs'
                               : isFullyBooked
-                                ? 'bg-[#EFE8DD] dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 text-slate-400 opacity-60 cursor-not-allowed'
-                                : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
+                                ? 'bg-[#F8FAFC] dark:bg-[#1C1A19] border-[#E5E7EB] dark:border-slate-800 text-slate-400 opacity-60 cursor-not-allowed'
+                                : 'bg-white dark:bg-[#1C1A19] border-[#E5E7EB] dark:border-slate-800 hover:border-[#4BB8E8] text-[#444444] dark:text-[#C9C1B5]'
                           }`}
                         >
                           <span className="text-[9px] uppercase font-bold tracking-wider">{dayName}</span>
@@ -315,7 +315,7 @@ const BookConsultation = () => {
                 </div>
 
                 <div className="space-y-3">
-                  <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Preferred Time Slot</label>
+                  <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Preferred Time Slot</label>
                   <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
                     {timeSlots.map((slot) => {
                       const isSelected = time === slot;
@@ -330,12 +330,12 @@ const BookConsultation = () => {
                           onClick={() => setTime(slot)}
                           className={`py-3 px-2 text-xs font-sans font-semibold border rounded-[12px] transition-all text-center cursor-pointer ${
                             isSelected
-                              ? 'bg-[#171717] dark:bg-[#8B6B57] text-[#F8F5F0] dark:text-[#171717] border-transparent shadow-xs'
+                              ? 'bg-[#000000] dark:bg-[#4BB8E8] text-[#FFFFFF] dark:text-[#000000] border-transparent shadow-xs'
                               : isBooked
-                                ? 'opacity-40 cursor-not-allowed bg-[#EFE8DD] dark:bg-navy-dark/10 border-[#DDD5C8] dark:border-slate-800 text-slate-400 line-through'
+                                ? 'opacity-40 cursor-not-allowed bg-[#F8FAFC] dark:bg-navy-dark/10 border-[#E5E7EB] dark:border-slate-800 text-slate-400 line-through'
                                 : isDateFull
-                                  ? 'opacity-40 cursor-not-allowed bg-[#EFE8DD] dark:bg-navy-dark/10 border-[#DDD5C8] dark:border-slate-800 text-slate-400'
-                                : 'bg-white dark:bg-[#1C1A19] border-[#DDD5C8] dark:border-slate-800 hover:border-[#8B6B57] text-[#6D6258] dark:text-[#C9C1B5]'
+                                  ? 'opacity-40 cursor-not-allowed bg-[#F8FAFC] dark:bg-navy-dark/10 border-[#E5E7EB] dark:border-slate-800 text-slate-400'
+                                : 'bg-white dark:bg-[#1C1A19] border-[#E5E7EB] dark:border-slate-800 hover:border-[#4BB8E8] text-[#444444] dark:text-[#C9C1B5]'
                           }`}
                         >
                           {slot}
@@ -355,13 +355,13 @@ const BookConsultation = () => {
               </div>
 
               <div className="space-y-2">
-                <label className="text-xs font-semibold text-[#6D6258] dark:text-[#C9C1B5] uppercase tracking-wide block">Technology description / briefing (Optional)</label>
+                <label className="text-xs font-semibold text-[#444444] dark:text-[#C9C1B5] uppercase tracking-wide block">Technology description / briefing (Optional)</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows="4"
                   placeholder="Outline details of patent drafts or trademarks search titles you wish to consult on..."
-                  className="w-full px-4 py-2.5 text-sm bg-[#F8F5F0] dark:bg-[#252220] text-[#171717] dark:text-white border border-[#DDD5C8] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#8B6B57] transition-all"
+                  className="w-full px-4 py-2.5 text-sm bg-[#FFFFFF] dark:bg-[#252220] text-[#000000] dark:text-white border border-[#E5E7EB] dark:border-slate-800 rounded focus:outline-hidden focus:border-[#4BB8E8] transition-all"
                 ></textarea>
               </div>
 
@@ -377,33 +377,33 @@ const BookConsultation = () => {
 
           {/* Guidelines Sidebar */}
           <div className="lg:col-span-4 card-premium text-xs leading-relaxed space-y-6">
-            <h3 className="text-lg font-serif font-medium text-[#171717] dark:text-[#F8F5F0] border-b border-[#DDD5C8]/40 pb-3 flex items-center gap-1.5">
+            <h3 className="text-lg font-serif font-medium text-[#000000] dark:text-[#FFFFFF] border-b border-[#E5E7EB]/40 pb-3 flex items-center gap-1.5">
               Booking Guidelines
             </h3>
             
             <div className="space-y-5">
               <div className="flex gap-3">
-                <div className="w-5 h-5 bg-[#8B6B57]/10 text-[#8B6B57] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
+                <div className="w-5 h-5 bg-[#4BB8E8]/10 text-[#4BB8E8] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
                   ✓
                 </div>
-                <div className="text-[#6D6258] dark:text-[#C9C1B5] font-light">
-                  <strong className="font-medium text-[#171717] dark:text-white">NDA Coverage:</strong> All consultations operate under legal privilege. Do not hesitate to discuss mechanisms or code logics.
+                <div className="text-[#444444] dark:text-[#C9C1B5] font-light">
+                  <strong className="font-medium text-[#000000] dark:text-white">NDA Coverage:</strong> All consultations operate under legal privilege. Do not hesitate to discuss mechanisms or code logics.
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-5 h-5 bg-[#8B6B57]/10 text-[#8B6B57] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
+                <div className="w-5 h-5 bg-[#4BB8E8]/10 text-[#4BB8E8] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
                   ✓
                 </div>
-                <div className="text-[#6D6258] dark:text-[#C9C1B5] font-light">
-                  <strong className="font-medium text-[#171717] dark:text-white">Zoom coordinates:</strong> Meeting invitations containing Google Meet or Zoom coordinates are shared via email after admin approval.
+                <div className="text-[#444444] dark:text-[#C9C1B5] font-light">
+                  <strong className="font-medium text-[#000000] dark:text-white">Zoom coordinates:</strong> Meeting invitations containing Google Meet or Zoom coordinates are shared via email after admin approval.
                 </div>
               </div>
               <div className="flex gap-3">
-                <div className="w-5 h-5 bg-[#8B6B57]/10 text-[#8B6B57] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
+                <div className="w-5 h-5 bg-[#4BB8E8]/10 text-[#4BB8E8] rounded-[4px] flex items-center justify-center shrink-0 text-[10px] font-bold">
                   ✓
                 </div>
-                <div className="text-[#6D6258] dark:text-[#C9C1B5] font-light">
-                  <strong className="font-medium text-[#171717] dark:text-white">Rescheduling:</strong> You may modify booking requests up to 12 hours prior to scheduled sessions.
+                <div className="text-[#444444] dark:text-[#C9C1B5] font-light">
+                  <strong className="font-medium text-[#000000] dark:text-white">Rescheduling:</strong> You may modify booking requests up to 12 hours prior to scheduled sessions.
                 </div>
               </div>
             </div>

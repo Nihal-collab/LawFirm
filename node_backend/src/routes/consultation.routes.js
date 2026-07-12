@@ -5,6 +5,7 @@ const {
   getConsultationAvailability,
   captureConsultationPayment,
   cancelConsultationBooking,
+  exportConsultationsCSV,
   listConsultations,
   updateConsultation,
   deleteConsultation,
@@ -17,10 +18,11 @@ const { protect, requireAdmin } = require('../middlewares/auth.middleware');
 router.post('/', createConsultation);
 router.post('/capture', captureConsultationPayment);
 router.post('/cancel', cancelConsultationBooking);
-router.get('/', listConsultations); // Public can fetch availability for date
 router.get('/availability', getConsultationAvailability);
 
-// Admin protected routes for modifying consultation bookings
+// Admin protected routes for modifying and listing consultation bookings
+router.get('/', protect, requireAdmin, listConsultations);
+router.get('/export_csv', protect, requireAdmin, exportConsultationsCSV);
 router.get('/settings', protect, requireAdmin, getConsultationSettings);
 router.patch('/settings', protect, requireAdmin, updateConsultationSettings);
 router.patch('/:id', protect, requireAdmin, updateConsultation);

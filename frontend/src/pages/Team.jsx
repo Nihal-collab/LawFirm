@@ -20,14 +20,14 @@ const Team = () => {
   const displayMembers = team;
 
   return (
-    <div className="page-enter py-16 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+    <div className="page-enter py-16 bg-[#FFFFFF] dark:bg-[#121110] min-h-screen">
       <div className="max-w-7xl mx-auto px-6 sm:px-8 space-y-16">
         
         {/* Header */}
         <div className="text-center space-y-3">
-          <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">Our Specialists</span>
-          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0]">IP Lawyers & Technical Agents</h1>
-          <p className="text-[#6D6258] dark:text-[#C9C1B5] text-sm max-w-2xl mx-auto font-normal leading-relaxed">Combining PhD-level scientific depth with elite legal training to secure client innovations.</p>
+          <span className="text-[#4BB8E8] uppercase tracking-[0.25em] text-xs font-semibold block">Our Specialists</span>
+          <h1 className="text-4xl sm:text-5xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF]">IP Lawyers & Technical Agents</h1>
+          <p className="text-[#444444] dark:text-[#C9C1B5] text-sm max-w-2xl mx-auto font-normal leading-relaxed">Combining PhD-level scientific depth with elite legal training to secure client innovations.</p>
         </div>
 
         {/* Members Grid */}
@@ -48,21 +48,21 @@ const Team = () => {
                 {/* Info Text */}
                 <div className="p-8 space-y-4">
                   <div className="space-y-1">
-                    <h3 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] transition-colors duration-300 group-hover:text-[#8B6B57]">{m.name}</h3>
-                    <p className="text-[#8B6B57] font-semibold text-xs uppercase tracking-wider">{m.role}</p>
+                    <h3 className="text-2xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] transition-colors duration-300 group-hover:text-[#4BB8E8]">{m.name}</h3>
+                    <p className="text-[#4BB8E8] font-semibold text-xs uppercase tracking-wider">{m.role}</p>
                   </div>
-                  <p className="text-sm text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal">
+                  <p className="text-sm text-[#444444] dark:text-[#C9C1B5] leading-relaxed font-normal">
                     {m.bio}
                   </p>
                   
                   {/* Stats list */}
-                  <div className="border-t border-[#DDD5C8]/40 dark:border-slate-850 pt-4 space-y-2.5 text-xs text-[#6D6258] dark:text-[#C9C1B5]">
+                  <div className="border-t border-[#E5E7EB]/40 dark:border-slate-850 pt-4 space-y-2.5 text-xs text-[#444444] dark:text-[#C9C1B5]">
                     <div className="flex items-start gap-2">
-                      <Award size={14} className="text-[#8B6B57] shrink-0 mt-0.5" strokeWidth={1.5} />
+                      <Award size={14} className="text-[#4BB8E8] shrink-0 mt-0.5" strokeWidth={1.5} />
                       <span className="font-normal">{m.qualifications}</span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <Clock size={14} className="text-[#8B6B57] shrink-0" strokeWidth={1.5} />
+                      <Clock size={14} className="text-[#4BB8E8] shrink-0" strokeWidth={1.5} />
                       <span className="font-normal">{m.experience} experience</span>
                     </div>
                   </div>
@@ -70,20 +70,20 @@ const Team = () => {
               </div>
 
               {/* Contacts Row */}
-              <div className="px-8 py-5 border-t border-[#DDD5C8]/40 dark:border-slate-850 flex items-center justify-between text-[#6D6258] dark:text-[#C9C1B5] mt-auto">
+              <div className="px-8 py-5 border-t border-[#E5E7EB]/40 dark:border-slate-850 flex items-center justify-between text-[#444444] dark:text-[#C9C1B5] mt-auto">
                 {m.email && (
-                  <a href={`mailto:${m.email}`} className="text-xs hover:text-[#8B6B57] transition-colors flex items-center gap-1.5 font-light">
+                  <a href={`mailto:${m.email}`} className="text-xs hover:text-[#4BB8E8] transition-colors flex items-center gap-1.5 font-light">
                     <Mail size={13} strokeWidth={1.5} /> {m.email}
                   </a>
                 )}
                 <div className="flex gap-3">
                   {m.linkedin_url && (
-                    <a href={m.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#8B6B57] transition-colors text-[#6D6258]/80">
+                    <a href={m.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#4BB8E8] transition-colors text-[#444444]/80">
                       <LinkedinIcon size={14} />
                     </a>
                   )}
                   {m.twitter_url && (
-                    <a href={m.twitter_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#8B6B57] transition-colors text-[#6D6258]/80">
+                    <a href={m.twitter_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#4BB8E8] transition-colors text-[#444444]/80">
                       <TwitterIcon size={14} />
                     </a>
                   )}

@@ -4,13 +4,13 @@
 @config "../tailwind.config.js";
 
 :root {
-  --bg-primary: #F8F5F0;
-  --bg-secondary: #EFE8DD;
+  --bg-primary: #FFFFFF;
+  --bg-secondary: #F8FAFC;
   --bg-card: #FFFFFF;
-  --text-primary: #171717;
-  --text-secondary: #6D6258;
-  --color-accent: #8B6B57;
-  --border-elegant: #DDD5C8;
+  --text-primary: #000000;
+  --text-secondary: #444444;
+  --color-accent: #4BB8E8;
+  --border-elegant: #E5E7EB;
 }
 
 @layer base {
@@ -20,17 +20,17 @@
   }
   
   body {
-    @apply bg-[#F8F5F0] text-[#171717] font-sans antialiased transition-colors duration-300;
+    @apply bg-white text-slate-800 font-sans antialiased transition-colors duration-300;
     line-height: 1.75;
     font-family: 'Inter', sans-serif;
   }
 
   body.dark {
-    @apply bg-[#121110] text-[#F8F5F0];
+    @apply bg-[#121110] text-[#FFFFFF];
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-normal text-[#171717] dark:text-[#F8F5F0];
+    @apply font-serif tracking-normal text-black dark:text-[#FFFFFF];
     font-family: 'Cormorant Garamond', serif;
   }
 
@@ -40,29 +40,29 @@
 
   /* Focus ring overrides for accessibility */
   input:focus, select:focus, textarea:focus {
-    @apply border-[#8B6B57] ring-0 outline-hidden;
+    @apply border-[#4BB8E8] ring-0 outline-hidden;
   }
 }
 
 @layer components {
   /* Premium Pill Button (Primary) */
   .btn-gold {
-    @apply bg-[#171717] dark:bg-[#F8F5F0] text-white dark:text-[#171717] hover:bg-[#8B6B57] dark:hover:bg-[#8B6B57] hover:text-white dark:hover:text-white font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] inline-flex items-center justify-center gap-2;
+    @apply bg-black dark:bg-[#F8FAFC] text-white dark:text-black hover:bg-[#4BB8E8] dark:hover:bg-[#4BB8E8] hover:text-white dark:hover:text-white font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] inline-flex items-center justify-center gap-2;
   }
 
   /* Premium Pill Button (Secondary/Outlined) */
   .btn-navy {
-    @apply bg-transparent text-[#171717] dark:text-[#F8F5F0] hover:bg-[#171717] hover:text-white dark:hover:bg-[#F8F5F0] dark:hover:text-[#171717] border border-[#DDD5C8] dark:border-slate-800 font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center justify-center gap-2;
+    @apply bg-white text-black dark:bg-[#121110] dark:text-white hover:border-[#4BB8E8] hover:text-[#4BB8E8] dark:hover:border-[#4BB8E8] dark:hover:text-[#4BB8E8] border border-black dark:border-slate-800 font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center justify-center gap-2;
   }
 
   /* Luxury Card */
   .card-premium {
-    @apply bg-white dark:bg-[#1C1A19] border border-[#DDD5C8]/80 dark:border-slate-800/80 rounded-[20px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(139,107,87,0.06)] hover:border-[#8B6B57] dark:hover:border-[#8B6B57] transition-all duration-500 transform hover:-translate-y-2;
+    @apply bg-white dark:bg-[#1C1A19] border border-[#E5E7EB] dark:border-slate-800 rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(75,184,232,0.06)] hover:border-[#4BB8E8] dark:hover:border-[#4BB8E8] transition-all duration-300 transform hover:-translate-y-1;
   }
 
   /* Text Highlight Gradient (Luxury) */
   .gradient-gold {
-    @apply bg-gradient-to-r from-[#171717] to-[#8B6B57] dark:from-[#F8F5F0] dark:to-[#8B6B57] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-black to-[#4BB8E8] dark:from-white dark:to-[#4BB8E8] bg-clip-text text-transparent;
   }
 
   /* Underline link animation */
@@ -77,7 +77,7 @@
     height: 1px;
     bottom: 0;
     left: 0;
-    background-color: #8B6B57;
+    background-color: #4BB8E8;
     transform-origin: bottom right;
     transition: transform 0.3s ease-out;
   }
@@ -93,10 +93,10 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-[#F8F5F0] dark:bg-[#121110];
+  @apply bg-[#FFFFFF] dark:bg-[#121110];
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#DDD5C8] dark:bg-[#2D2A28] rounded-full hover:bg-[#8B6B57] transition-colors;
+  @apply bg-[#E5E7EB] dark:bg-[#2D2A28] rounded-full hover:bg-[#4BB8E8] transition-colors;
 }
 
 /* Slide up page transition animation */

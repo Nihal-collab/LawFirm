@@ -26,6 +26,14 @@ const login = asyncHandler(async (req, res) => {
   user.refreshToken = refresh;
   await user.save({ validateBeforeSave: false });
 
+  // Set httpOnly secure refresh token cookie
+  res.cookie('refreshToken', refresh, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+    maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+  });
+
   res.status(200).json({
     access,
     refresh,
@@ -41,7 +49,7 @@ const login = asyncHandler(async (req, res) => {
 
 // POST /api/auth/refresh
 const refreshToken = asyncHandler(async (req, res) => {
-  const { refresh } = req.body;
+  const refresh = req.body.refresh || req.cookies?.refreshToken;
 
   if (!refresh) {
     return res.status(400).json({ detail: 'Refresh token is required.' });
@@ -69,6 +77,13 @@ const refreshToken = asyncHandler(async (req, res) => {
 const logout = asyncHandler(async (req, res) => {
   // Clear refresh token from DB
   await User.findByIdAndUpdate(req.user._id, { refreshToken: null });
+
+  res.clearCookie('refreshToken', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'strict',
+  });
+
   res.status(200).json({ detail: 'Logout successful.' });
 });
 

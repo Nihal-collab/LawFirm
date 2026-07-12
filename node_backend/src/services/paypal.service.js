@@ -53,7 +53,7 @@ const createPayPalOrder = async (amount, currency, returnUrl, cancelUrl) => {
           returnUrl,
           cancelUrl,
           userAction: 'PAY_NOW',
-          brandName: 'SR4IPR Partners'
+          brandName: 'Roots-ip'
         }
       }
     }

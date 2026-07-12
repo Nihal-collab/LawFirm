@@ -53,20 +53,20 @@ export default function FeaturedVideoSection({ video }) {
   };
 
   return (
-    <section className="py-20 lg:py-24 bg-[#F8F5F0] dark:bg-[#121110] border-t border-[#DDD5C8]/80 dark:border-slate-850">
+    <section className="py-20 lg:py-24 bg-[#F8FAFC] dark:bg-[#121110] border-t border-[#E5E7EB] dark:border-slate-850">
       <div className="max-w-7xl mx-auto px-6 sm:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
           
           {/* Left Content Column */}
           <div className="lg:col-span-5 space-y-6">
-            <span className="text-[#8B6B57] uppercase tracking-[0.2em] font-semibold text-xs block">
-              Featured Video Briefing
+            <span className="text-[#4BB8E8] uppercase tracking-[0.2em] font-semibold text-xs block">
+               Featured Video Briefing
             </span>
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] leading-tight">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium text-black dark:text-[#FFFFFF] leading-tight">
               {video.title}
             </h2>
             {video.description && (
-              <p className="text-sm sm:text-base text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed font-normal">
+              <p className="text-sm sm:text-base text-[#444444] dark:text-[#C9C1B5] leading-relaxed font-normal font-sans">
                 {video.description}
               </p>
             )}
@@ -75,7 +75,7 @@ export default function FeaturedVideoSection({ video }) {
             <div className="pt-4">
               <a
                 href="/book-consultation"
-                className="inline-flex items-center gap-3 px-6 py-3.5 bg-[#8B6B57] text-[#F8F5F0] text-xs font-semibold uppercase tracking-widest hover:bg-[#171717] dark:hover:bg-[#F8F5F0] dark:hover:text-[#171717] transition-all rounded-xs cursor-pointer shadow-sm hover:shadow-md active:translate-y-[1px]"
+                className="inline-flex items-center gap-3 px-6 py-3.5 bg-black text-white text-xs font-semibold uppercase tracking-widest hover:bg-[#4BB8E8] hover:text-white transition-all rounded-full cursor-pointer shadow-sm hover:shadow-md active:translate-y-[1px]"
               >
                 Schedule Consultation
               </a>
@@ -84,7 +84,7 @@ export default function FeaturedVideoSection({ video }) {
 
           {/* Right Video Embed Column */}
           <div className="lg:col-span-7">
-            <div className="relative aspect-video w-full rounded-[20px] lg:rounded-[24px] bg-[#EBE7DF] dark:bg-[#1C1A19] shadow-lg hover:shadow-xl border border-[#DDD5C8]/60 dark:border-slate-800 overflow-hidden group transition-all duration-500">
+            <div className="relative aspect-video w-full rounded-[20px] lg:rounded-[24px] bg-[#F8FAFC] dark:bg-[#1C1A19] shadow-lg hover:shadow-xl border border-[#E5E7EB] dark:border-slate-800 overflow-hidden group transition-all duration-500">
               
               {!isValid ? (
                 /* Error State */
@@ -92,7 +92,7 @@ export default function FeaturedVideoSection({ video }) {
                   <span className="text-red-500 font-semibold text-sm tracking-wide">
                     Invalid YouTube URL
                   </span>
-                  <p className="text-xs text-[#6D6258] dark:text-[#C9C1B5] mt-2 max-w-xs">
+                  <p className="text-xs text-[#444444] dark:text-[#C9C1B5] mt-2 max-w-xs">
                     Please verify the video link format in the admin dashboard settings.
                   </p>
                 </div>
@@ -131,11 +131,11 @@ export default function FeaturedVideoSection({ video }) {
                         handlePlayClick();
                       }}
                       onKeyDown={handleKeyDown}
-                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#8B6B57] text-[#F8F5F0] flex items-center justify-center shadow-xl hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#8B6B57]/50 active:scale-95 transition-all duration-300 transform group-hover:scale-105 relative"
+                      className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#4BB8E8] text-white flex items-center justify-center shadow-xl hover:shadow-2xl focus:outline-none focus:ring-4 focus:ring-[#4BB8E8]/50 active:scale-95 transition-all duration-300 transform group-hover:scale-105 relative"
                       aria-label={`Play Featured Video: ${video.title}`}
                     >
                       {/* Smooth ripple pulse animation ring */}
-                      <span className="absolute inset-0 rounded-full bg-[#8B6B57] opacity-30 group-hover:animate-ping"></span>
+                      <span className="absolute inset-0 rounded-full bg-[#4BB8E8] opacity-30 group-hover:animate-ping"></span>
                       
                       <Play 
                         size={24} 

@@ -202,6 +202,11 @@ const captureConsultationPayment = asyncHandler(async (req, res) => {
     });
   }
 
+  // Verify booking orderId matches the captured orderId (PayPal Order ID validation)
+  if (booking.paypalOrderId !== orderId) {
+    return res.status(400).json({ detail: 'PayPal Order ID mismatch.' });
+  }
+
   try {
     const captureResult = await paypalService.capturePayPalOrder(orderId);
 
@@ -218,12 +223,31 @@ const captureConsultationPayment = asyncHandler(async (req, res) => {
     const capture = purchaseUnit.payments?.captures?.[0] || {};
     const payer = captureResult.payer || {};
 
+    const expectedAmount = parseFloat(process.env.CONSULTATION_FEE || '100.00');
+    const expectedCurrency = process.env.CONSULTATION_CURRENCY || 'USD';
+    const actualAmount = parseFloat(capture.amount?.value || 0);
+    const actualCurrency = capture.amount?.currencyCode || 'USD';
+
+    // Validate Payment Amount and Currency (Parameter Tampering Protection)
+    if (Math.abs(actualAmount - expectedAmount) > 0.01) {
+      return res.status(400).json({ detail: `Incorrect payment amount. Expected: ${expectedAmount}, Received: ${actualAmount}` });
+    }
+    if (actualCurrency !== expectedCurrency) {
+      return res.status(400).json({ detail: `Incorrect payment currency. Expected: ${expectedCurrency}, Received: ${actualCurrency}` });
+    }
+
+    // Validate that transaction ID isn't reused on another booking (Transaction Replay Protection)
+    const duplicatePayment = await Contact.findOne({ paypalTransactionId: capture.id });
+    if (duplicatePayment) {
+      return res.status(400).json({ detail: 'This transaction ID has already been used for another booking.' });
+    }
+
     booking.paypalTransactionId = capture.id;
     booking.paypalOrderId = captureResult.id;
     booking.paymentStatus = 'Successful';
     booking.paymentMethod = 'PayPal';
-    booking.paymentAmount = parseFloat(capture.amount?.value || 0);
-    booking.paymentCurrency = capture.amount?.currencyCode || 'USD';
+    booking.paymentAmount = actualAmount;
+    booking.paymentCurrency = actualCurrency;
     booking.paymentDate = new Date(capture.createTime || Date.now());
     booking.payerName = `${payer.name?.givenName || ''} ${payer.name?.surname || ''}`.trim() || 'N/A';
     booking.payerEmail = payer.emailAddress || 'N/A';
@@ -271,6 +295,38 @@ const cancelConsultationBooking = asyncHandler(async (req, res) => {
     detail: 'Booking status updated to cancelled.',
     booking: mapConsultation(booking)
   });
+});
+
+// GET /api/consultations/export_csv (admin)
+const exportConsultationsCSV = asyncHandler(async (req, res) => {
+  const list = await Contact.find({ type: 'CONSULTATION' }).sort({ createdAt: -1 });
+
+  res.setHeader('Content-Type', 'text/csv');
+  res.setHeader('Content-Disposition', 'attachment; filename=consultations_export.csv');
+
+  // CSV headers
+  let csv = 'ID,Name,Email,Phone,Company,Date,Time,Service Area,Status,Payment Status,Amount,Currency,Transaction ID,Created At\n';
+
+  for (const item of list) {
+    const id = item._id;
+    const name = `"${(item.name || '').replace(/"/g, '""')}"`;
+    const email = `"${(item.email || '').replace(/"/g, '""')}"`;
+    const phone = `"${(item.phone || '').replace(/"/g, '""')}"`;
+    const company = `"${(item.company || '').replace(/"/g, '""')}"`;
+    const date = item.consultationDate || '';
+    const time = item.consultationTime || '';
+    const service = `"${(item.serviceArea || '').replace(/"/g, '""')}"`;
+    const status = item.status || '';
+    const paymentStatus = item.paymentStatus || '';
+    const amount = item.paymentAmount || 0;
+    const currency = item.paymentCurrency || 'USD';
+    const txnId = item.paypalTransactionId || '';
+    const createdAt = item.createdAt ? item.createdAt.toISOString() : '';
+
+    csv += `${id},${name},${email},${phone},${company},${date},${time},${service},${status},${paymentStatus},${amount},${currency},${txnId},${createdAt}\n`;
+  }
+
+  res.status(200).send(csv);
 });
 
 // GET /api/consultations (admin or public slot lookup)
@@ -349,6 +405,7 @@ module.exports = {
   getConsultationAvailability,
   captureConsultationPayment,
   cancelConsultationBooking,
+  exportConsultationsCSV,
   listConsultations,
   updateConsultation,
   deleteConsultation,

@@ -1,6 +1,7 @@
 const Contact = require('../models/Contact');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendContactNotification } = require('../services/email.service');
+const { escapeRegex } = require('../utils/regex');
 
 // POST /api/contact  (public — handles both contact form and consultation requests)
 const createContact = asyncHandler(async (req, res) => {
@@ -37,10 +38,11 @@ const listContacts = asyncHandler(async (req, res) => {
   if (status) filter.status = status;
   if (type) filter.type = type;
   if (search) {
+    const escapedSearch = escapeRegex(search);
     filter.$or = [
-      { name: { $regex: search, $options: 'i' } },
-      { email: { $regex: search, $options: 'i' } },
-      { message: { $regex: search, $options: 'i' } },
+      { name: { $regex: escapedSearch, $options: 'i' } },
+      { email: { $regex: escapedSearch, $options: 'i' } },
+      { message: { $regex: escapedSearch, $options: 'i' } },
     ];
   }
 

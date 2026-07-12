@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
 const cors = require('cors');
@@ -6,6 +7,7 @@ const morgan = require('morgan');
 
 const { apiLimiter } = require('./src/middlewares/rateLimiter.middleware');
 const errorHandler = require('./src/middlewares/error.middleware');
+const nosqlSanitize = require('./src/middlewares/sanitize.middleware');
 
 const authRoutes = require('./src/routes/auth.routes');
 const aiRoutes = require('./src/routes/ai.routes');
@@ -13,6 +15,7 @@ const contactRoutes = require('./src/routes/contact.routes');
 const consultationRoutes = require('./src/routes/consultation.routes');
 const videoRoutes = require('./src/routes/video.routes');
 const analyticsRoutes = require('./src/routes/analytics.routes');
+const seoRoutes = require('./src/routes/seo.routes');
 
 const app = express();
 
@@ -21,7 +24,34 @@ app.set('strict routing', false);  // Allow trailing slashes (e.g., /api/videos/
 app.set('case sensitive routing', false);
 
 // ── Security Middleware ──────────────────────────────────────────────────────
-app.use(helmet());
+app.use(
+  helmet({
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        fontSrc: ["'self'", "https://fonts.gstatic.com"],
+        imgSrc: ["'self'", "data:", "https://images.unsplash.com", "https://*.paypal.com"],
+        connectSrc: ["'self'", "http://localhost:5000", "http://localhost:5173", "https://*.paypal.com"],
+      },
+    },
+  })
+);
+app.use(nosqlSanitize);
+app.use((req, res, next) => {
+  req.cookies = {};
+  const rc = req.headers.cookie;
+  if (rc) {
+    rc.split(';').forEach((cookie) => {
+      const parts = cookie.split('=');
+      if (parts.length >= 1) {
+        req.cookies[parts.shift().trim()] = decodeURI(parts.join('='));
+      }
+    });
+  }
+  next();
+});
 app.set('trust proxy', 1); // Required for rate limiting behind proxies
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
@@ -51,8 +81,8 @@ app.use(
 app.use(compression());
 
 // ── Body Parsing ──────────────────────────────────────────────────────────────
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // ── Logging (dev only) ────────────────────────────────────────────────────────
 if (process.env.NODE_ENV !== 'production') {
@@ -78,6 +108,7 @@ app.use('/api/ai', aiRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/consultations', consultationRoutes);
 app.use('/api/videos', videoRoutes);
+app.use('/api/cms/seo', seoRoutes);
 app.use('/api', analyticsRoutes);
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────

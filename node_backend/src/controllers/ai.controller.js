@@ -2,6 +2,7 @@ const { v4: uuidv4 } = require('uuid');
 const AIChat = require('../models/AIChat');
 const { callAI } = require('../ai/groq.service');
 const asyncHandler = require('../utils/asyncHandler');
+const { verifyAccessToken } = require('../utils/token');
 
 // POST /api/ai/chat
 const chat = asyncHandler(async (req, res) => {
@@ -51,6 +52,25 @@ const getHistory = asyncHandler(async (req, res) => {
 
   if (!chatSession) {
     return res.status(404).json({ detail: 'Session not found.' });
+  }
+
+  // If the chat session is linked to a registered user, verify access permissions
+  if (chatSession.userId) {
+    let authUser = null;
+    const authHeader = req.headers.authorization;
+    if (authHeader && authHeader.startsWith('Bearer ')) {
+      try {
+        const token = authHeader.split(' ')[1];
+        const decoded = verifyAccessToken(token);
+        authUser = decoded;
+      } catch (err) {
+        // Suppress and keep authUser null
+      }
+    }
+
+    if (!authUser || (authUser.userId !== chatSession.userId.toString() && !['ADMIN', 'SUPERADMIN'].includes(authUser.role))) {
+      return res.status(403).json({ detail: 'Access denied to this chat session.' });
+    }
   }
 
   res.status(200).json({

@@ -37,21 +37,26 @@ const Footer = () => {
   }
 
   return (
-    <footer className="bg-[#171717] text-[#F8F5F0] border-t border-[#2D2A28] font-sans">
+    <footer className="bg-black text-white border-t border-slate-900 font-sans">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           
           {/* Brand Col */}
           <div className="space-y-6">
-            <div className="flex flex-col">
-              <span className="font-serif text-2xl font-bold tracking-wider text-white">ROOTSIP Partners</span>
-              <span className="text-[9px] tracking-[0.25em] text-[#8B6B57] uppercase font-semibold">Intellectual Property Counsel</span>
+            <div className="flex items-center gap-2.5">
+              <img src="/roots-logo-white.svg" alt="ROOTS-ip Logo" className="h-9 w-auto object-contain" />
+              <div className="flex flex-col">
+                <div className="font-serif text-2xl font-bold tracking-wider text-white whitespace-nowrap">
+                  ROOTS<span className="font-sans text-[#4BB8E8] font-bold">-ip</span>
+                </div>
+                <span className="text-[9px] tracking-[0.25em] text-[#4BB8E8] uppercase font-semibold">Intellectual Property Counsel</span>
+              </div>
             </div>
-            <p className="text-sm text-[#C9C1B5] leading-relaxed">
+            <p className="text-sm text-slate-300 leading-relaxed">
               Elite counsel securing patents, trademarks, and copyright assets for technology leaders across 45+ countries.
             </p>
-            <div className="flex items-center gap-2 text-xs text-[#C9C1B5]/75">
-              <Shield size={14} className="text-[#8B6B57]" /> WIPO & USPTO Registered Practitioners
+            <div className="flex items-center gap-2 text-xs text-slate-400">
+              <Shield size={14} className="text-[#4BB8E8]" /> WIPO & USPTO Registered Practitioners
             </div>
           </div>
 
@@ -59,11 +64,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-serif text-white font-medium text-lg tracking-wide">Resources</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/about" className="text-[#C9C1B5] hover:text-white transition-colors">Our History</Link></li>
-              <li><Link to="/team" className="text-[#C9C1B5] hover:text-white transition-colors">IP Lawyers</Link></li>
-              <li><Link to="/blog" className="text-[#C9C1B5] hover:text-white transition-colors">Blogs</Link></li>
-              <li><Link to="/gallery" className="text-[#C9C1B5] hover:text-white transition-colors">Gallery</Link></li>
-              <li><Link to="/client-success" className="text-[#C9C1B5] hover:text-white transition-colors">Client Success</Link></li>
+              <li><Link to="/about" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Our History</Link></li>
+              <li><Link to="/team" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">IP Lawyers</Link></li>
+              <li><Link to="/blog" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Blogs</Link></li>
+              <li><Link to="/gallery" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Gallery</Link></li>
+              <li><Link to="/client-success" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Client Success</Link></li>
             </ul>
           </div>
 
@@ -71,11 +76,11 @@ const Footer = () => {
           <div className="space-y-4">
             <h4 className="font-serif text-white font-medium text-lg tracking-wide">Practice Areas</h4>
             <ul className="space-y-3 text-sm">
-              <li><Link to="/services/patent-services" className="text-[#C9C1B5] hover:text-white transition-colors">Patent Prosecution</Link></li>
-              <li><Link to="/services/trademark-services" className="text-[#C9C1B5] hover:text-white transition-colors">Trademarks clearance</Link></li>
-              <li><Link to="/services/copyright-services" className="text-[#C9C1B5] hover:text-white transition-colors">Software Registration</Link></li>
-              <li><Link to="/services/design-registration" className="text-[#C9C1B5] hover:text-white transition-colors">Industrial Designs</Link></li>
-              <li><Link to="/services/litigation-enforcement" className="text-[#C9C1B5] hover:text-white transition-colors">IP Litigation</Link></li>
+              <li><Link to="/services/patent-services" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Patent Prosecution</Link></li>
+              <li><Link to="/services/trademark-services" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Trademarks clearance</Link></li>
+              <li><Link to="/services/copyright-services" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Software Registration</Link></li>
+              <li><Link to="/services/design-registration" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">Industrial Designs</Link></li>
+              <li><Link to="/services/litigation-enforcement" className="text-slate-300 hover:text-[#4BB8E8] transition-colors">IP Litigation</Link></li>
             </ul>
           </div>
 
@@ -84,54 +89,54 @@ const Footer = () => {
             <h4 className="font-serif text-white font-medium text-lg tracking-wide">Corporate Offices</h4>
             <div className="space-y-3">
               <div className="flex items-start gap-2.5">
-                <MapPin size={16} className="text-[#8B6B57] mt-1 shrink-0" />
-                <span className="text-[#C9C1B5] leading-relaxed">
+                <MapPin size={16} className="text-[#4BB8E8] mt-1 shrink-0" />
+                <span className="text-slate-300 leading-relaxed">
                   <strong className="text-white font-normal">HQ:</strong> {settings?.hq_address || "Level 14, Nariman Point, Mumbai - 400021, India"}
                 </span>
               </div>
               <div className="flex items-start gap-2.5">
-                <MapPin size={16} className="text-[#8B6B57] mt-1 shrink-0" />
-                <span className="text-[#C9C1B5] leading-relaxed">
+                <MapPin size={16} className="text-[#4BB8E8] mt-1 shrink-0" />
+                <span className="text-slate-300 leading-relaxed">
                   <strong className="text-white font-normal">Liaison Desk:</strong> {settings?.liaison_address || "Canary Wharf, London E14, UK"}
                 </span>
               </div>
               <div className="flex items-center gap-2.5 pt-2">
-                <Phone size={16} className="text-[#8B6B57] shrink-0" />
-                <span className="text-[#C9C1B5]">{settings?.phone || "+91 7731023446"}</span>
+                <Phone size={16} className="text-[#4BB8E8] shrink-0" />
+                <span className="text-slate-300">{settings?.phone || "+91 7731023446"}</span>
               </div>
               <div className="flex items-center gap-2.5">
-                <Mail size={16} className="text-[#8B6B57] shrink-0" />
-                <span className="text-[#C9C1B5]">{settings?.email || "gnihal4321@gmail.com"}</span>
+                <Mail size={16} className="text-[#4BB8E8] shrink-0" />
+                <span className="text-slate-300">{settings?.email || "gnihal4321@gmail.com"}</span>
               </div>
             </div>
           </div>
         </div>
 
         {/* Footer Bottom */}
-        <div className="border-t border-[#2D2A28] mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-[#C9C1B5]/60 gap-4">
+        <div className="border-t border-slate-900 mt-16 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-slate-400 gap-4">
           <p>&copy; {currentYear} {settings?.copyright || "ROOTSIP Partners. All Rights Reserved."}</p>
           <div className="flex items-center gap-4">
-            <Link to="/faqs" className="hover:text-white">Disclaimer & Cookie Policy</Link>
+            <Link to="/faqs" className="hover:text-[#4BB8E8]">Disclaimer & Cookie Policy</Link>
             <span>|</span>
             <div className="flex items-center gap-3">
               {settings?.linkedin_url && (
-                <a href={settings.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-white text-[#C9C1B5]/80">
+                <a href={settings.linkedin_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#4BB8E8] text-slate-400">
                   <LinkedinIcon size={14} />
                 </a>
               )}
               {settings?.twitter_url && (
-                <a href={settings.twitter_url} target="_blank" rel="noopener noreferrer" className="hover:text-white text-[#C9C1B5]/80">
+                <a href={settings.twitter_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#4BB8E8] text-slate-400">
                   <TwitterIcon size={14} />
                 </a>
               )}
               {settings?.facebook_url && (
-                <a href={settings.facebook_url} target="_blank" rel="noopener noreferrer" className="hover:text-white text-[#C9C1B5]/80">
+                <a href={settings.facebook_url} target="_blank" rel="noopener noreferrer" className="hover:text-[#4BB8E8] text-slate-400">
                   <FacebookIcon size={14} />
                 </a>
               )}
             </div>
             <span>|</span>
-            <span className="text-[#C9C1B5]/40">Enterprise Edition v2.1</span>
+            <span className="text-slate-600">Enterprise Edition v2.1</span>
           </div>
         </div>
       </div>

@@ -47,4 +47,10 @@ const contactSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+// Indexes for query optimization
+contactSchema.index({ type: 1, consultationDate: 1, consultationTime: 1 });
+contactSchema.index({ email: 1, type: 1 });
+contactSchema.index({ paypalOrderId: 1 });
+contactSchema.index({ type: 1, createdAt: -1 });
+
 module.exports = mongoose.model('Contact', contactSchema);

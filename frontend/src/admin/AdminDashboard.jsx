@@ -1954,7 +1954,7 @@ const AdminDashboard = () => {
                         {c.message && <div className="text-[10px] text-slate-500 mt-1 max-w-[250px] truncate" title={c.message}>"{c.message}"</div>}
                         {c.paypalTransactionId && (
                           <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-500 space-y-0.5">
-                            <div className="font-semibold text-[#8B6B57]">PayPal Payment Details:</div>
+                            <div className="font-semibold text-[#4BB8E8]">PayPal Payment Details:</div>
                             <div>Transaction ID: <span className="font-mono">{c.paypalTransactionId}</span></div>
                             <div>Amount: {c.paymentCurrency === 'INR' ? 'INR ' : '$'}{c.paymentAmount} {c.paymentCurrency}</div>
                             {c.payerEmail && <div>Payer: {c.payerEmail}</div>}
@@ -2418,7 +2418,7 @@ const AdminDashboard = () => {
                               </div>
                             </td>
                             <td className="py-4">
-                              <div className="font-bold text-[#171717] dark:text-white">{vid.title}</div>
+                              <div className="font-bold text-[#000000] dark:text-white">{vid.title}</div>
                               <div className="text-slate-400 max-w-xs truncate mt-0.5">{vid.description || 'No description provided.'}</div>
                               <a
                                 href={vid.youtube_url}

@@ -78,17 +78,17 @@ const ServiceDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#F8F5F0] dark:bg-[#121110]">
-        <div className="w-10 h-10 border-2 border-[#8B6B57] border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF] dark:bg-[#121110]">
+        <div className="w-10 h-10 border-2 border-[#4BB8E8] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!service) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#F8F5F0] dark:bg-[#121110] p-6 text-center">
-        <h2 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] mb-2">Practice Area Not Found</h2>
-        <p className="text-[#6D6258] dark:text-[#C9C1B5] mb-6 font-light text-sm">The requested service directory could not be located.</p>
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#FFFFFF] dark:bg-[#121110] p-6 text-center">
+        <h2 className="text-2xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] mb-2">Practice Area Not Found</h2>
+        <p className="text-[#444444] dark:text-[#C9C1B5] mb-6 font-light text-sm">The requested service directory could not be located.</p>
         <Link to="/services" className="btn-gold">
           <ArrowLeft size={14} /> Back to Services
         </Link>
@@ -99,22 +99,22 @@ const ServiceDetail = () => {
   const Icon = iconMap[service.icon] || ShieldCheck;
 
   return (
-    <div className="page-enter py-24 bg-[#F8F5F0] dark:bg-[#121110] min-h-screen">
+    <div className="page-enter py-24 bg-[#FFFFFF] dark:bg-[#121110] min-h-screen">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-8">
         
         {/* Back Link */}
-        <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#6D6258] hover:text-[#8B6B57] transition-colors">
+        <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#444444] hover:text-[#4BB8E8] transition-colors">
           <ArrowLeft size={14} /> Back to Practices
         </Link>
 
         {/* Hero Area */}
-        <div className="bg-[#171717] dark:bg-[#151413] text-white rounded-[20px] p-10 border border-[#8B6B57]/30 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+        <div className="bg-[#000000] dark:bg-[#151413] text-white rounded-[20px] p-10 border border-[#4BB8E8]/30 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
           <div className="space-y-3">
-            <span className="text-[#8B6B57] uppercase tracking-[0.25em] text-xs font-semibold block">{service.category} SECTOR</span>
-            <h1 className="text-3xl sm:text-4xl font-serif font-medium text-[#F8F5F0]">{service.name}</h1>
+            <span className="text-[#4BB8E8] uppercase tracking-[0.25em] text-xs font-semibold block">{service.category} SECTOR</span>
+            <h1 className="text-3xl sm:text-4xl font-serif font-medium text-[#FFFFFF]">{service.name}</h1>
             <p className="text-[#C9C1B5] text-sm max-w-2xl font-light leading-relaxed">{service.short_desc}</p>
           </div>
-          <div className="p-4 bg-[#8B6B57]/10 border border-[#8B6B57]/20 text-[#8B6B57] rounded-full shrink-0">
+          <div className="p-4 bg-[#4BB8E8]/10 border border-[#4BB8E8]/20 text-[#4BB8E8] rounded-full shrink-0">
             <Icon size={32} strokeWidth={1.5} />
           </div>
         </div>
@@ -124,16 +124,16 @@ const ServiceDetail = () => {
           
           {/* Main info */}
           <div className="lg:col-span-8 card-premium">
-            <h3 className="text-2xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] border-b border-[#DDD5C8]/40 pb-3">Practice Overview</h3>
-            <p className="text-[#6D6258] dark:text-[#C9C1B5] leading-relaxed text-sm whitespace-pre-wrap font-light">
+            <h3 className="text-2xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] border-b border-[#E5E7EB]/40 pb-3">Practice Overview</h3>
+            <p className="text-[#444444] dark:text-[#C9C1B5] leading-relaxed text-sm whitespace-pre-wrap font-light">
               {service.long_desc || service.short_desc}
             </p>
 
-            <h4 className="text-xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] pt-6">Sub-Practice Areas & Offerings</h4>
+            <h4 className="text-xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] pt-6">Sub-Practice Areas & Offerings</h4>
             <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
               {service.details_list.map((point, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-sm text-[#6D6258] dark:text-[#C9C1B5] font-light">
-                  <span className="w-1.5 h-1.5 bg-[#8B6B57] rounded-full shrink-0"></span>
+                <li key={idx} className="flex items-center gap-3 text-sm text-[#444444] dark:text-[#C9C1B5] font-light">
+                  <span className="w-1.5 h-1.5 bg-[#4BB8E8] rounded-full shrink-0"></span>
                   {point}
                 </li>
               ))}
@@ -142,8 +142,8 @@ const ServiceDetail = () => {
 
           {/* Sidebar CTA */}
           <div className="lg:col-span-4 card-premium h-fit space-y-6">
-            <h4 className="text-xl font-serif font-medium text-[#171717] dark:text-[#F8F5F0] border-b border-[#DDD5C8]/40 pb-3">Initiate File</h4>
-            <p className="text-[#6D6258] dark:text-[#C9C1B5] text-xs leading-relaxed font-light">
+            <h4 className="text-xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] border-b border-[#E5E7EB]/40 pb-3">Initiate File</h4>
+            <p className="text-[#444444] dark:text-[#C9C1B5] text-xs leading-relaxed font-light">
               Submit technological disclosures or scheduling requests. All briefs are protected under client-attorney confidentiality.
             </p>
             <div className="pt-2">
