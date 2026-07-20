@@ -44,7 +44,6 @@ const Footer = () => {
           {/* Brand Col */}
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <img src="/roots-logo-white.svg" alt="ROOTS-ip Logo" className="h-9 w-auto object-contain" />
               <div className="flex flex-col">
                 <div className="font-serif text-2xl font-bold tracking-wider text-white whitespace-nowrap">
                   ROOTS<span className="font-sans text-[#4BB8E8] font-bold">-ip</span>

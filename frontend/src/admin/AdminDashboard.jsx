@@ -15,7 +15,7 @@ import { homeContent as staticHome, aboutContent as staticAbout, siteSettings as
 import {
   LayoutDashboard, BookOpen, Users, HelpCircle, FileText,
   Plus, Edit2, Trash2, Check, X, Download, Settings,
-  Image as ImageIcon, Sparkles, ChevronUp, ChevronDown, LogOut, Play
+  Image as ImageIcon, Sparkles, ChevronUp, ChevronDown, LogOut, Play, Menu
 } from 'lucide-react';
 
 const AdminDashboard = () => {
@@ -23,6 +23,7 @@ const AdminDashboard = () => {
   const { showToast } = useToast();
   const [activeTab, setActiveTab] = useState('overview');
   const [loading, setLoading] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   // Stats data
   const [stats, setStats] = useState({
@@ -740,86 +741,121 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-slate-50 dark:bg-navy-dark dark:text-slate-100 flex flex-col lg:flex-row">
+    <div className="font-sans min-h-screen bg-slate-50 dark:bg-navy-dark dark:text-slate-100 flex flex-col lg:flex-row relative">
       
-      {/* 1. Left Sidebar menu */}
-      <div className="w-full lg:w-64 bg-navy text-white border-r border-gold-dark/30 shrink-0 flex flex-col justify-between">
+      {/* Mobile Sticky Header Bar */}
+      <div className="lg:hidden sticky top-0 z-40 bg-navy text-white border-b border-gold-dark/30 p-4 flex items-center justify-between shadow-md">
         <div>
-          <div className="p-6 border-b border-slate-800 text-center">
+          <h2 className="font-serif font-bold text-base text-gold">Management Portal</h2>
+          <p className="text-[9px] uppercase tracking-wider text-slate-400">Real-time CMS Desk</p>
+        </div>
+        <button
+          onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+          className="p-2 rounded bg-navy-accent border border-slate-700/60 text-gold hover:bg-slate-800 transition-colors focus:outline-none"
+          aria-label="Toggle navigation menu"
+        >
+          {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+        </button>
+      </div>
+
+      {/* Mobile Drawer Backdrop */}
+      {isMobileMenuOpen && (
+        <div
+          onClick={() => setIsMobileMenuOpen(false)}
+          className="fixed inset-0 bg-black/60 backdrop-blur-xs z-40 lg:hidden"
+        />
+      )}
+
+      {/* 1. Left Sidebar menu (Desktop fixed sidebar & Mobile off-canvas drawer) */}
+      <div className={`fixed inset-y-0 left-0 z-50 w-64 bg-navy text-white border-r border-gold-dark/30 transform transition-transform duration-300 ease-in-out lg:static lg:translate-x-0 shrink-0 flex flex-col justify-between ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}`}>
+        <div>
+          <div className="p-6 border-b border-slate-800 text-center hidden lg:block">
             <h2 className="font-serif font-bold text-lg text-gold">Management Portal</h2>
             <p className="text-[10px] uppercase text-slate-400 mt-1">Real-time CMS Desk</p>
           </div>
-          
-          <nav className="p-4 space-y-1 text-sm font-semibold font-sans">
+
+          <div className="p-4 border-b border-slate-800 flex items-center justify-between lg:hidden">
+            <div>
+              <h2 className="font-serif font-bold text-base text-gold">Navigation Menu</h2>
+            </div>
             <button
-              onClick={() => setActiveTab('overview')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'overview' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="p-1 text-slate-400 hover:text-white"
+            >
+              <X size={18} />
+            </button>
+          </div>
+          
+          <nav className="p-4 space-y-1 text-sm font-semibold font-sans overflow-y-auto max-h-[calc(100vh-140px)] lg:max-h-none">
+            <button
+              onClick={() => { setActiveTab('overview'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'overview' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <LayoutDashboard size={16} /> Overview
             </button>
             <button
-              onClick={() => setActiveTab('homepage_cms')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'homepage_cms' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('homepage_cms'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'homepage_cms' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Settings size={16} /> Homepage copy
             </button>
             <button
-              onClick={() => setActiveTab('about_cms')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'about_cms' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('about_cms'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'about_cms' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Settings size={16} /> About Us
             </button>
             <button
-              onClick={() => setActiveTab('services')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'services' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('services'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'services' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <BookOpen size={16} /> Services Portfolio
             </button>
             <button
-              onClick={() => setActiveTab('team')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'team' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('team'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'team' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Users size={16} /> Lawyer Roster
             </button>
             <button
-              onClick={() => setActiveTab('blogs')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'blogs' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('blogs'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'blogs' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <FileText size={16} /> Blogs
             </button>
             <button
-              onClick={() => setActiveTab('gallery')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'gallery' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('gallery'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'gallery' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <ImageIcon size={16} /> Gallery
             </button>
             <button
-              onClick={() => setActiveTab('success_stories')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'success_stories' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('success_stories'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'success_stories' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Sparkles size={16} /> Client Success
             </button>
             <button
-              onClick={() => setActiveTab('consultations')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'consultations' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('consultations'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'consultations' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Users size={16} /> Consultation Requests
             </button>
             <button
-              onClick={() => setActiveTab('videos')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'videos' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('videos'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'videos' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Sparkles size={16} /> Manage YouTube Videos
             </button>
             <button
-              onClick={() => setActiveTab('faqs')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'faqs' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('faqs'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'faqs' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <HelpCircle size={16} /> FAQs
             </button>
             <button
-              onClick={() => setActiveTab('settings')}
-              className={`w-full flex items-center gap-2.5 px-4 py-2 rounded text-left transition-all ${activeTab === 'settings' ? 'bg-gold text-navy-dark' : 'hover:bg-navy-accent text-slate-300'}`}
+              onClick={() => { setActiveTab('settings'); setIsMobileMenuOpen(false); }}
+              className={`w-full flex items-center gap-2.5 px-4 py-2.5 rounded text-left transition-all ${activeTab === 'settings' ? 'bg-gold text-navy-dark font-bold' : 'hover:bg-navy-accent text-slate-300'}`}
             >
               <Settings size={16} /> Global Settings
             </button>
@@ -829,7 +865,7 @@ const AdminDashboard = () => {
         <div className="p-4 border-t border-slate-800">
           <button 
             onClick={handleAdminLogout} 
-            className="w-full flex items-center justify-center gap-2 py-2 border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 rounded font-semibold text-sm transition-all"
+            className="w-full flex items-center justify-center gap-2 py-2.5 border border-rose-500/30 text-rose-400 hover:bg-rose-500/10 rounded font-semibold text-sm transition-all"
           >
             <LogOut size={16} /> Logout
           </button>
@@ -837,7 +873,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* 2. Main Dashboard Content Frame */}
-      <div className="flex-grow p-6 sm:p-8 space-y-8 overflow-y-auto max-h-screen">
+      <div className="flex-grow p-4 sm:p-6 lg:p-8 space-y-6 sm:space-y-8 overflow-y-auto w-full">
         
         {loading && (
           <div className="fixed inset-0 bg-slate-500/10 dark:bg-navy-dark/10 backdrop-blur-xs flex items-center justify-center z-50">
@@ -847,83 +883,83 @@ const AdminDashboard = () => {
 
         {/* Tab 1: Overview Dashboard */}
         {activeTab === 'overview' && (
-          <div className="space-y-8">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Administrative Dashboard</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Administrative Dashboard</h1>
             
             {/* Stats widgets */}
-            <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 text-center">
-              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-5 rounded-lg shadow-sm">
-                <div className="text-2xl font-serif font-bold text-gold">{stats.consultations}</div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 sm:gap-4 text-center">
+              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-lg shadow-sm">
+                <div className="text-xl sm:text-2xl font-serif font-bold text-gold">{stats.consultations}</div>
                 <div className="text-[10px] font-semibold text-slate-500 uppercase mt-1">Consultation Requests</div>
               </div>
-              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-5 rounded-lg shadow-sm">
-                <div className="text-2xl font-serif font-bold text-gold">{stats.blogs}</div>
+              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-lg shadow-sm">
+                <div className="text-xl sm:text-2xl font-serif font-bold text-gold">{stats.blogs}</div>
                 <div className="text-[10px] font-semibold text-slate-500 uppercase mt-1">Articles Published</div>
               </div>
-              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-5 rounded-lg shadow-sm">
-                <div className="text-2xl font-serif font-bold text-gold">{stats.gallery}</div>
+              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-lg shadow-sm">
+                <div className="text-xl sm:text-2xl font-serif font-bold text-gold">{stats.gallery}</div>
                 <div className="text-[10px] font-semibold text-slate-500 uppercase mt-1">Gallery Highlights</div>
               </div>
-              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-5 rounded-lg shadow-sm">
-                <div className="text-2xl font-serif font-bold text-gold">{stats.success}</div>
+              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-lg shadow-sm">
+                <div className="text-xl sm:text-2xl font-serif font-bold text-gold">{stats.success}</div>
                 <div className="text-[10px] font-semibold text-slate-500 uppercase mt-1">Success Stories</div>
               </div>
-              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-5 rounded-lg shadow-sm">
-                <div className="text-2xl font-serif font-bold text-gold">{stats.testimonials}</div>
+              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-5 rounded-lg shadow-sm col-span-2 sm:col-span-1">
+                <div className="text-xl sm:text-2xl font-serif font-bold text-gold">{stats.testimonials}</div>
                 <div className="text-[10px] font-semibold text-slate-500 uppercase mt-1">Testimonials</div>
               </div>
             </div>
 
             {/* Website Visitor Analytics */}
-            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-6 shadow-sm space-y-4">
               <h2 className="text-lg font-serif font-bold text-navy dark:text-white border-b pb-2">
                 Website Analytics
               </h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 text-center font-sans">
-                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 text-center font-sans">
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-4 sm:p-5 rounded-lg">
                   <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Today's Visitors</div>
-                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.today}</div>
+                  <div className="text-2xl sm:text-3xl font-serif font-bold text-gold mt-2">{analytics.today}</div>
                 </div>
-                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-4 sm:p-5 rounded-lg">
                   <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Monthly Visitors</div>
-                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.thisMonth}</div>
+                  <div className="text-2xl sm:text-3xl font-serif font-bold text-gold mt-2">{analytics.thisMonth}</div>
                 </div>
-                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-4 sm:p-5 rounded-lg">
                   <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Yearly Visitors</div>
-                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.thisYear}</div>
+                  <div className="text-2xl sm:text-3xl font-serif font-bold text-gold mt-2">{analytics.thisYear}</div>
                 </div>
-                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-5 rounded-lg">
+                <div className="bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-800/50 p-4 sm:p-5 rounded-lg">
                   <div className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase">Total Visitors</div>
-                  <div className="text-3xl font-serif font-bold text-gold mt-2">{analytics.totalVisitors}</div>
+                  <div className="text-2xl sm:text-3xl font-serif font-bold text-gold mt-2">{analytics.totalVisitors}</div>
                 </div>
               </div>
             </div>
 
             {/* Testimonials approvals */}
-            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 shadow-sm space-y-4">
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-6 shadow-sm space-y-4">
               <h2 className="text-lg font-serif font-bold text-navy dark:text-white border-b pb-2">
                 Testimonials Validation Desk
               </h2>
               {testimonials.length > 0 ? (
                 <div className="space-y-3">
                   {testimonials.map((t) => (
-                    <div key={t.id} className="flex justify-between items-center p-3 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-850 rounded text-xs gap-4">
+                    <div key={t.id} className="flex flex-col sm:flex-row justify-between items-start sm:items-center p-3 sm:p-4 bg-slate-50 dark:bg-navy border border-slate-200 dark:border-slate-850 rounded text-xs gap-3">
                       <div>
                         <strong>{t.client_name}</strong> ({t.client_role} at {t.company})
                         <p className="text-slate-500 italic mt-0.5">"{t.feedback}"</p>
                       </div>
-                      <div className="flex gap-2">
+                      <div className="flex gap-2 shrink-0 self-end sm:self-auto">
                         {t.approved ? (
                           <button
                             onClick={() => handleApproveTestimonial(t.id, false)}
-                            className="px-2.5 py-1 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded font-semibold hover:bg-amber-500/20"
+                            className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded font-semibold hover:bg-amber-500/20 text-xs"
                           >
                             Hide Review
                           </button>
                         ) : (
                           <button
                             onClick={() => handleApproveTestimonial(t.id, true)}
-                            className="px-2.5 py-1 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded font-semibold hover:bg-emerald-500/20"
+                            className="px-3 py-1.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 rounded font-semibold hover:bg-emerald-500/20 text-xs"
                           >
                             Approve Review
                           </button>
@@ -941,10 +977,10 @@ const AdminDashboard = () => {
 
         {/* Tab 2: CMS Homepage copy */}
         {activeTab === 'homepage_cms' && (
-          <div className="space-y-8">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Website Home Copy CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Website Home Copy CMS</h1>
             
-            <form onSubmit={handleUpdateCmsHome} className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 sm:p-8 space-y-6 shadow-sm text-xs font-sans">
+            <form onSubmit={handleUpdateCmsHome} className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-8 space-y-6 shadow-sm text-xs font-sans">
               
               <div className="space-y-4">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">Hero Copy</h3>
@@ -979,7 +1015,7 @@ const AdminDashboard = () => {
 
               <div className="space-y-4 pt-4 border-t border-slate-100 dark:border-slate-800">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">Statistics Benchmarks</h3>
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
                   <div className="space-y-1">
                     <label className="text-[10px] uppercase font-bold text-slate-550">Claims Resolved</label>
                     <input
@@ -1043,7 +1079,7 @@ const AdminDashboard = () => {
 
               <button
                 type="submit"
-                className="px-6 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow"
+                className="w-full sm:w-auto px-6 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95"
               >
                 Save Homepage copy
               </button>
@@ -1053,10 +1089,10 @@ const AdminDashboard = () => {
 
         {/* Tab 3: CMS About Us copy */}
         {activeTab === 'about_cms' && (
-          <div className="space-y-8">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">About Us Content CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">About Us Content CMS</h1>
             
-            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-6 sm:p-8 space-y-6 shadow-sm text-xs font-sans">
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg p-4 sm:p-8 space-y-6 shadow-sm text-xs font-sans">
               <form onSubmit={handleUpdateCmsAbout} className="space-y-4">
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-slate-550">Company Overview</label>
@@ -1087,7 +1123,7 @@ const AdminDashboard = () => {
                 </div>
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow"
+                  className="w-full sm:w-auto px-6 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95"
                 >
                   Save About Copy
                 </button>
@@ -1106,7 +1142,7 @@ const AdminDashboard = () => {
                       </div>
                       <button
                         onClick={() => handleRemoveTimelineItem(idx)}
-                        className="p-1 text-rose-500 hover:bg-rose-500/10 border border-rose-500/10 rounded"
+                        className="p-1.5 text-rose-500 hover:bg-rose-500/10 border border-rose-500/10 rounded"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -1115,33 +1151,33 @@ const AdminDashboard = () => {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-end p-4 border border-slate-200 dark:border-slate-800 rounded">
-                  <div className="sm:col-span-2 space-y-1">
+                  <div className="sm:col-span-3 space-y-1">
                     <label className="text-[9px] uppercase font-bold text-slate-500">Year</label>
                     <input
                       type="text"
                       placeholder="e.g. 2026"
                       value={newTimelineYear}
                       onChange={(e) => setNewTimelineYear(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-xs"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-xs"
                     />
                   </div>
-                  <div className="sm:col-span-8 space-y-1">
+                  <div className="sm:col-span-7 space-y-1">
                     <label className="text-[9px] uppercase font-bold text-slate-500">Milestone Event Details</label>
                     <input
                       type="text"
                       placeholder="Secured record biochemical patent approvals."
                       value={newTimelineEvent}
                       onChange={(e) => setNewTimelineEvent(e.target.value)}
-                      className="w-full px-2.5 py-1.5 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-xs"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-xs"
                     />
                   </div>
                   <div className="sm:col-span-2">
                     <button
                       type="button"
                       onClick={handleAddTimelineItem}
-                      className="w-full py-1.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold text-xs rounded hover:opacity-90 flex items-center justify-center gap-1"
+                      className="w-full py-2 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold text-xs rounded hover:opacity-90 flex items-center justify-center gap-1"
                     >
-                      <Plus size={12} /> Add
+                      <Plus size={14} /> Add
                     </button>
                   </div>
                 </div>
@@ -1152,14 +1188,14 @@ const AdminDashboard = () => {
 
         {/* Tab 4: Services CMS */}
         {activeTab === 'services' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Services Portfolio CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Services Portfolio CMS</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Service list */}
               <div className="lg:col-span-7 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Active Practices</h2>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {services.map((svc) => (
                     <div key={svc.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex justify-between items-start gap-4">
                       <div>
@@ -1170,13 +1206,13 @@ const AdminDashboard = () => {
                       <div className="flex gap-2 shrink-0">
                         <button
                           onClick={() => startEditService(svc)}
-                          className="p-1.5 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
+                          className="p-2 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
                         >
                           <Edit2 size={14} />
                         </button>
                         <button
                           onClick={() => handleDeleteService(svc.slug)}
-                          className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
+                          className="p-2 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -1187,7 +1223,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Add/Edit Form */}
-              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm space-y-4 text-xs">
+              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm space-y-4 text-xs">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">
                   {isEditingService ? 'Edit Practice Area' : 'Add Practice Area'}
                 </h3>
@@ -1203,7 +1239,7 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Slug (Optional)</label>
                       <input
@@ -1271,10 +1307,10 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none"
                     ></textarea>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 pt-2">
                     <button
                       type="submit"
-                      className="flex-1 py-2 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded"
+                      className="flex-1 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95"
                     >
                       {isEditingService ? 'Save Service' : 'Create Service'}
                     </button>
@@ -1282,7 +1318,7 @@ const AdminDashboard = () => {
                       <button
                         type="button"
                         onClick={resetServiceForm}
-                        className="px-4 py-2 border border-slate-300 rounded font-semibold text-slate-500 hover:text-slate-800"
+                        className="px-4 py-2.5 border border-slate-300 rounded font-semibold text-slate-500 hover:text-slate-800"
                       >
                         Cancel
                       </button>
@@ -1296,14 +1332,14 @@ const AdminDashboard = () => {
 
         {/* Tab 5: Team Members CMS */}
         {activeTab === 'team' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Firm Attorneys CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Firm Attorneys CMS</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Team list */}
               <div className="lg:col-span-7 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Attorney Roster</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {team.map((member) => (
                     <div key={member.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex flex-col justify-between gap-4 text-xs">
                       <div className="flex gap-3">
@@ -1322,17 +1358,17 @@ const AdminDashboard = () => {
                       </div>
                       <p className="text-[11px] text-slate-500 line-clamp-3 italic">"{member.bio}"</p>
                       <div className="flex justify-between items-center border-t pt-2 border-slate-100 dark:border-slate-850">
-                        <span className="text-[10px] text-slate-450 truncate max-w-[150px]">{member.email}</span>
-                        <div className="flex gap-1">
+                        <span className="text-[10px] text-slate-450 truncate max-w-[130px] sm:max-w-[150px]">{member.email}</span>
+                        <div className="flex gap-1.5">
                           <button
                             onClick={() => startEditTeam(member)}
-                            className="p-1 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
+                            className="p-1.5 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
                           >
                             <Edit2 size={12} />
                           </button>
                           <button
                             onClick={() => handleDeleteTeamMember(member.id)}
-                            className="p-1 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
+                            className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
                           >
                             <Trash2 size={12} />
                           </button>
@@ -1344,12 +1380,12 @@ const AdminDashboard = () => {
               </div>
 
               {/* Add/Edit Form */}
-              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm space-y-4 text-xs">
+              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm space-y-4 text-xs">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">
                   {isEditingTeam ? 'Edit Attorney Details' : 'Add New Attorney'}
                 </h3>
                 <form onSubmit={handleSaveTeamMember} className="space-y-4 font-sans">
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Name</label>
                       <input
@@ -1373,7 +1409,7 @@ const AdminDashboard = () => {
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Experience</label>
                       <input
@@ -1415,14 +1451,14 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">LinkedIn profile URL</label>
                       <input
                         type="text"
                         value={teamLinkedinUrl}
                         onChange={(e) => setTeamLinkedinUrl(e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                     <div className="space-y-1">
@@ -1431,7 +1467,7 @@ const AdminDashboard = () => {
                         type="text"
                         value={teamTwitterUrl}
                         onChange={(e) => setTeamTwitterUrl(e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                   </div>
@@ -1445,10 +1481,10 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none"
                     ></textarea>
                   </div>
-                  <div className="flex gap-2">
+                  <div className="flex gap-2 pt-2">
                     <button
                       type="submit"
-                      className="flex-1 py-2 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded"
+                      className="flex-1 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95"
                     >
                       {isEditingTeam ? 'Save Attorney' : 'Add Attorney'}
                     </button>
@@ -1456,7 +1492,7 @@ const AdminDashboard = () => {
                       <button
                         type="button"
                         onClick={resetTeamForm}
-                        className="px-4 py-2 border border-slate-300 rounded font-semibold text-slate-500 hover:text-slate-800"
+                        className="px-4 py-2.5 border border-slate-300 rounded font-semibold text-slate-500 hover:text-slate-800"
                       >
                         Cancel
                       </button>
@@ -1470,16 +1506,16 @@ const AdminDashboard = () => {
 
         {/* Tab 6: Blogs CMS */}
         {activeTab === 'blogs' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Blogs CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Blogs CMS</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Blog list */}
               <div className="lg:col-span-6 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Articles Directory</h2>
                 <div className="space-y-3">
                   {blogs.map((bg) => (
-                    <div key={bg.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex justify-between items-center gap-4 text-xs">
+                    <div key={bg.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex flex-col sm:flex-row justify-between sm:items-center gap-3 text-xs">
                       <div>
                         <div className="flex items-center gap-2">
                           <span className={`px-2 py-0.5 rounded-[3px] font-bold text-[9px] border ${
@@ -1494,18 +1530,18 @@ const AdminDashboard = () => {
                         <h4 className="font-serif font-bold text-sm text-navy dark:text-white mt-1.5">{bg.title}</h4>
                         <p className="text-slate-500 line-clamp-1 mt-1 text-[11px]">{bg.summary}</p>
                       </div>
-                      <div className="flex gap-2 shrink-0">
+                      <div className="flex gap-2 shrink-0 self-end sm:self-auto">
                         <button
                           onClick={() => startEditBlog(bg)}
-                          className="p-1.5 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
+                          className="p-2 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
                         >
-                          <Edit2 size={12} />
+                          <Edit2 size={14} />
                         </button>
                         <button
                           onClick={() => handleDeleteBlog(bg.slug)}
-                          className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
+                          className="p-2 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
@@ -1514,7 +1550,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Add/Edit Form */}
-              <div className="lg:col-span-6 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm space-y-4 text-xs">
+              <div className="lg:col-span-6 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm space-y-4 text-xs">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">
                   {isEditingBlog ? 'Edit Article & SEO' : 'Compose New Article'}
                 </h3>
@@ -1530,7 +1566,7 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Slug (Optional)</label>
                       <input
@@ -1538,7 +1574,7 @@ const AdminDashboard = () => {
                         value={blogSlug}
                         onChange={(e) => setBlogSlug(e.target.value)}
                         placeholder="e.g. navigating-wipo"
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                     <div className="space-y-1">
@@ -1548,18 +1584,18 @@ const AdminDashboard = () => {
                         value={blogCategory}
                         onChange={(e) => setBlogCategory(e.target.value)}
                         placeholder="e.g. Patents, News"
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Image Cover URL</label>
                       <input
                         type="text"
                         value={blogImageUrl}
                         onChange={(e) => setBlogImageUrl(e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                     <div className="space-y-1">
@@ -1567,7 +1603,7 @@ const AdminDashboard = () => {
                       <select
                         value={blogStatus}
                         onChange={(e) => setBlogStatus(e.target.value)}
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                       >
                         <option value="DRAFT">Draft (Save privately)</option>
                         <option value="PUBLISHED">Published (Go live instantly)</option>
@@ -1581,7 +1617,7 @@ const AdminDashboard = () => {
                       rows="2"
                       value={blogSummary}
                       onChange={(e) => setBlogSummary(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                     ></textarea>
                   </div>
                   <div className="space-y-1">
@@ -1591,7 +1627,7 @@ const AdminDashboard = () => {
                       rows="8"
                       value={blogContent}
                       onChange={(e) => setBlogContent(e.target.value)}
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy font-mono text-[11px]"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy font-mono text-[11px] border border-slate-300 dark:border-slate-700 rounded"
                     ></textarea>
                   </div>
 
@@ -1603,7 +1639,7 @@ const AdminDashboard = () => {
                         type="text"
                         value={blogSeoTitle}
                         onChange={(e) => setBlogSeoTitle(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy text-xs border"
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy text-xs border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                     <div className="space-y-1">
@@ -1612,17 +1648,17 @@ const AdminDashboard = () => {
                         rows="2"
                         value={blogSeoDescription}
                         onChange={(e) => setBlogSeoDescription(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy text-xs border"
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy text-xs border border-slate-300 dark:border-slate-700 rounded"
                       ></textarea>
                     </div>
                   </div>
 
-                  <div className="flex gap-2">
-                    <button type="submit" className="flex-grow py-2 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded">
+                  <div className="flex gap-2 pt-2">
+                    <button type="submit" className="flex-grow py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95">
                       {isEditingBlog ? 'Save Article' : 'Publish Article'}
                     </button>
                     {isEditingBlog && (
-                      <button type="button" onClick={resetBlogForm} className="px-4 py-2 border border-slate-300 rounded text-slate-500">
+                      <button type="button" onClick={resetBlogForm} className="px-4 py-2.5 border border-slate-300 rounded text-slate-500">
                         Cancel
                       </button>
                     )}
@@ -1635,14 +1671,14 @@ const AdminDashboard = () => {
 
         {/* Tab 7: Gallery CMS */}
         {activeTab === 'gallery' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Gallery CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Gallery CMS</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Item List */}
               <div className="lg:col-span-7 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Active Highlights</h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
                   {gallery.map((item) => (
                     <div key={item.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex flex-col justify-between gap-3 text-xs">
                       <div className="aspect-[4/3] w-full bg-slate-100 rounded overflow-hidden">
@@ -1674,7 +1710,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Add/Edit Form */}
-              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm space-y-4 text-xs">
+              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm space-y-4 text-xs">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">
                   {isEditingGallery ? 'Edit Gallery Item' : 'Add Gallery Item'}
                 </h3>
@@ -1690,7 +1726,7 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Category</label>
                       <select
@@ -1737,12 +1773,12 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded"
                     ></textarea>
                   </div>
-                  <div className="flex gap-2">
-                    <button type="submit" className="flex-grow py-2 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded">
+                  <div className="flex gap-2 pt-2">
+                    <button type="submit" className="flex-grow py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95">
                       {isEditingGallery ? 'Save Item' : 'Create Item'}
                     </button>
                     {isEditingGallery && (
-                      <button type="button" onClick={resetGalleryForm} className="px-4 py-2 border border-slate-300 rounded text-slate-500">
+                      <button type="button" onClick={resetGalleryForm} className="px-4 py-2.5 border border-slate-300 rounded text-slate-500">
                         Cancel
                       </button>
                     )}
@@ -1755,14 +1791,14 @@ const AdminDashboard = () => {
 
         {/* Tab 8: Client Success stories CMS */}
         {activeTab === 'success_stories' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Client Success CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Client Success CMS</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* Stories list */}
               <div className="lg:col-span-7 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Case Studies</h2>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {successStories.map((story) => (
                     <div key={story.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex justify-between items-start gap-4 text-xs">
                       <div>
@@ -1792,7 +1828,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Add/Edit Form */}
-              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm space-y-4 text-xs">
+              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm space-y-4 text-xs">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">
                   {isEditingSuccess ? 'Edit Success Story' : 'Add Success Story'}
                 </h3>
@@ -1807,7 +1843,7 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-550">Practice Area</label>
                       <input
@@ -1880,30 +1916,30 @@ const AdminDashboard = () => {
 
         {/* Tab 9: Consultation Requests */}
         {activeTab === 'consultations' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-2">
-              <h1 className="text-3xl font-serif font-bold text-navy dark:text-white">Consultation Requests</h1>
+              <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white">Consultation Requests</h1>
               <button
                 onClick={handleExportCSV}
-                className="flex items-center gap-1.5 px-4 py-2 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 rounded text-xs font-semibold font-sans transition-all"
+                className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-2.5 bg-emerald-500/10 border border-emerald-500/20 text-emerald-500 hover:bg-emerald-500/20 rounded text-xs font-semibold font-sans transition-all active:scale-95"
               >
                 <Download size={14} /> Export Requests to CSV
               </button>
             </div>
 
             {/* Filter inputs */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
               <input
                 type="text"
                 value={consultationSearch}
                 onChange={(e) => setConsultationSearch(e.target.value)}
                 placeholder="Search requests by name / email / company..."
-                className="px-3 py-2 text-xs bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
+                className="px-3 py-2.5 text-xs bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
               />
               <select
                 value={consultationStatus}
                 onChange={(e) => setConsultationStatus(e.target.value)}
-                className="px-3 py-2 text-xs bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
+                className="px-3 py-2.5 text-xs bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
               >
                 <option value="">Filter by Status</option>
                 <option value="PENDING">Pending</option>
@@ -1917,7 +1953,7 @@ const AdminDashboard = () => {
               <select
                 value={consultationService}
                 onChange={(e) => setConsultationService(e.target.value)}
-                className="px-3 py-2 text-xs bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
+                className="px-3 py-2.5 text-xs bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded focus:outline-none focus:border-gold shadow-sm"
               >
                 <option value="">Filter by Practice Area</option>
                 <option value="Patent Prosecution">Patent Prosecution</option>
@@ -1930,9 +1966,9 @@ const AdminDashboard = () => {
               </select>
             </div>
 
-            {/* Leads Table List */}
+            {/* Leads Table List with Horizontal Scroll Wrapper */}
             <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg overflow-x-auto shadow-sm">
-              <table className="w-full text-left border-collapse text-xs">
+              <table className="w-full text-left border-collapse text-xs min-w-[850px]">
                 <thead>
                   <tr className="bg-slate-50 dark:bg-navy border-b border-slate-200 dark:border-slate-800/80 uppercase text-slate-550 font-semibold text-slate-400">
                     <th className="p-3">Client details</th>
@@ -1968,7 +2004,7 @@ const AdminDashboard = () => {
                         <select
                           value={c.status}
                           onChange={(e) => handleUpdateConsultationStatus(c.id, e.target.value, c.assigned_lawyer, c.notes)}
-                          className="px-2 py-1 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-[11px]"
+                          className="px-2.5 py-1.5 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-[11px]"
                         >
                           <option value="PENDING">Pending</option>
                           <option value="CONTACTED">Contacted</option>
@@ -1985,7 +2021,7 @@ const AdminDashboard = () => {
                           defaultValue={c.assigned_lawyer || ''}
                           onBlur={(e) => handleUpdateConsultationStatus(c.id, c.status, e.target.value, c.notes)}
                           placeholder="Assign lawyer"
-                          className="px-2 py-1 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-[11px] w-28"
+                          className="px-2.5 py-1.5 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-[11px] w-28"
                         />
                       </td>
                       <td className="p-3">
@@ -1994,16 +2030,16 @@ const AdminDashboard = () => {
                           defaultValue={c.notes || ''}
                           onBlur={(e) => handleUpdateConsultationStatus(c.id, c.status, c.assigned_lawyer, e.target.value)}
                           placeholder="Internal Notes"
-                          className="px-2 py-1 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-[11px] w-36"
+                          className="px-2.5 py-1.5 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded text-[11px] w-36"
                         />
                       </td>
                       <td className="p-3 text-right">
                         <button
                           onClick={() => handleDeleteConsultation(c.id)}
-                          className="p-1 text-rose-500 hover:bg-rose-550/10 border border-rose-500/10 rounded"
+                          className="p-1.5 text-rose-500 hover:bg-rose-500/10 border border-rose-500/10 rounded"
                           title="Delete Request"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={14} />
                         </button>
                       </td>
                     </tr>
@@ -2016,14 +2052,14 @@ const AdminDashboard = () => {
 
         {/* Tab 10: FAQ CMS */}
         {activeTab === 'faqs' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">FAQs CMS</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">FAQs CMS</h1>
             
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
               {/* FAQ list */}
               <div className="lg:col-span-7 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Active FAQs</h2>
-                <div className="grid grid-cols-1 gap-4">
+                <div className="grid grid-cols-1 gap-3 sm:gap-4">
                   {faqs.map((f) => (
                     <div key={f.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex justify-between items-start gap-4 text-xs">
                       <div>
@@ -2037,15 +2073,15 @@ const AdminDashboard = () => {
                       <div className="flex gap-2 shrink-0">
                         <button
                           onClick={() => startEditFaq(f)}
-                          className="p-1.5 text-slate-550 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
+                          className="p-2 text-slate-550 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
                         >
-                          <Edit2 size={12} />
+                          <Edit2 size={14} />
                         </button>
                         <button
                           onClick={() => handleDeleteFaq(f.id)}
-                          className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
+                          className="p-2 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
                         >
-                          <Trash2 size={12} />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </div>
@@ -2054,7 +2090,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Add/Edit Form */}
-              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm space-y-4 text-xs">
+              <div className="lg:col-span-5 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm space-y-4 text-xs">
                 <h3 className="text-base font-serif font-bold text-navy dark:text-white border-b pb-2">
                   {isEditingFaq ? 'Edit FAQ Item' : 'Add FAQ Item'}
                 </h3>
@@ -2070,7 +2106,7 @@ const AdminDashboard = () => {
                       className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none"
                     />
                   </div>
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-555">Category</label>
                       <input
@@ -2079,7 +2115,7 @@ const AdminDashboard = () => {
                         value={faqCategory}
                         onChange={(e) => setFaqCategory(e.target.value)}
                         placeholder="e.g. General, Patent"
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                     <div className="space-y-1">
@@ -2089,7 +2125,7 @@ const AdminDashboard = () => {
                         required
                         value={faqOrder}
                         onChange={(e) => setFaqOrder(parseInt(e.target.value) || 0)}
-                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                       />
                     </div>
                   </div>
@@ -2101,15 +2137,15 @@ const AdminDashboard = () => {
                       value={faqAnswer}
                       onChange={(e) => setFaqAnswer(e.target.value)}
                       placeholder="Provide precise answer explanation..."
-                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy border border-slate-300 rounded"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                     ></textarea>
                   </div>
-                  <div className="flex gap-2">
-                    <button type="submit" className="flex-grow py-2 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded">
+                  <div className="flex gap-2 pt-2">
+                    <button type="submit" className="flex-grow py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow transition-transform active:scale-95">
                       {isEditingFaq ? 'Save FAQ' : 'Create FAQ'}
                     </button>
                     {isEditingFaq && (
-                      <button type="button" onClick={resetFaqForm} className="px-4 py-2 border border-slate-300 rounded text-slate-500">
+                      <button type="button" onClick={resetFaqForm} className="px-4 py-2.5 border border-slate-300 rounded text-slate-500">
                         Cancel
                       </button>
                     )}
@@ -2122,10 +2158,10 @@ const AdminDashboard = () => {
 
         {/* Tab 11: Site & Footer Settings */}
         {activeTab === 'settings' && (
-          <div className="space-y-8 animate-fade-in">
-            <h1 className="text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Global Site Settings</h1>
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
+            <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white border-b pb-2">Global Site Settings</h1>
             
-            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-lg shadow-sm max-w-3xl">
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-8 rounded-lg shadow-sm max-w-3xl">
               <form onSubmit={handleSaveConsultationLimit} className="space-y-4 text-xs font-sans">
                 <div className="space-y-1">
                   <label className="text-[10px] uppercase font-bold text-slate-550 font-sans">Daily Consultation Booking Limit</label>
@@ -2141,17 +2177,17 @@ const AdminDashboard = () => {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-gold text-navy-dark font-bold rounded shadow hover:opacity-90"
+                  className="w-full sm:w-auto px-6 py-2.5 bg-gold text-navy-dark font-bold rounded shadow hover:opacity-90 transition-transform active:scale-95"
                 >
                   Save Consultation Limit
                 </button>
               </form>
             </div>
 
-            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 sm:p-8 rounded-lg shadow-sm max-w-3xl">
+            <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-8 rounded-lg shadow-sm max-w-3xl">
               <form onSubmit={handleSaveSettings} className="space-y-6 text-xs font-sans">
                 
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                   <div className="space-y-1">
                     <label className="text-[10px] uppercase font-bold text-slate-550 font-sans">Contact Email</label>
                     <input
@@ -2205,7 +2241,7 @@ const AdminDashboard = () => {
                     required
                     value={settingsCopyright}
                     onChange={(e) => setSettingsCopyright(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300"
+                    className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded"
                   />
                 </div>
 
@@ -2218,7 +2254,7 @@ const AdminDashboard = () => {
                         type="url"
                         value={settingsLinkedin}
                         onChange={(e) => setSettingsLinkedin(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded text-xs"
                       />
                     </div>
                     <div className="space-y-1">
@@ -2227,7 +2263,7 @@ const AdminDashboard = () => {
                         type="url"
                         value={settingsTwitter}
                         onChange={(e) => setSettingsTwitter(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded text-xs"
                       />
                     </div>
                     <div className="space-y-1">
@@ -2236,7 +2272,7 @@ const AdminDashboard = () => {
                         type="url"
                         value={settingsFacebook}
                         onChange={(e) => setSettingsFacebook(e.target.value)}
-                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy border border-slate-300 rounded"
+                        className="w-full px-2.5 py-1.5 bg-white dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded text-xs"
                       />
                     </div>
                   </div>
@@ -2244,7 +2280,7 @@ const AdminDashboard = () => {
 
                 <button
                   type="submit"
-                  className="px-6 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow hover:opacity-90"
+                  className="w-full sm:w-auto px-6 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow hover:opacity-90 transition-transform active:scale-95"
                 >
                   Save Global Site Settings
                 </button>
@@ -2255,24 +2291,24 @@ const AdminDashboard = () => {
 
         {/* Tab 12: Manage YouTube Videos */}
         {activeTab === 'videos' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-6 sm:space-y-8 animate-fade-in">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b pb-2">
               <div>
-                <h1 className="text-3xl font-serif font-bold text-navy dark:text-white">YouTube Video Carousel</h1>
+                <h1 className="text-2xl sm:text-3xl font-serif font-bold text-navy dark:text-white">YouTube Video Carousel</h1>
                 <p className="text-xs text-slate-400 mt-1">Manage links, titles, descriptions, and ordering for home page player cards</p>
               </div>
               <button
                 onClick={resetVideoForm}
-                className="px-4 py-2 bg-slate-100 hover:bg-slate-200 dark:bg-navy-accent dark:hover:bg-navy-accent/80 text-navy dark:text-gold text-xs font-bold rounded"
+                className="w-full sm:w-auto px-4 py-2.5 bg-slate-100 hover:bg-slate-200 dark:bg-navy-accent dark:hover:bg-navy-accent/80 text-navy dark:text-gold text-xs font-bold rounded text-center"
               >
                 Clear Form / Add New
               </button>
             </div>
 
-            <div className="grid grid-cols-1 xl:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 xl:grid-cols-3 gap-6 lg:gap-8">
               
               {/* Form Side */}
-              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm h-fit">
+              <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm h-fit">
                 <h2 className="font-serif font-bold text-lg text-gold mb-4 font-serif">
                   {isEditingVideo ? 'Edit Video Details' : 'Add New YouTube Video'}
                 </h2>
@@ -2304,7 +2340,7 @@ const AdminDashboard = () => {
                     <p className="text-[9px] text-slate-400">Accepts share (youtu.be), watch, embed, or shorts link formats.</p>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="space-y-1">
                       <label className="text-[10px] uppercase font-bold text-slate-500">Display Order</label>
                       <input
@@ -2341,7 +2377,7 @@ const AdminDashboard = () => {
 
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow hover:opacity-90 transition-opacity"
+                    className="w-full py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-bold rounded shadow hover:opacity-90 transition-transform active:scale-95"
                   >
                     {isEditingVideo ? 'Update Video Profile' : 'Add Video to Library'}
                   </button>
@@ -2360,7 +2396,7 @@ const AdminDashboard = () => {
               </div>
 
               {/* Data Table Side */}
-              <div className="xl:col-span-2 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-6 rounded-lg shadow-sm">
+              <div className="xl:col-span-2 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-6 rounded-lg shadow-sm overflow-x-auto">
                 <h2 className="font-serif font-bold text-lg text-gold mb-4">Current Video Collection</h2>
                 
                 {videos.length === 0 ? (
@@ -2369,7 +2405,7 @@ const AdminDashboard = () => {
                   </div>
                 ) : (
                   <div className="overflow-x-auto text-xs font-sans">
-                    <table className="w-full text-left border-collapse font-sans">
+                    <table className="w-full text-left border-collapse font-sans min-w-[650px]">
                       <thead>
                         <tr className="border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-400">
                           <th className="pb-3 pl-2">Display Order</th>
@@ -2442,16 +2478,16 @@ const AdminDashboard = () => {
                                 <button
                                   onClick={() => startEditVideo(vid)}
                                   title="Edit Video"
-                                  className="p-1.5 bg-sky-500/15 hover:bg-sky-500/30 text-sky-400 rounded transition-all cursor-pointer"
+                                  className="p-2 bg-sky-500/15 hover:bg-sky-500/30 text-sky-400 rounded transition-all cursor-pointer"
                                 >
-                                  <Edit2 size={13} />
+                                  <Edit2 size={14} />
                                 </button>
                                 <button
                                   onClick={() => handleDeleteVideo(vid._id)}
                                   title="Delete Video"
-                                  className="p-1.5 bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 rounded transition-all cursor-pointer"
+                                  className="p-2 bg-rose-500/15 hover:bg-rose-500/30 text-rose-400 rounded transition-all cursor-pointer"
                                 >
-                                  <Trash2 size={13} />
+                                  <Trash2 size={14} />
                                 </button>
                               </div>
                             </td>

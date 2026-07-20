@@ -68,8 +68,6 @@ const Navbar = () => {
           {/* Logo Branding (left aligned) */}
           <div className="flex-shrink-0">
             <Link to="/" onClick={handleHomeClick} className="flex items-center gap-2.5 group">
-              <img src="/roots-logo.svg" alt="ROOTS-ip Logo" className="h-9 w-auto object-contain block dark:hidden" />
-              <img src="/roots-logo-white.svg" alt="ROOTS-ip Logo" className="h-9 w-auto object-contain hidden dark:block" />
               <div className="flex flex-col justify-center">
                 <div className="font-serif text-xl 2xl:text-2xl font-bold tracking-wider text-black dark:text-white transition-transform duration-300 group-hover:scale-[1.01] whitespace-nowrap">
                   ROOTS<span className="font-sans text-[#4BB8E8] font-bold">-ip</span>
