@@ -4,34 +4,56 @@
 @config "../tailwind.config.js";
 
 :root {
-  --bg-primary: #FFFFFF;
-  --bg-secondary: #F8FAFC;
-  --bg-card: #FFFFFF;
-  --text-primary: #000000;
-  --text-secondary: #444444;
-  --color-accent: #4BB8E8;
-  --border-elegant: #E5E7EB;
+  --bg-primary: #09111F;
+  --bg-secondary: #0B132B;
+  --bg-card: #111827;
+  --bg-secondary-card: #162033;
+  --text-primary: #FFFFFF;
+  --text-secondary: #C8D3E2;
+  --text-muted: #94A3B8;
+  --color-accent: #0A4DFF;
+  --border-elegant: rgba(255, 255, 255, 0.08);
 }
 
 @layer base {
+  html, body {
+    max-width: 100vw;
+    overflow-x: hidden;
+  }
+
   html {
-    font-size: 18px;
+    font-size: 16px;
     scroll-behavior: smooth;
+    background-color: #09111F;
   }
   
   body {
-    @apply bg-white text-slate-800 font-sans antialiased transition-colors duration-300;
+    @apply bg-[#09111F] text-[#C8D3E2] font-sans antialiased;
     line-height: 1.75;
     font-family: 'Inter', sans-serif;
   }
 
   body.dark {
-    @apply bg-[#121110] text-[#FFFFFF];
+    @apply bg-[#09111F] text-[#C8D3E2];
+    --bg-primary: #09111F;
+    --bg-secondary: #0B132B;
+    --bg-card: #111827;
+    --bg-secondary-card: #162033;
+    --text-primary: #FFFFFF;
+    --text-secondary: #C8D3E2;
+    --text-muted: #94A3B8;
+    --color-accent: #0A4DFF;
+    --border-elegant: rgba(255, 255, 255, 0.08);
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-serif tracking-normal text-black dark:text-[#FFFFFF];
-    font-family: 'Cormorant Garamond', serif;
+    @apply font-serif tracking-normal text-white;
+    font-family: "ITC Avant Garde Gothic", "Futura PT", "Century Gothic", "Avant Garde", sans-serif;
+  }
+
+  section, .py-20, .py-24 {
+    padding-top: clamp(2.5rem, 6vw, 5rem) !important;
+    padding-bottom: clamp(2.5rem, 6vw, 5rem) !important;
   }
 
   p, li {
@@ -40,29 +62,56 @@
 
   /* Focus ring overrides for accessibility */
   input:focus, select:focus, textarea:focus {
-    @apply border-[#4BB8E8] ring-0 outline-hidden;
+    @apply border-[#0A4DFF] bg-[#111827] text-white ring-2 ring-[#0A4DFF]/20 outline-hidden;
   }
 }
 
 @layer components {
   /* Premium Pill Button (Primary) */
   .btn-gold {
-    @apply bg-black dark:bg-[#F8FAFC] text-white dark:text-black hover:bg-[#4BB8E8] dark:hover:bg-[#4BB8E8] hover:text-white dark:hover:text-white font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full shadow-xs hover:shadow-md transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] inline-flex items-center justify-center gap-2;
+    background: linear-gradient(90deg, #0057D9, #0A4DFF);
+    color: #FFFFFF;
+    @apply font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full shadow-xs transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(10,77,255,0.40)] inline-flex items-center justify-center gap-2 cursor-pointer;
   }
 
   /* Premium Pill Button (Secondary/Outlined) */
   .btn-navy {
-    @apply bg-white text-black dark:bg-[#121110] dark:text-white hover:border-[#4BB8E8] hover:text-[#4BB8E8] dark:hover:border-[#4BB8E8] dark:hover:text-[#4BB8E8] border border-black dark:border-slate-800 font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 inline-flex items-center justify-center gap-2;
+    background: transparent;
+    color: #0A4DFF;
+    border: 1px solid #0A4DFF;
+    @apply font-sans text-xs font-semibold tracking-widest uppercase py-3.5 px-8 rounded-full transition-all duration-300 transform hover:-translate-y-0.5 hover:bg-[#0A4DFF] hover:text-white inline-flex items-center justify-center gap-2 cursor-pointer;
   }
 
-  /* Luxury Card */
-  .card-premium {
-    @apply bg-white dark:bg-[#1C1A19] border border-[#E5E7EB] dark:border-slate-800 rounded-[12px] p-8 shadow-[0_10px_30px_rgba(0,0,0,0.02)] dark:shadow-[0_10px_30px_rgba(0,0,0,0.2)] hover:shadow-[0_20px_40px_rgba(75,184,232,0.06)] hover:border-[#4BB8E8] dark:hover:border-[#4BB8E8] transition-all duration-300 transform hover:-translate-y-1;
+  /* Reduce size of all luxury/premium cards on the site */
+  .card-premium, 
+  .card-outcome {
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-elegant);
+    border-radius: 16px !important;
+    padding: clamp(1.25rem, 3vw, 1.5rem) !important;
+    max-width: 380px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    @apply shadow-[0_20px_50px_rgba(0,0,0,0.35)] transition-all duration-300 transform hover:-translate-y-1 hover:shadow-[0_25px_70px_rgba(10,77,255,0.30)] hover:border-[#0A4DFF] dark:hover:border-[#0A4DFF] text-left;
+  }
+
+  /* Exclude large layout cards like booking forms or detail containers from max-width restrictions */
+  form.card-premium,
+  .lg\:col-span-8.card-premium,
+  .lg\:col-span-7.card-premium,
+  .lg\:col-span-4.card-premium,
+  .max-w-md.card-premium,
+  .max-w-3xl.card-premium,
+  .card-premium form {
+    max-width: 100% !important;
+    margin-left: unset;
+    margin-right: unset;
   }
 
   /* Text Highlight Gradient (Luxury) */
   .gradient-gold {
-    @apply bg-gradient-to-r from-black to-[#4BB8E8] dark:from-white dark:to-[#4BB8E8] bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-white to-[#0A4DFF] bg-clip-text text-transparent;
   }
 
   /* Underline link animation */
@@ -74,16 +123,66 @@
     position: absolute;
     width: 100%;
     transform: scaleX(0);
-    height: 1px;
+    height: 2px;
     bottom: 0;
     left: 0;
-    background-color: #4BB8E8;
+    background-color: #0A4DFF;
     transform-origin: bottom right;
     transition: transform 0.3s ease-out;
   }
   .link-underline:hover::after {
     transform: scaleX(1);
     transform-origin: bottom left;
+  }
+
+  /* Outcomes responsive grid */
+  .outcomes-grid {
+    display: grid;
+    gap: 24px;
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  @media (min-width: 480px) {
+    .outcomes-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 768px) {
+    .outcomes-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .outcomes-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  @media (min-width: 1440px) {
+    .outcomes-grid {
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+  }
+
+  /* Compact outcomes card style */
+  .card-outcome {
+    background-color: #111827;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 20px;
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 100%;
+  }
+
+  .card-outcome:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 20px 45px rgba(10, 77, 255, 0.25);
+    border-color: #0A4DFF;
   }
 }
 
@@ -93,14 +192,121 @@
   height: 8px;
 }
 ::-webkit-scrollbar-track {
-  @apply bg-[#FFFFFF] dark:bg-[#121110];
+  @apply bg-[#09111F];
 }
 ::-webkit-scrollbar-thumb {
-  @apply bg-[#E5E7EB] dark:bg-[#2D2A28] rounded-full hover:bg-[#4BB8E8] transition-colors;
+  @apply bg-[#08204A] rounded-full hover:bg-[#0A4DFF] transition-colors;
 }
 
 /* Slide up page transition animation */
 .page-enter {
   animation: slideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
+
+/* Administrative Dashboard overrides */
+.admin-portal {
+  background-color: #09111F !important;
+  color: #C8D3E2 !important;
+}
+
+.admin-portal .bg-white {
+  background-color: #111827 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-portal .bg-slate-50, 
+.admin-portal .bg-slate-100 {
+  background-color: #0B132B !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-portal .text-navy {
+  color: #FFFFFF !important;
+}
+
+.admin-portal .text-slate-900, 
+.admin-portal .text-slate-800 {
+  color: #FFFFFF !important;
+}
+
+.admin-portal .text-slate-600, 
+.admin-portal .text-slate-700 {
+  color: #C8D3E2 !important;
+}
+
+.admin-portal .text-slate-500, 
+.admin-portal .text-slate-400 {
+  color: #94A3B8 !important;
+}
+
+.admin-portal .border-slate-200, 
+.admin-portal .border-slate-300, 
+.admin-portal .border-slate-400,
+.admin-portal .border-slate-700 {
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+.admin-portal input, 
+.admin-portal select, 
+.admin-portal textarea {
+  background-color: #0B132B !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+  color: #FFFFFF !important;
+}
+
+.admin-portal input:focus, 
+.admin-portal select:focus, 
+.admin-portal textarea:focus {
+  border-color: #0A4DFF !important;
+}
+
+/* Mobile Layout Optimization (Screens under 768px) */
+@media (max-width: 767px) {
+  section, .py-20, .py-24 {
+    padding-top: 2.5rem !important;
+    padding-bottom: 2.5rem !important;
+  }
+
+  body {
+    font-size: 14px !important;
+  }
+
+  p, li {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+
+  .card-premium, 
+  .card-outcome {
+    border-radius: 12px !important;
+    padding: 12px !important;
+  }
+
+  .btn-gold,
+  .btn-navy {
+    padding: 8px 20px !important;
+    font-size: 11px !important;
+  }
+
+  .services-mobile-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 10px !important;
+  }
+
+  .hero-mobile-height {
+    min-height: 0px !important;
+    height: auto !important;
+    padding-top: 120px !important;
+    padding-bottom: 50px !important;
+  }
+
+  .hero-mobile-container {
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+  }
+}
+
+
+
 

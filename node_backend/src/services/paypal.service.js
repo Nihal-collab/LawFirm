@@ -66,7 +66,15 @@ const createPayPalOrder = async (amount, currency, returnUrl, cancelUrl) => {
 
   // Check for HTTP errors or invalid response structure
   if (response.statusCode >= 400 || !response.result || response.result.error) {
-    const errorDetails = response.result?.error_description || response.result?.error || 'Unknown error';
+    let errorDetails = response.result?.error_description || response.result?.error;
+    if (!errorDetails && response.result?.details?.[0]) {
+      const issue = response.result.details[0].issue || '';
+      const desc = response.result.details[0].description || '';
+      errorDetails = `${issue}: ${desc}`;
+    }
+    if (!errorDetails) {
+      errorDetails = response.result?.message || 'Unknown error';
+    }
     throw new Error(`PayPal Order Creation Failed (HTTP ${response.statusCode}): ${errorDetails}`);
   }
 
@@ -99,7 +107,15 @@ const capturePayPalOrder = async (orderId) => {
   });
 
   if (response.statusCode >= 400 || !response.result || response.result.error) {
-    const errorDetails = response.result?.error_description || response.result?.error || 'Unknown error';
+    let errorDetails = response.result?.error_description || response.result?.error;
+    if (!errorDetails && response.result?.details?.[0]) {
+      const issue = response.result.details[0].issue || '';
+      const desc = response.result.details[0].description || '';
+      errorDetails = `${issue}: ${desc}`;
+    }
+    if (!errorDetails) {
+      errorDetails = response.result?.message || 'Unknown error';
+    }
     throw new Error(`PayPal Capture Failed (HTTP ${response.statusCode}): ${errorDetails}`);
   }
 

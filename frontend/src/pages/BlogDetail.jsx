@@ -43,18 +43,18 @@ const BlogDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-white dark:bg-[#121110]">
-        <div className="w-10 h-10 border-2 border-[#4BB8E8] border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#09111F]">
+        <div className="w-10 h-10 border-2 border-[#0A4DFF] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!blog) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-white dark:bg-[#121110] p-6 text-center">
-        <h2 className="text-2xl font-serif font-medium text-black dark:text-[#FFFFFF] mb-2">Briefing Not Found</h2>
-        <p className="text-[#444444] dark:text-[#C9C1B5] mb-6 font-light text-sm">The requested publication could not be loaded.</p>
-        <Link to="/blog" className="btn-gold">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#09111F] p-6 text-center text-[#C8D3E2]">
+        <h2 className="text-2xl font-serif font-medium text-white mb-2">Briefing Not Found</h2>
+        <p className="text-[#94A3B8] mb-6 font-light text-sm">The requested publication could not be loaded.</p>
+        <Link to="/blog" className="px-6 py-2.5 bg-gradient-to-r from-[#0057D9] to-[#0A4DFF] text-white shadow-[0_12px_35px_rgba(10,77,255,0.40)] font-sans text-xs font-semibold tracking-widest uppercase rounded-full transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(10,77,255,0.60)] whitespace-nowrap cursor-pointer">
           <ArrowLeft size={14} /> Back to Blogs
         </Link>
       </div>
@@ -71,16 +71,16 @@ const BlogDetail = () => {
   };
 
   return (
-    <div className="page-enter py-24 bg-white dark:bg-[#121110] min-h-screen">
+    <div className="page-enter py-24 bg-[#09111F] text-[#C8D3E2] min-h-screen">
       <div className="max-w-4xl mx-auto px-6 sm:px-8 space-y-8">
         
         {/* Back navigation */}
-        <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#444444] hover:text-[#4BB8E8] transition-colors">
+        <Link to="/blog" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#94A3B8] hover:text-[#0A4DFF] transition-colors">
           <ArrowLeft size={14} /> Back to Blogs
         </Link>
  
         {/* Feature Image */}
-        <div className="aspect-[21/9] w-full rounded-[20px] overflow-hidden border border-[#E5E7EB] dark:border-slate-800 shadow-xs">
+        <div className="aspect-[21/9] w-full rounded-[20px] overflow-hidden border border-white/8 shadow-xs">
           <img
             src={blog.image_url || "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80&w=800"}
             alt={blog.title}
@@ -90,11 +90,11 @@ const BlogDetail = () => {
  
         {/* Article Metadata */}
         <div className="space-y-6">
-          <div className="flex flex-wrap items-center gap-4 text-xs text-[#444444] dark:text-[#C9C1B5] border-b border-[#E5E7EB]/40 dark:border-slate-850 pb-6">
-            <span className="bg-white dark:bg-[#1C1A19] border border-[#E5E7EB] dark:border-slate-800 text-[#4BB8E8] px-3.5 py-1 rounded-full uppercase tracking-wider font-semibold text-[9px]">
+          <div className="flex flex-wrap items-center gap-4 text-xs text-[#94A3B8] border-b border-white/8 pb-6">
+            <span className="bg-[#0B132B] border border-white/8 text-[#0A4DFF] px-3.5 py-1 rounded-full uppercase tracking-wider font-semibold text-[9px] font-sans">
               {blog.category}
             </span>
-            <span className="flex items-center gap-1.5 font-light">
+            <span className="flex items-center gap-1.5 font-light font-sans">
               <Calendar size={13} strokeWidth={1.5} /> {formatDate(blog.published_at)}
             </span>
             <span className="flex items-center gap-1.5 font-light font-sans">
@@ -102,24 +102,24 @@ const BlogDetail = () => {
             </span>
           </div>
  
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium text-black dark:text-[#FFFFFF] leading-tight">
+          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-serif font-medium text-white leading-tight">
             {blog.title}
           </h1>
  
-          <p className="text-[#444444] dark:text-[#C9C1B5] font-sans italic text-sm border-l-2 border-[#4BB8E8] pl-4 py-1 leading-relaxed font-light">
+          <p className="text-[#C8D3E2] font-sans italic text-sm border-l-2 border-[#0A4DFF] pl-4 py-1 leading-relaxed font-light">
             {blog.summary}
           </p>
         </div>
  
         {/* Main Post Body */}
         <div className="card-premium">
-          <div className="prose dark:prose-invert max-w-none text-[#444444] dark:text-[#C9C1B5] text-sm leading-relaxed whitespace-pre-wrap space-y-4 font-sans font-light">
+          <div className="prose dark:prose-invert max-w-none text-[#C8D3E2] text-sm leading-relaxed whitespace-pre-wrap space-y-4 font-sans font-light">
             {blog.content}
           </div>
         </div>
  
         {/* Disclaimer footer inside reader */}
-        <div className="text-xs text-[#444444]/80 dark:text-[#C9C1B5]/85 italic bg-white/80 dark:bg-[#1C1A19]/80 p-5 rounded-[12px] border border-[#E5E7EB]/70 dark:border-slate-800/80 leading-relaxed font-light">
+        <div className="text-xs text-[#94A3B8] italic bg-[#0B132B]/80 p-5 rounded-[12px] border border-white/8 shadow-premium leading-relaxed font-light font-sans">
           Disclaimer: This strategic briefing is compiled for educational references only. Individual patent descriptions or mechanical drawings require specific prior art assessment. Standard consultation is recommended prior to filing applications.
         </div>
  

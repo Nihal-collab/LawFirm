@@ -77,11 +77,19 @@ const seed = async () => {
     }
 
     const settings = await ConsultationSettings.getSingleton();
+    let needsSave = false;
     if (!settings.dailyLimit || settings.dailyLimit < 1) {
       settings.dailyLimit = 3;
+      needsSave = true;
+    }
+    if (settings.amount === undefined || settings.amount === null) {
+      settings.amount = 100;
+      needsSave = true;
+    }
+    if (needsSave) {
       await settings.save();
     }
-    console.log(`✅ Consultation daily limit is set to ${settings.dailyLimit}.`);
+    console.log(`✅ Consultation settings: dailyLimit=${settings.dailyLimit}, amount=$${settings.amount}`);
 
     console.log('\n🎉 Seed complete!');
     process.exit(0);

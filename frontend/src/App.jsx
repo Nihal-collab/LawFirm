@@ -8,7 +8,6 @@ import { ToastProvider } from './context/ToastContext';
 // Core layout components
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
-import AIWidget from './components/AIWidget';
 import ProtectedRoute from './components/ProtectedRoute';
 import SEOManager from './components/SEOManager';
 
@@ -33,12 +32,14 @@ const ClientSuccess = lazy(() => import('./pages/ClientSuccess'));
 const Forgot = lazy(() => import('./pages/Forgot'));
 const Reset = lazy(() => import('./pages/Reset'));
 const AdminDashboard = lazy(() => import('./admin/AdminDashboard'));
+const Payment = lazy(() => import('./pages/Payment'));
+const PaymentSuccess = lazy(() => import('./pages/PaymentSuccess'));
+const PaymentCancel = lazy(() => import('./pages/PaymentCancel'));
 
-// Brand-themed fallback loading spinner for suspended routes
 function LoadingSpinner() {
   return (
-    <div className="min-h-[60vh] flex items-center justify-center bg-white dark:bg-black">
-      <div className="w-10 h-10 border-4 border-[#4BB8E8] border-t-transparent rounded-full animate-spin"></div>
+    <div className="min-h-[60vh] flex items-center justify-center bg-[#F8FAFC] dark:bg-[#0B132B]">
+      <div className="w-10 h-10 border-4 border-[#0A4DFF] border-t-transparent rounded-full animate-spin"></div>
     </div>
   );
 }
@@ -66,7 +67,7 @@ function App() {
             <Navbar />
 
             {/* Main Content Area */}
-            <main className="flex-grow">
+            <main className="flex-grow pt-20">
               <Suspense fallback={<LoadingSpinner />}>
                 <Routes>
                   {/* Public Routes */}
@@ -81,6 +82,10 @@ function App() {
                   <Route path="/book-consultation" element={<BookConsultation />} />
                   <Route path="/book-consultation/success" element={<BookConsultationSuccess />} />
                   <Route path="/book-consultation/cancel" element={<BookConsultationCancel />} />
+                  <Route path="/payment" element={<Payment />} />
+                  <Route path="/make-payment" element={<Navigate to="/payment" replace />} />
+                  <Route path="/payment/success" element={<PaymentSuccess />} />
+                  <Route path="/payment/cancel" element={<PaymentCancel />} />
                   <Route path="/contact" element={<Contact />} />
                   <Route path="/login" element={<Navigate to="/admin/login" replace />} />
                   <Route path="/admin/login" element={<Login adminOnly />} />
@@ -104,9 +109,6 @@ function App() {
 
             {/* Footer layout */}
             <Footer />
-
-            {/* AI Assistant widget */}
-            <AIWidget />
           </div>
         </ToastProvider>
       </AuthProvider>

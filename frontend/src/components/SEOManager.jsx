@@ -13,7 +13,7 @@ const SEOManager = () => {
         const data = res.data;
 
         // 1. Update Document Title
-        document.title = data.title || 'ROOTSIP Partners | Elite IP Rights Legal Counsel';
+        document.title = data.title || 'ROOTS-IP Partners | Elite IP Rights Legal Counsel';
 
         // Helper to set or create meta tag
         const setMetaTag = (attrName, attrValue, content) => {
@@ -80,7 +80,7 @@ const SEOManager = () => {
           schemaObject = {
             "@context": "https://schema.org",
             "@type": "LegalService",
-            "name": "ROOTSIP Partners",
+            "name": "ROOTS-IP Partners",
             "description": data.meta_description,
             "url": "https://www.rootsip.com",
             "logo": "https://www.rootsip.com/logo.png",
@@ -108,7 +108,7 @@ const SEOManager = () => {
             "description": data.meta_description,
             "provider": {
               "@type": "LegalService",
-              "name": "ROOTSIP Partners",
+              "name": "ROOTS-IP Partners",
               "url": "https://www.rootsip.com"
             }
           };
@@ -122,11 +122,11 @@ const SEOManager = () => {
             "url": window.location.href,
             "author": {
               "@type": "Organization",
-              "name": "ROOTSIP Partners"
+              "name": "ROOTS-IP Partners"
             },
             "publisher": {
               "@type": "LegalService",
-              "name": "ROOTSIP Partners",
+              "name": "ROOTS-IP Partners",
               "logo": {
                 "@type": "ImageObject",
                 "url": "https://www.rootsip.com/logo.png"

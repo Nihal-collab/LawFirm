@@ -10,12 +10,13 @@ const errorHandler = require('./src/middlewares/error.middleware');
 const nosqlSanitize = require('./src/middlewares/sanitize.middleware');
 
 const authRoutes = require('./src/routes/auth.routes');
-const aiRoutes = require('./src/routes/ai.routes');
 const contactRoutes = require('./src/routes/contact.routes');
 const consultationRoutes = require('./src/routes/consultation.routes');
 const videoRoutes = require('./src/routes/video.routes');
 const analyticsRoutes = require('./src/routes/analytics.routes');
 const seoRoutes = require('./src/routes/seo.routes');
+const bookConsultationRoutes = require('./src/routes/book-consultation.routes');
+const paymentRoutes = require('./src/routes/payment.routes');
 
 const app = express();
 
@@ -104,11 +105,12 @@ app.get('/api/health', (req, res) => {
 
 // ── API Routes ────────────────────────────────────────────────────────────────
 app.use('/api/auth', authRoutes);
-app.use('/api/ai', aiRoutes);
 app.use('/api/contact', contactRoutes);
 app.use('/api/consultations', consultationRoutes);
 app.use('/api/videos', videoRoutes);
 app.use('/api/cms/seo', seoRoutes);
+app.use('/api/book-consultation', bookConsultationRoutes);
+app.use('/api/payment', paymentRoutes);
 app.use('/api', analyticsRoutes);
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────

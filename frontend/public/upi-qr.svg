@@ -1,0 +1,123 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300" width="100%" height="100%">
+  <!-- Premium Glassmorphic Card Background style -->
+  <defs>
+    <linearGradient id="goldBlueGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0057D9" />
+      <stop offset="100%" stop-color="#0A4DFF" />
+    </linearGradient>
+    <linearGradient id="goldBorder" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A4DFF" stop-opacity="0.8"/>
+      <stop offset="50%" stop-color="#E2B857" stop-opacity="0.3"/>
+      <stop offset="100%" stop-color="#0A4DFF" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Border Frame -->
+  <rect x="5" y="5" width="290" height="290" rx="20" fill="#0B132B" stroke="url(#goldBorder)" stroke-width="3" />
+  
+  <!-- Outer Finder Patterns (Top-Left) -->
+  <rect x="35" y="35" width="45" height="45" rx="8" fill="none" stroke="#0A4DFF" stroke-width="8" />
+  <rect x="47" y="47" width="21" height="21" rx="4" fill="#E2B857" />
+
+  <!-- Outer Finder Patterns (Top-Right) -->
+  <rect x="220" y="35" width="45" height="45" rx="8" fill="none" stroke="#0A4DFF" stroke-width="8" />
+  <rect x="232" y="47" width="21" height="21" rx="4" fill="#E2B857" />
+
+  <!-- Outer Finder Patterns (Bottom-Left) -->
+  <rect x="35" y="220" width="45" height="45" rx="8" fill="none" stroke="#0A4DFF" stroke-width="8" />
+  <rect x="47" y="232" width="21" height="21" rx="4" fill="#E2B857" />
+
+  <!-- Alignment Pattern (Near Bottom-Right) -->
+  <rect x="220" y="220" width="25" height="25" rx="4" fill="none" stroke="#0A4DFF" stroke-width="5" />
+  <rect x="230" y="230" width="5" height="5" rx="1" fill="#E2B857" />
+
+  <!-- Simulated QR Code Grid Elements (Modern pixel styling) -->
+  <!-- Row 1 -->
+  <rect x="95" y="35" width="10" height="10" rx="2" fill="#C8D3E2" opacity="0.8" />
+  <rect x="110" y="35" width="20" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="140" y="35" width="10" height="10" rx="2" fill="#E2B857" />
+  <rect x="160" y="35" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.6" />
+  <rect x="185" y="35" width="20" height="10" rx="2" fill="#0A4DFF" />
+
+  <!-- Row 2 -->
+  <rect x="95" y="55" width="30" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="135" y="55" width="10" height="10" rx="2" fill="#C8D3E2" opacity="0.7" />
+  <rect x="155" y="55" width="25" height="10" rx="2" fill="#E2B857" />
+  <rect x="190" y="55" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.5" />
+
+  <!-- Row 3 -->
+  <rect x="95" y="75" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.9" />
+  <rect x="120" y="75" width="10" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="145" y="75" width="20" height="10" rx="2" fill="#E2B857" />
+  <rect x="175" y="75" width="30" height="10" rx="2" fill="#0A4DFF" />
+
+  <!-- Row 4 -->
+  <rect x="35" y="95" width="10" height="20" rx="2" fill="#C8D3E2" opacity="0.8" />
+  <rect x="55" y="95" width="25" height="10" rx="2" fill="#E2B857" />
+  <rect x="90" y="95" width="15" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="115" y="95" width="30" height="10" rx="2" fill="#C8D3E2" opacity="0.7" />
+  <rect x="160" y="95" width="10" height="20" rx="2" fill="#0A4DFF" />
+  <rect x="180" y="95" width="20" height="10" rx="2" fill="#E2B857" />
+  <rect x="210" y="95" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.6" />
+  <rect x="235" y="95" width="30" height="10" rx="2" fill="#0A4DFF" />
+
+  <!-- Row 5 -->
+  <rect x="35" y="125" width="20" height="10" rx="2" fill="#E2B857" />
+  <rect x="65" y="125" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.9" />
+  <rect x="90" y="120" width="10" height="15" rx="2" fill="#0A4DFF" />
+  <rect x="110" y="125" width="25" height="10" rx="2" fill="#C8D3E2" opacity="0.5" />
+  <rect x="145" y="125" width="35" height="10" rx="2" fill="#E2B857" />
+  <rect x="190" y="125" width="15" height="15" rx="2" fill="#0A4DFF" />
+  <rect x="215" y="125" width="20" height="10" rx="2" fill="#C8D3E2" opacity="0.8" />
+  <rect x="245" y="125" width="20" height="10" rx="2" fill="#E2B857" />
+
+  <!-- Row 6 -->
+  <rect x="35" y="145" width="30" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="75" y="145" width="10" height="20" rx="2" fill="#E2B857" />
+  <rect x="95" y="145" width="20" height="10" rx="2" fill="#C8D3E2" opacity="0.6" />
+  <rect x="125" y="145" width="15" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="180" y="145" width="30" height="10" rx="2" fill="#C8D3E2" opacity="0.8" />
+  <rect x="220" y="145" width="10" height="10" rx="2" fill="#E2B857" />
+  <rect x="240" y="145" width="25" height="10" rx="2" fill="#0A4DFF" />
+
+  <!-- Row 7 -->
+  <rect x="35" y="175" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.7" />
+  <rect x="60" y="175" width="20" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="90" y="175" width="30" height="10" rx="2" fill="#E2B857" />
+  <rect x="130" y="175" width="20" height="10" rx="2" fill="#C8D3E2" opacity="0.9" />
+  <rect x="160" y="175" width="15" height="20" rx="2" fill="#0A4DFF" />
+  <rect x="185" y="175" width="10" height="10" rx="2" fill="#E2B857" />
+  <rect x="205" y="175" width="25" height="10" rx="2" fill="#C8D3E2" opacity="0.5" />
+  <rect x="240" y="175" width="25" height="10" rx="2" fill="#0A4DFF" />
+
+  <!-- Row 8 -->
+  <rect x="95" y="195" width="10" height="20" rx="2" fill="#0A4DFF" />
+  <rect x="115" y="195" width="25" height="10" rx="2" fill="#C8D3E2" opacity="0.8" />
+  <rect x="150" y="195" width="15" height="10" rx="2" fill="#E2B857" />
+  <rect x="175" y="195" width="30" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="220" y="195" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.6" />
+  <rect x="245" y="195" width="20" height="10" rx="2" fill="#E2B857" />
+
+  <!-- Row 9 -->
+  <rect x="95" y="225" width="20" height="10" rx="2" fill="#E2B857" />
+  <rect x="125" y="225" width="15" height="15" rx="2" fill="#C8D3E2" opacity="0.9" />
+  <rect x="150" y="225" width="25" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="185" y="225" width="20" height="10" rx="2" fill="#E2B857" />
+  
+  <!-- Row 10 -->
+  <rect x="95" y="250" width="35" height="10" rx="2" fill="#0A4DFF" />
+  <rect x="140" y="250" width="15" height="10" rx="2" fill="#C8D3E2" opacity="0.7" />
+  <rect x="165" y="250" width="20" height="10" rx="2" fill="#E2B857" />
+  <rect x="195" y="250" width="10" height="15" rx="2" fill="#0A4DFF" />
+  <rect x="215" y="250" width="20" height="10" rx="2" fill="#C8D3E2" opacity="0.8" />
+  <rect x="245" y="250" width="20" height="10" rx="2" fill="#E2B857" />
+
+  <!-- Center Logo Placeholder / BHIM Logo Frame -->
+  <rect x="120" y="120" width="60" height="60" rx="12" fill="#09111F" stroke="#E2B857" stroke-width="2" />
+  <rect x="125" y="125" width="50" height="50" rx="8" fill="url(#goldBlueGrad)" />
+  
+  <!-- Stylized UPI Center Icon -->
+  <path d="M 140 157 L 148 141 L 160 141 L 152 157 Z" fill="#FFFFFF" />
+  <path d="M 148 157 L 153 147 L 159 147 L 154 157 Z" fill="#E2B857" />
+  <text x="150" y="167" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="#FFFFFF" text-anchor="middle">UPI</text>
+</svg>

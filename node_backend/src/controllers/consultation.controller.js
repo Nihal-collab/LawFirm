@@ -1,7 +1,7 @@
 const Contact = require('../models/Contact');
 const ConsultationSettings = require('../models/ConsultationSettings');
 const asyncHandler = require('../utils/asyncHandler');
-const { sendContactNotification } = require('../services/email.service');
+const { sendContactNotification, sendDirectBookingNotification } = require('../services/email.service');
 const paypalService = require('../services/paypal.service');
 
 const ACTIVE_CONSULTATION_STATUSES = ['NEW', 'PENDING', 'CONTACTED', 'COMPLETED', 'Payment Successful'];
@@ -108,6 +108,10 @@ const createConsultation = asyncHandler(async (req, res) => {
 
   let consultation;
   try {
+    const settings = await ConsultationSettings.getSingleton();
+    const amountVal = settings.amount !== undefined ? settings.amount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
+    const currencyVal = process.env.CONSULTATION_CURRENCY || 'USD';
+
     consultation = await Contact.create({
       name,
       email: normalizedEmail,
@@ -119,17 +123,16 @@ const createConsultation = asyncHandler(async (req, res) => {
       message,
       type: 'CONSULTATION',
       status: 'Pending Payment', // Consultations start as Pending Payment
+      paymentAmount: amountVal,
+      paymentCurrency: currencyVal
     });
 
     const frontendOrigin = process.env.FRONTEND_ORIGIN || req.headers.origin || 'http://localhost:5173';
     const returnUrl = `${frontendOrigin}/book-consultation/success?bookingId=${consultation._id}`;
     const cancelUrl = `${frontendOrigin}/book-consultation/cancel?bookingId=${consultation._id}`;
 
-    const amount = process.env.CONSULTATION_FEE || '100.00';
-    const currency = process.env.CONSULTATION_CURRENCY || 'USD';
-
     // Initiate PayPal checkout order
-    const paypalOrder = await paypalService.createPayPalOrder(amount, currency, returnUrl, cancelUrl);
+    const paypalOrder = await paypalService.createPayPalOrder(amountVal.toFixed(2), currencyVal, returnUrl, cancelUrl);
 
     consultation.paypalOrderId = paypalOrder.id;
     await consultation.save();
@@ -156,7 +159,11 @@ const getConsultationAvailability = asyncHandler(async (req, res) => {
     return res.status(400).json({ detail: 'Please provide a valid date.' });
   }
 
-  const dailyLimit = await getDailyLimit();
+  const settings = await ConsultationSettings.getSingleton();
+  const dailyLimit = Math.max(Number(settings.dailyLimit) || 1, 1);
+  const amount = settings.amount !== undefined ? settings.amount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
+  const currency = process.env.CONSULTATION_CURRENCY || 'USD';
+
   const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
   const consultations = await Contact.find({
@@ -174,6 +181,8 @@ const getConsultationAvailability = asyncHandler(async (req, res) => {
   res.status(200).json({
     date,
     dailyLimit,
+    amount,
+    currency,
     bookedCount,
     remainingSlots: Math.max(dailyLimit - bookedCount, 0),
     isAvailable: bookedCount < dailyLimit,
@@ -223,8 +232,8 @@ const captureConsultationPayment = asyncHandler(async (req, res) => {
     const capture = purchaseUnit.payments?.captures?.[0] || {};
     const payer = captureResult.payer || {};
 
-    const expectedAmount = parseFloat(process.env.CONSULTATION_FEE || '100.00');
-    const expectedCurrency = process.env.CONSULTATION_CURRENCY || 'USD';
+    const expectedAmount = booking.paymentAmount !== undefined ? booking.paymentAmount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
+    const expectedCurrency = booking.paymentCurrency || process.env.CONSULTATION_CURRENCY || 'USD';
     const actualAmount = parseFloat(capture.amount?.value || 0);
     const actualCurrency = capture.amount?.currencyCode || 'USD';
 
@@ -382,26 +391,159 @@ const getConsultationSettings = asyncHandler(async (req, res) => {
   const settings = await ConsultationSettings.getSingleton();
   res.status(200).json({
     dailyLimit: settings.dailyLimit,
+    amount: settings.amount !== undefined ? settings.amount : 100,
+    upiQrCode: settings.upiQrCode !== undefined ? settings.upiQrCode : '/upi-qr.svg',
+    supportEmail: settings.supportEmail || 'support@sr4ipr.com',
+    supportPhone: settings.supportPhone || '+1 (555) 012-3456',
+    supportWhatsapp: settings.supportWhatsapp || '',
+    upiInstructions: settings.upiInstructions || 'After completing your UPI payment, please share your Transaction ID or payment screenshot with our office. Once your payment is verified, your consultation will be processed accordingly.',
   });
 });
 
 // PATCH /api/consultations/settings (admin)
 const updateConsultationSettings = asyncHandler(async (req, res) => {
-  const nextDailyLimit = Number(req.body.dailyLimit);
+  const settings = await ConsultationSettings.getSingleton();
 
-  if (!Number.isInteger(nextDailyLimit) || nextDailyLimit < 1) {
-    return res.status(400).json({ detail: 'Daily consultation limit must be a whole number greater than 0.' });
+  if (req.body.dailyLimit !== undefined) {
+    const nextDailyLimit = Number(req.body.dailyLimit);
+    if (!Number.isInteger(nextDailyLimit) || nextDailyLimit < 1) {
+      return res.status(400).json({ detail: 'Daily consultation limit must be a whole number greater than 0.' });
+    }
+    settings.dailyLimit = nextDailyLimit;
+  }
+
+  if (req.body.amount !== undefined) {
+    const nextAmount = Number(req.body.amount);
+    if (isNaN(nextAmount) || nextAmount < 0) {
+      return res.status(400).json({ detail: 'Consultation fee amount must be a number greater than or equal to 0.' });
+    }
+    settings.amount = nextAmount;
+  }
+
+  if (req.body.upiQrCode !== undefined) {
+    settings.upiQrCode = req.body.upiQrCode;
+  }
+
+  if (req.body.supportEmail !== undefined) {
+    settings.supportEmail = req.body.supportEmail;
+  }
+
+  if (req.body.supportPhone !== undefined) {
+    settings.supportPhone = req.body.supportPhone;
+  }
+
+  if (req.body.supportWhatsapp !== undefined) {
+    settings.supportWhatsapp = req.body.supportWhatsapp;
+  }
+
+  if (req.body.upiInstructions !== undefined) {
+    settings.upiInstructions = req.body.upiInstructions;
+  }
+
+  await settings.save();
+
+  res.status(200).json({
+    dailyLimit: settings.dailyLimit,
+    amount: settings.amount,
+    upiQrCode: settings.upiQrCode,
+    supportEmail: settings.supportEmail,
+    supportPhone: settings.supportPhone,
+    supportWhatsapp: settings.supportWhatsapp,
+    upiInstructions: settings.upiInstructions,
+  });
+});
+
+// POST /api/book-consultation (public — creates direct booking without payment)
+const createDirectBooking = asyncHandler(async (req, res) => {
+  const {
+    name, email, phone, company, date, time, service, message
+  } = req.body;
+
+  if (!name || !email || !date || !time) {
+    return res.status(400).json({ detail: 'Name, email, date, and time are required.' });
+  }
+
+  if (!isValidDateString(date)) {
+    return res.status(400).json({ detail: 'Please select a valid consultation date.' });
+  }
+
+  const normalizedEmail = String(email).trim().toLowerCase();
+  const selectedDate = new Date(`${date}T00:00:00`);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+
+  if (selectedDate < today) {
+    return res.status(400).json({ detail: 'Consultation date must be in the future.' });
+  }
+
+  const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
+
+  const [dailyLimit, duplicateBooking, activeBookingCount] = await Promise.all([
+    getDailyLimit(),
+    Contact.findOne({
+      type: 'CONSULTATION',
+      email: normalizedEmail,
+      consultationDate: date,
+      consultationTime: time,
+      $or: [
+        { status: { $in: ACTIVE_CONSULTATION_STATUSES } },
+        { status: 'Pending Payment', createdAt: { $gte: fifteenMinutesAgo } }
+      ]
+    }),
+    Contact.countDocuments({
+      type: 'CONSULTATION',
+      consultationDate: date,
+      $or: [
+        { status: { $in: ACTIVE_CONSULTATION_STATUSES } },
+        { status: 'Pending Payment', createdAt: { $gte: fifteenMinutesAgo } }
+      ]
+    }),
+  ]);
+
+  if (duplicateBooking) {
+    return res.status(409).json({ detail: 'You already booked this date and time.' });
+  }
+
+  if (activeBookingCount >= dailyLimit) {
+    return res.status(409).json({
+      detail: 'This date is fully booked. Please choose another date.',
+      dailyLimit,
+      bookedCount: activeBookingCount,
+    });
   }
 
   const settings = await ConsultationSettings.getSingleton();
-  settings.dailyLimit = nextDailyLimit;
-  await settings.save();
+  const amountVal = settings.amount !== undefined ? settings.amount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
+  const currencyVal = process.env.CONSULTATION_CURRENCY || 'USD';
 
-  res.status(200).json({ dailyLimit: settings.dailyLimit });
+  const consultation = await Contact.create({
+    name,
+    email: normalizedEmail,
+    phone,
+    company,
+    consultationDate: date,
+    consultationTime: time,
+    serviceArea: service,
+    message,
+    type: 'CONSULTATION',
+    status: 'NEW', // Direct bookings are created with status NEW
+    paymentAmount: amountVal,
+    paymentCurrency: currencyVal
+  });
+
+  // Send direct booking emails (async, non-blocking)
+  sendDirectBookingNotification(consultation).catch((err) => {
+    console.error('Failed to send direct booking confirmation emails:', err);
+  });
+
+  res.status(201).json({
+    booking: mapConsultation(consultation)
+  });
 });
 
 module.exports = {
   createConsultation,
+  createDirectBooking,
   getConsultationAvailability,
   captureConsultationPayment,
   cancelConsultationBooking,

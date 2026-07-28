@@ -52,10 +52,21 @@ const AdminDashboard = () => {
   const [gallery, setGallery] = useState([]);
   const [successStories, setSuccessStories] = useState([]);
 
-  // Filter/Search states for Consultations
   const [consultationSearch, setConsultationSearch] = useState('');
   const [consultationStatus, setConsultationStatus] = useState('');
   const [consultationService, setConsultationService] = useState('');
+  const [expandedConsultations, setExpandedConsultations] = useState({});
+  const toggleConsultation = (id) => {
+    setExpandedConsultations(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
+  };
+  const [visibleConsultationsCount, setVisibleConsultationsCount] = useState(5);
+
+  useEffect(() => {
+    setVisibleConsultationsCount(5);
+  }, [consultationSearch, consultationStatus, consultationService]);
 
   // CMS Homepage copy states
   const [cmsHome, setCmsHome] = useState({
@@ -157,6 +168,23 @@ const AdminDashboard = () => {
   const [settingsTwitter, setSettingsTwitter] = useState('');
   const [settingsFacebook, setSettingsFacebook] = useState('');
   const [consultationDailyLimit, setConsultationDailyLimit] = useState(3);
+  const [consultationAmount, setConsultationAmount] = useState(100);
+  const [consultationUpiQrCode, setConsultationUpiQrCode] = useState('/upi-qr.svg');
+  const [consultationSupportEmail, setConsultationSupportEmail] = useState('support@sr4ipr.com');
+  const [consultationSupportPhone, setConsultationSupportPhone] = useState('+1 (555) 012-3456');
+  const [consultationSupportWhatsapp, setConsultationSupportWhatsapp] = useState('');
+  const [consultationUpiInstructions, setConsultationUpiInstructions] = useState('');
+
+  const handleQrUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setConsultationUpiQrCode(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // Fetch all management records
   const loadAdminData = async () => {
@@ -208,6 +236,12 @@ const AdminDashboard = () => {
       setSettingsTwitter(staticSettings.twitter_url || '');
       setSettingsFacebook(staticSettings.facebook_url || '');
       setConsultationDailyLimit(consultSettingsRes.data.dailyLimit || 3);
+      setConsultationAmount(consultSettingsRes.data.amount !== undefined ? consultSettingsRes.data.amount : 100);
+      setConsultationUpiQrCode(consultSettingsRes.data.upiQrCode || '/upi-qr.svg');
+      setConsultationSupportEmail(consultSettingsRes.data.supportEmail || 'support@sr4ipr.com');
+      setConsultationSupportPhone(consultSettingsRes.data.supportPhone || '+1 (555) 012-3456');
+      setConsultationSupportWhatsapp(consultSettingsRes.data.supportWhatsapp || '');
+      setConsultationUpiInstructions(consultSettingsRes.data.upiInstructions || '');
 
       setStats({
         consultations: consRes.data.length,
@@ -721,11 +755,23 @@ const AdminDashboard = () => {
     try {
       const res = await API.patch('consultations/settings/', {
         dailyLimit: consultationDailyLimit,
+        amount: consultationAmount,
+        upiQrCode: consultationUpiQrCode,
+        supportEmail: consultationSupportEmail,
+        supportPhone: consultationSupportPhone,
+        supportWhatsapp: consultationSupportWhatsapp,
+        upiInstructions: consultationUpiInstructions,
       });
       setConsultationDailyLimit(res.data.dailyLimit);
-      showToast('Consultation booking limit updated.', 'success');
+      setConsultationAmount(res.data.amount !== undefined ? res.data.amount : 100);
+      setConsultationUpiQrCode(res.data.upiQrCode || '/upi-qr.svg');
+      setConsultationSupportEmail(res.data.supportEmail || 'support@sr4ipr.com');
+      setConsultationSupportPhone(res.data.supportPhone || '+1 (555) 012-3456');
+      setConsultationSupportWhatsapp(res.data.supportWhatsapp || '');
+      setConsultationUpiInstructions(res.data.upiInstructions || '');
+      showToast('Consultation and payment settings updated.', 'success');
     } catch (err) {
-      showToast(err.response?.data?.detail || 'Failed to update consultation limit.', 'error');
+      showToast(err.response?.data?.detail || 'Failed to update consultation settings.', 'error');
     }
   };
 
@@ -741,7 +787,7 @@ const AdminDashboard = () => {
   };
 
   return (
-    <div className="font-sans min-h-screen bg-slate-50 dark:bg-navy-dark dark:text-slate-100 flex flex-col lg:flex-row relative">
+    <div className="admin-portal font-sans min-h-screen bg-[#09111F] text-[#C8D3E2] flex flex-col lg:flex-row relative">
       
       {/* Mobile Sticky Header Bar */}
       <div className="lg:hidden sticky top-0 z-40 bg-navy text-white border-b border-gold-dark/30 p-4 flex items-center justify-between shadow-md">
@@ -1982,18 +2028,37 @@ const AdminDashboard = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100 dark:divide-slate-850">
-                  {filteredConsultations.map((c) => (
+                  {filteredConsultations.slice(0, visibleConsultationsCount).map((c) => (
                     <tr key={c.id} className="hover:bg-slate-50/50 dark:hover:bg-navy/20">
                       <td className="p-3">
                         <div className="font-semibold text-slate-800 dark:text-slate-100">{c.name}</div>
                         <div className="text-[10px] text-slate-450">{c.email} • {c.phone}</div>
-                        {c.message && <div className="text-[10px] text-slate-500 mt-1 max-w-[250px] truncate" title={c.message}>"{c.message}"</div>}
-                        {c.paypalTransactionId && (
-                          <div className="mt-2 pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-500 space-y-0.5">
-                            <div className="font-semibold text-[#4BB8E8]">PayPal Payment Details:</div>
-                            <div>Transaction ID: <span className="font-mono">{c.paypalTransactionId}</span></div>
-                            <div>Amount: {c.paymentCurrency === 'INR' ? 'INR ' : '$'}{c.paymentAmount} {c.paymentCurrency}</div>
-                            {c.payerEmail && <div>Payer: {c.payerEmail}</div>}
+                        
+                        {(c.message || c.paypalTransactionId) && (
+                          <button
+                            onClick={() => toggleConsultation(c.id)}
+                            className="mt-1 text-[10px] font-semibold text-[#0A4DFF] hover:underline flex items-center gap-1 cursor-pointer focus:outline-none"
+                          >
+                            {expandedConsultations[c.id] ? 'View Less' : 'View More'}
+                          </button>
+                        )}
+
+                        {expandedConsultations[c.id] && (
+                          <div className="mt-2 space-y-2 animate-fade-in">
+                            {c.message && (
+                              <div className="text-[10px] text-slate-500 bg-slate-50 dark:bg-navy p-1.5 rounded border border-slate-100 dark:border-slate-800/60 max-w-[250px] whitespace-pre-wrap">
+                                <span className="font-semibold text-slate-700 dark:text-slate-350 block mb-0.5">Message:</span>
+                                "{c.message}"
+                              </div>
+                            )}
+                            {c.paypalTransactionId && (
+                              <div className="pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-500 space-y-0.5">
+                                <div className="font-semibold text-[#0A4DFF]">PayPal Payment Details:</div>
+                                <div>Transaction ID: <span className="font-mono">{c.paypalTransactionId}</span></div>
+                                <div>Amount: {c.paymentCurrency === 'INR' ? 'INR ' : '$'}{c.paymentAmount} {c.paymentCurrency}</div>
+                                {c.payerEmail && <div>Payer: {c.payerEmail}</div>}
+                              </div>
+                            )}
                           </div>
                         )}
                       </td>
@@ -2047,6 +2112,16 @@ const AdminDashboard = () => {
                 </tbody>
               </table>
             </div>
+            {filteredConsultations.length > visibleConsultationsCount && (
+              <div className="flex justify-center pt-4">
+                <button
+                  onClick={() => setVisibleConsultationsCount(prev => prev + 5)}
+                  className="px-5 py-2.5 bg-navy dark:bg-gold text-white dark:text-navy-dark font-semibold rounded shadow-sm text-xs hover:opacity-90 active:scale-95 transition-all cursor-pointer font-sans"
+                >
+                  View More Requests
+                </button>
+              </div>
+            )}
           </div>
         )}
 
@@ -2163,23 +2238,85 @@ const AdminDashboard = () => {
             
             <div className="bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 p-4 sm:p-8 rounded-lg shadow-sm max-w-3xl">
               <form onSubmit={handleSaveConsultationLimit} className="space-y-4 text-xs font-sans">
+                <div className="grid grid-cols-1 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-slate-555 font-sans">Daily Consultation Booking Limit</label>
+                    <input
+                      type="number"
+                      min="1"
+                      step="1"
+                      value={consultationDailyLimit}
+                      onChange={(e) => setConsultationDailyLimit(Number(e.target.value))}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    />
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 border-t border-slate-100 dark:border-slate-800 pt-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-slate-555 font-sans block">UPI QR Code Image</label>
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleQrUpload}
+                      className="w-full px-3 py-1.5 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded text-xs"
+                    />
+                  </div>
+                  <div className="flex items-center gap-4">
+                    {consultationUpiQrCode && (
+                      <div className="w-16 h-16 bg-slate-50 dark:bg-navy border border-slate-300 dark:border-slate-700 rounded flex items-center justify-center p-1">
+                        <img src={consultationUpiQrCode} alt="QR Code Preview" className="w-full h-full object-contain" />
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-slate-555 font-sans">Payment Support Email</label>
+                    <input
+                      type="email"
+                      value={consultationSupportEmail}
+                      onChange={(e) => setConsultationSupportEmail(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-slate-555 font-sans">Payment Support Phone</label>
+                    <input
+                      type="text"
+                      value={consultationSupportPhone}
+                      onChange={(e) => setConsultationSupportPhone(e.target.value)}
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    />
+                  </div>
+                  <div className="space-y-1">
+                    <label className="text-[10px] uppercase font-bold text-slate-555 font-sans">WhatsApp Number (Optional)</label>
+                    <input
+                      type="text"
+                      value={consultationSupportWhatsapp}
+                      onChange={(e) => setConsultationSupportWhatsapp(e.target.value)}
+                      placeholder="e.g. +919876543210"
+                      className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
+                    />
+                  </div>
+                </div>
+
                 <div className="space-y-1">
-                  <label className="text-[10px] uppercase font-bold text-slate-550 font-sans">Daily Consultation Booking Limit</label>
-                  <input
-                    type="number"
-                    min="1"
-                    step="1"
-                    value={consultationDailyLimit}
-                    onChange={(e) => setConsultationDailyLimit(Number(e.target.value))}
+                  <label className="text-[10px] uppercase font-bold text-slate-555 font-sans">UPI Payment Instructions</label>
+                  <textarea
+                    rows="3"
+                    value={consultationUpiInstructions}
+                    onChange={(e) => setConsultationUpiInstructions(e.target.value)}
                     className="w-full px-3 py-2 bg-slate-50 dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded focus:outline-none focus:border-gold"
-                  />
+                  ></textarea>
                 </div>
 
                 <button
                   type="submit"
                   className="w-full sm:w-auto px-6 py-2.5 bg-gold text-navy-dark font-bold rounded shadow hover:opacity-90 transition-transform active:scale-95"
                 >
-                  Save Consultation Limit
+                  Save Consultation & Payment Settings
                 </button>
               </form>
             </div>

@@ -78,19 +78,19 @@ const ServiceDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-[#FFFFFF] dark:bg-[#121110]">
-        <div className="w-10 h-10 border-2 border-[#4BB8E8] border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen flex items-center justify-center bg-[#09111F]">
+        <div className="w-10 h-10 border-2 border-[#0A4DFF] border-t-transparent rounded-full animate-spin"></div>
       </div>
     );
   }
 
   if (!service) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-[#FFFFFF] dark:bg-[#121110] p-6 text-center">
-        <h2 className="text-2xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] mb-2">Practice Area Not Found</h2>
-        <p className="text-[#444444] dark:text-[#C9C1B5] mb-6 font-light text-sm">The requested service directory could not be located.</p>
-        <Link to="/services" className="btn-gold">
-          <ArrowLeft size={14} /> Back to Services
+      <div className="min-h-screen flex flex-col items-center justify-center bg-[#09111F] p-6 text-center text-[#C8D3E2]">
+        <h2 className="text-2xl font-serif font-medium text-white mb-2">Practice Area Not Found</h2>
+        <p className="text-[#94A3B8] mb-6 font-light text-sm">The requested service directory could not be located.</p>
+        <Link to="/services" className="px-6 py-2.5 bg-gradient-to-r from-[#0057D9] to-[#0A4DFF] text-white shadow-[0_12px_35px_rgba(10,77,255,0.40)] font-sans text-xs font-semibold tracking-widest uppercase rounded-full transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(10,77,255,0.60)] whitespace-nowrap cursor-pointer">
+          <ArrowLeft className="inline-block mr-1.5" size={14} /> Back to Services
         </Link>
       </div>
     );
@@ -99,22 +99,22 @@ const ServiceDetail = () => {
   const Icon = iconMap[service.icon] || ShieldCheck;
 
   return (
-    <div className="page-enter py-24 bg-[#FFFFFF] dark:bg-[#121110] min-h-screen">
+    <div className="page-enter py-24 bg-[#09111F] text-[#C8D3E2] min-h-screen">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-8">
         
         {/* Back Link */}
-        <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#444444] hover:text-[#4BB8E8] transition-colors">
+        <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#94A3B8] hover:text-[#0A4DFF] transition-colors font-sans">
           <ArrowLeft size={14} /> Back to Practices
         </Link>
 
         {/* Hero Area */}
-        <div className="bg-[#000000] dark:bg-[#151413] text-white rounded-[20px] p-10 border border-[#4BB8E8]/30 shadow-xs flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
-          <div className="space-y-3">
-            <span className="text-[#4BB8E8] uppercase tracking-[0.25em] text-xs font-semibold block">{service.category} SECTOR</span>
-            <h1 className="text-3xl sm:text-4xl font-serif font-medium text-[#FFFFFF]">{service.name}</h1>
-            <p className="text-[#C9C1B5] text-sm max-w-2xl font-light leading-relaxed">{service.short_desc}</p>
+        <div className="bg-[#111827] text-white rounded-[20px] p-10 border border-white/8 shadow-premium flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+          <div className="space-y-3 font-sans">
+            <span className="text-[#0A4DFF] uppercase tracking-[0.25em] text-xs font-semibold block">{service.category} SECTOR</span>
+            <h1 className="text-3xl sm:text-4xl font-serif font-medium text-white">{service.name}</h1>
+            <p className="text-[#C8D3E2] text-sm max-w-2xl font-light leading-relaxed">{service.short_desc}</p>
           </div>
-          <div className="p-4 bg-[#4BB8E8]/10 border border-[#4BB8E8]/20 text-[#4BB8E8] rounded-full shrink-0">
+          <div className="p-4 bg-[#0A4DFF]/10 border border-[#0A4DFF]/20 text-[#0A4DFF] rounded-full shrink-0 shadow-[0_0_10px_rgba(10,77,255,0.25)]">
             <Icon size={32} strokeWidth={1.5} />
           </div>
         </div>
@@ -123,17 +123,17 @@ const ServiceDetail = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           
           {/* Main info */}
-          <div className="lg:col-span-8 card-premium">
-            <h3 className="text-2xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] border-b border-[#E5E7EB]/40 pb-3">Practice Overview</h3>
-            <p className="text-[#444444] dark:text-[#C9C1B5] leading-relaxed text-sm whitespace-pre-wrap font-light">
+          <div className="lg:col-span-8 card-premium font-sans">
+            <h3 className="text-2xl font-serif font-medium text-white border-b border-white/8 pb-3">Practice Overview</h3>
+            <p className="text-[#C8D3E2] leading-relaxed text-sm whitespace-pre-wrap font-light mt-4">
               {service.long_desc || service.short_desc}
             </p>
 
-            <h4 className="text-xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] pt-6">Sub-Practice Areas & Offerings</h4>
-            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+            <h4 className="text-xl font-serif font-medium text-white pt-6">Sub-Practice Areas & Offerings</h4>
+            <ul className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
               {service.details_list.map((point, idx) => (
-                <li key={idx} className="flex items-center gap-3 text-sm text-[#444444] dark:text-[#C9C1B5] font-light">
-                  <span className="w-1.5 h-1.5 bg-[#4BB8E8] rounded-full shrink-0"></span>
+                <li key={idx} className="flex items-center gap-3 text-sm text-[#C8D3E2] font-light">
+                  <span className="w-1.5 h-1.5 bg-[#0A4DFF] shadow-[0_0_8px_rgba(10,77,255,0.4)] rounded-full shrink-0"></span>
                   {point}
                 </li>
               ))}
@@ -141,17 +141,17 @@ const ServiceDetail = () => {
           </div>
 
           {/* Sidebar CTA */}
-          <div className="lg:col-span-4 card-premium h-fit space-y-6">
-            <h4 className="text-xl font-serif font-medium text-[#000000] dark:text-[#FFFFFF] border-b border-[#E5E7EB]/40 pb-3">Initiate File</h4>
-            <p className="text-[#444444] dark:text-[#C9C1B5] text-xs leading-relaxed font-light">
+          <div className="lg:col-span-4 card-premium h-fit space-y-6 font-sans">
+            <h4 className="text-xl font-serif font-medium text-white border-b border-white/8 pb-3">Initiate File</h4>
+            <p className="text-[#C8D3E2] text-xs leading-relaxed font-light">
               Submit technological disclosures or scheduling requests. All briefs are protected under client-attorney confidentiality.
             </p>
             <div className="pt-2">
               <Link
                 to={`/book-consultation?service=${encodeURIComponent(service.name)}`}
-                className="btn-gold w-full py-4 uppercase font-sans text-xs tracking-widest font-semibold cursor-pointer"
+                className="inline-flex justify-center items-center w-full px-8 py-3.5 bg-gradient-to-r from-[#0057D9] to-[#0A4DFF] text-white shadow-[0_12px_35px_rgba(10,77,255,0.40)] font-sans text-xs font-semibold tracking-widest uppercase rounded-full transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(10,77,255,0.60)] whitespace-nowrap cursor-pointer text-center"
               >
-                <Calendar className="inline-block" size={14} strokeWidth={1.5} /> Book Strategy Session
+                <Calendar className="inline-block mr-1.5" size={14} strokeWidth={1.5} /> Book Strategy Session
               </Link>
             </div>
           </div>

@@ -158,4 +158,187 @@ Manage at: http://localhost:5174/admin
   ]);
 };
 
-module.exports = { sendEmail, sendContactNotification };
+const sendDirectBookingNotification = async (booking) => {
+  const frontendOrigin = process.env.FRONTEND_ORIGIN || 'http://localhost:5173';
+  const adminSubject = `New Consultation Request: ${booking.name} — ${booking.serviceArea || 'General'}`;
+  
+  const adminText = `
+A new direct consultation has been requested. Details are as follows:
+
+Customer & Session Details:
+- Booking Reference ID: ${booking._id}
+- Customer Name: ${booking.name}
+- Email Address: ${booking.email}
+- Phone Number: ${booking.phone || 'Not provided'}
+- Company Name: ${booking.company || 'Not provided'}
+- Practice Area: ${booking.serviceArea || 'General'}
+- Preferred Date: ${booking.consultationDate}
+- Preferred Time Slot: ${booking.consultationTime}
+
+Quick Actions:
+- View Booking: ${frontendOrigin}/admin
+- Reply via Email: mailto:${booking.email}?subject=Regarding your ROOTS-ip booking: ${booking._id}
+
+ROOTS-ip Admin Portal Automation
+  `.trim();
+
+  const adminHtml = `
+<div style="font-family: Arial, sans-serif; background-color: #09111F; color: #C8D3E2; padding: 30px; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(255, 255, 255, 0.08);">
+  <div style="text-align: center; margin-bottom: 20px;">
+    <h2 style="font-family: Georgia, serif; color: #FFFFFF; font-size: 24px; margin: 0;">ROOTS<span style="color: #0A4DFF;">-ip</span> Dashboard</h2>
+    <p style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #A7B2C3; margin: 5px 0 0 0;">New Consultation Request</p>
+  </div>
+  <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 20px 0;" />
+  
+  <p style="font-size: 14px; line-height: 1.6; color: #FFFFFF;">A new direct consultation has been requested. Details are as follows:</p>
+  
+  <div style="background-color: #0B132B; padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); margin: 20px 0;">
+    <h3 style="font-size: 12px; text-transform: uppercase; color: #FFFFFF; letter-spacing: 1px; margin-top: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px;">Customer & Session Details</h3>
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+      <tr><td style="padding: 6px 0; color: #94A3B8; width: 40%;">Booking Reference ID:</td><td style="padding: 6px 0; color: #FFFFFF; font-weight: bold;">${booking._id}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Customer Name:</td><td style="padding: 6px 0; color: #FFFFFF; font-weight: bold;">${booking.name}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Email Address:</td><td style="padding: 6px 0; color: #FFFFFF;"><a href="mailto:${booking.email}" style="color: #0A4DFF; text-decoration: none;">${booking.email}</a></td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Phone Number:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.phone || 'Not provided'}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Company Name:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.company || 'Not provided'}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Practice Area:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.serviceArea || 'General'}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Preferred Date:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.consultationDate}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Preferred Time Slot:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.consultationTime}</td></tr>
+    </table>
+  </div>
+
+  <div style="text-align: center; margin: 30px 0;">
+    <p style="font-size: 12px; color: #94A3B8; margin-bottom: 15px;">Quick Actions</p>
+    <a href="${frontendOrigin}/admin" style="display: inline-block; background: linear-gradient(90deg, #0057D9, #0A4DFF); color: #FFFFFF; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 12px 24px; border-radius: 20px; text-decoration: none; margin: 0 5px; box-shadow: 0 4px 15px rgba(10,77,255,0.35);">View Booking</a>
+    <a href="mailto:${booking.email}?subject=Regarding your ROOTS-ip booking: ${booking._id}" style="display: inline-block; border: 1px solid #0A4DFF; color: #0A4DFF; font-size: 11px; font-weight: bold; text-transform: uppercase; letter-spacing: 1px; padding: 11px 23px; border-radius: 20px; text-decoration: none; margin: 0 5px;">Reply via Email</a>
+  </div>
+  
+  <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 20px 0;" />
+  <div style="text-align: center; font-size: 11px; color: #A7B2C3;">
+    <p style="margin: 5px 0;">ROOTS-ip Admin Portal Automation</p>
+  </div>
+</div>
+  `.trim();
+
+  const clientSubject = 'Consultation Request Received — SR4IPR Partners';
+  const clientText = `
+Dear ${booking.name},
+
+Your consultation request has been received successfully. Our team will review your request and contact you shortly to confirm your appointment.
+
+Booking Details:
+- Booking Reference ID: ${booking._id}
+- Practice Area: ${booking.serviceArea || 'General'}
+- Preferred Date: ${booking.consultationDate}
+- Preferred Time Slot: ${booking.consultationTime}
+- Company Name: ${booking.company || 'Not provided'}
+- Phone Number: ${booking.phone || 'Not provided'}
+
+Sincerely,
+SR4IPR Partners Team
+https://www.sr4ipr.com
+  `.trim();
+
+  const clientHtml = `
+<div style="font-family: Arial, sans-serif; background-color: #09111F; color: #C8D3E2; padding: 30px; border-radius: 12px; max-width: 600px; margin: 0 auto; border: 1px solid rgba(255, 255, 255, 0.08);">
+  <div style="text-align: center; margin-bottom: 20px;">
+    <h2 style="font-family: Georgia, serif; color: #FFFFFF; font-size: 24px; margin: 0;">ROOTS<span style="color: #0A4DFF;">-ip</span></h2>
+    <p style="font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: #A7B2C3; margin: 5px 0 0 0;">Intellectual Property Counsel</p>
+  </div>
+  <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 20px 0;" />
+  <p style="font-size: 15px; color: #FFFFFF; font-weight: bold;">Dear ${booking.name},</p>
+  <p style="font-size: 14px; line-height: 1.6; color: #C8D3E2;">Your consultation request has been received successfully. Our team will review your request and contact you shortly to confirm your appointment.</p>
+  
+  <div style="background-color: #0B132B; padding: 20px; border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.05); margin: 20px 0;">
+    <h3 style="font-size: 12px; text-transform: uppercase; color: #FFFFFF; letter-spacing: 1px; margin-top: 0; border-bottom: 1px solid rgba(255, 255, 255, 0.05); padding-bottom: 8px;">Booking Summary</h3>
+    <table style="width: 100%; border-collapse: collapse; font-size: 13px;">
+      <tr><td style="padding: 6px 0; color: #94A3B8; width: 40%;">Booking Reference ID:</td><td style="padding: 6px 0; color: #FFFFFF; font-weight: bold;">${booking._id}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">IPR Practice Area:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.serviceArea || 'General'}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Preferred Date:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.consultationDate}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Preferred Time Slot:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.consultationTime}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Company Name:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.company || 'Not provided'}</td></tr>
+      <tr><td style="padding: 6px 0; color: #94A3B8;">Phone Number:</td><td style="padding: 6px 0; color: #FFFFFF;">${booking.phone || 'Not provided'}</td></tr>
+    </table>
+  </div>
+  
+  <p style="font-size: 13px; line-height: 1.6; color: #94A3B8; text-align: center; margin-top: 30px;">Our team will review your request and contact you shortly to confirm your appointment.</p>
+  <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 20px 0;" />
+  <div style="text-align: center; font-size: 12px; color: #A7B2C3;">
+    <p style="margin: 5px 0;">Sincerely,</p>
+    <p style="margin: 5px 0; color: #FFFFFF; font-weight: bold;">SR4IPR Partners Team</p>
+    <p style="margin: 5px 0;"><a href="https://www.sr4ipr.com" style="color: #0A4DFF; text-decoration: none;">www.sr4ipr.com</a></p>
+  </div>
+</div>
+  `.trim();
+
+  await Promise.all([
+    sendEmail({
+      to: process.env.ADMIN_EMAIL || 'consult@sr4ipr.com',
+      subject: adminSubject,
+      text: adminText,
+      html: adminHtml
+    }),
+    sendEmail({
+      to: booking.email,
+      subject: clientSubject,
+      text: clientText,
+      html: clientHtml
+    })
+  ]);
+};
+
+const sendPaymentConfirmationNotification = async (booking) => {
+  const currencySymbol = booking.paymentCurrency === 'INR' ? 'INR ' : '$';
+  
+  const adminSubject = `Payment Confirmed: ${booking.name} — ${booking.serviceArea || 'General'}`;
+  const adminText = `
+Payment confirmation received for booking ${booking._id}.
+
+Payment Details:
+- Customer Name: ${booking.name}
+- Email: ${booking.email}
+- Amount: ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'}
+- Payment Method: ${booking.paymentMethod || 'PayPal'}
+- Transaction ID: ${booking.paypalTransactionId || 'N/A'}
+- Order ID: ${booking.paypalOrderId || 'N/A'}
+- Date: ${booking.paymentDate || new Date()}
+
+ROOTS-ip Admin Portal Automation
+  `.trim();
+
+  const clientSubject = 'Payment Confirmed — SR4IPR Partners';
+  const clientText = `
+Dear ${booking.name},
+
+Thank you for choosing SR4IPR Partners. We have successfully received your payment of ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'} for Booking Reference ID: ${booking._id}.
+
+Payment Details:
+- Reference ID: ${booking._id}
+- Transaction ID: ${booking.paypalTransactionId || 'N/A'}
+- Amount: ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'}
+- Date: ${booking.paymentDate || new Date()}
+
+Sincerely,
+SR4IPR Partners Team
+https://www.sr4ipr.com
+  `.trim();
+
+  await Promise.all([
+    sendEmail({
+      to: process.env.ADMIN_EMAIL || 'consult@sr4ipr.com',
+      subject: adminSubject,
+      text: adminText,
+    }),
+    sendEmail({
+      to: booking.email,
+      subject: clientSubject,
+      text: clientText,
+    })
+  ]);
+};
+
+module.exports = {
+  sendEmail,
+  sendContactNotification,
+  sendDirectBookingNotification,
+  sendPaymentConfirmationNotification,
+};
