@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { clientSuccess as successData } from '../data/clientSuccess';
+import API from '../utils/api';
 import { Calendar, ChevronRight, CheckCircle2, Award, Briefcase } from 'lucide-react';
 
 const ClientSuccess = () => {
   const [stories, setStories] = useState([]);
 
   useEffect(() => {
-    setStories(successData);
+    API.get('client-success')
+      .then((res) => setStories(res.data))
+      .catch((err) => console.error('Failed to fetch client success stories:', err));
   }, []);
 
   return (

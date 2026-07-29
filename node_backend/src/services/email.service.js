@@ -31,7 +31,7 @@ const sendEmail = async ({ to, subject, text, html }) => {
 
   try {
     await transporter.sendMail({
-      from: process.env.EMAIL_FROM || 'noreply@sr4ipr.com',
+      from: process.env.EMAIL_FROM || 'noreply@rootsip.com',
       to,
       subject,
       text,
@@ -139,14 +139,14 @@ Manage at: http://localhost:5174/admin
   let clientBody;
   if (isConsultation) {
     const payDetails = formatPaymentDetails(contact);
-    clientBody = `Dear ${contact.name},\n\nThank you for reaching out to SR4IPR Partners. Your consultation has been booked successfully, and payment has been received successfully.\n\nBooking Details:\n- Practice Area: ${contact.serviceArea || 'General'}\n- Requested Date: ${contact.consultationDate}\n- Requested Time: ${contact.consultationTime}\n\n${payDetails}\n\nOne of our IP specialists will contact you shortly to confirm your session.\n\nSincerely,\nSR4IPR Partners Team\nhttps://www.sr4ipr.com`;
+    clientBody = `Dear ${contact.name},\n\nThank you for reaching out to Roots-IP. Your consultation has been booked successfully, and payment has been received successfully.\n\nBooking Details:\n- Practice Area: ${contact.serviceArea || 'General'}\n- Requested Date: ${contact.consultationDate}\n- Requested Time: ${contact.consultationTime}\n\n${payDetails}\n\nOne of our IP specialists will contact you shortly to confirm your session.\n\nSincerely,\nRoots-IP Team\nhttps://www.rootsip.com`;
   } else {
-    clientBody = `Dear ${contact.name},\n\nThank you for your message. We have received your enquiry and will respond within 1-2 business days.\n\nSincerely,\nSR4IPR Partners Team\nhttps://www.sr4ipr.com`;
+    clientBody = `Dear ${contact.name},\n\nThank you for your message. We have received your enquiry and will respond within 1-2 business days.\n\nSincerely,\nRoots-IP Team\nhttps://www.rootsip.com`;
   }
 
   await Promise.all([
     sendEmail({
-      to: process.env.ADMIN_EMAIL || 'consult@sr4ipr.com',
+      to: process.env.ADMIN_EMAIL || 'consult@rootsip.com',
       subject: adminSubject,
       text: adminBody,
     }),
@@ -234,8 +234,8 @@ Booking Details:
 - Phone Number: ${booking.phone || 'Not provided'}
 
 Sincerely,
-SR4IPR Partners Team
-https://www.sr4ipr.com
+Roots-IP Team
+https://www.rootsip.com
   `.trim();
 
   const clientHtml = `
@@ -264,15 +264,15 @@ https://www.sr4ipr.com
   <hr style="border: 0; border-top: 1px solid rgba(255, 255, 255, 0.08); margin: 20px 0;" />
   <div style="text-align: center; font-size: 12px; color: #A7B2C3;">
     <p style="margin: 5px 0;">Sincerely,</p>
-    <p style="margin: 5px 0; color: #FFFFFF; font-weight: bold;">SR4IPR Partners Team</p>
-    <p style="margin: 5px 0;"><a href="https://www.sr4ipr.com" style="color: #0A4DFF; text-decoration: none;">www.sr4ipr.com</a></p>
+    <p style="margin: 5px 0; color: #FFFFFF; font-weight: bold;">Roots-IP Team</p>
+    <p style="margin: 5px 0;"><a href="https://www.rootsip.com" style="color: #0A4DFF; text-decoration: none;">www.rootsip.com</a></p>
   </div>
 </div>
   `.trim();
 
   await Promise.all([
     sendEmail({
-      to: process.env.ADMIN_EMAIL || 'consult@sr4ipr.com',
+      to: process.env.ADMIN_EMAIL || 'consult@rootsip.com',
       subject: adminSubject,
       text: adminText,
       html: adminHtml
@@ -305,11 +305,11 @@ Payment Details:
 ROOTS-ip Admin Portal Automation
   `.trim();
 
-  const clientSubject = 'Payment Confirmed — SR4IPR Partners';
+  const clientSubject = 'Payment Confirmed — Roots-IP';
   const clientText = `
 Dear ${booking.name},
 
-Thank you for choosing SR4IPR Partners. We have successfully received your payment of ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'} for Booking Reference ID: ${booking._id}.
+Thank you for choosing Roots-IP. We have successfully received your payment of ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'} for Booking Reference ID: ${booking._id}.
 
 Payment Details:
 - Reference ID: ${booking._id}
@@ -318,13 +318,13 @@ Payment Details:
 - Date: ${booking.paymentDate || new Date()}
 
 Sincerely,
-SR4IPR Partners Team
-https://www.sr4ipr.com
+Roots-IP Team
+https://www.rootsip.com
   `.trim();
 
   await Promise.all([
     sendEmail({
-      to: process.env.ADMIN_EMAIL || 'consult@sr4ipr.com',
+      to: process.env.ADMIN_EMAIL || 'consult@rootsip.com',
       subject: adminSubject,
       text: adminText,
     }),

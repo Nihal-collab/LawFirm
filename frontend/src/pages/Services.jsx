@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { services } from '../data/services';
+import API from '../utils/api';
 import { ShieldCheck, Cpu, Scale, FileText, Award, Globe2, ChevronRight } from 'lucide-react';
 
 const iconMap = {
@@ -13,7 +13,15 @@ const iconMap = {
 };
 
 const Services = () => {
-  const displayServices = services;
+  const [servicesList, setServicesList] = useState([]);
+
+  useEffect(() => {
+    API.get('services')
+      .then((res) => setServicesList(res.data))
+      .catch((err) => console.error('Failed to fetch services:', err));
+  }, []);
+
+  const displayServices = servicesList;
 
   return (
     <div className="page-enter py-24 bg-[#09111F] text-[#C8D3E2] min-h-screen">

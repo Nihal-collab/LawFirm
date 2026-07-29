@@ -29,6 +29,8 @@ The PCT is an international treaty with more than 150 contracting states. It is 
   }
 };
 
+import API from '../utils/api';
+
 const BlogDetail = () => {
   const { slug } = useParams();
   const [blog, setBlog] = useState(null);
@@ -36,9 +38,15 @@ const BlogDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    const foundBlog = blogData.find((b) => b.slug === slug) || defaultBlogs[slug];
-    setBlog(foundBlog || null);
-    setLoading(false);
+    API.get(`blogs/${slug}`)
+      .then((res) => {
+        setBlog(res.data);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch blog post:', err);
+        setBlog(defaultBlogs[slug] || null);
+      })
+      .finally(() => setLoading(false));
   }, [slug]);
 
   if (loading) {

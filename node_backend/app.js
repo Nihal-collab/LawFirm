@@ -17,6 +17,14 @@ const analyticsRoutes = require('./src/routes/analytics.routes');
 const seoRoutes = require('./src/routes/seo.routes');
 const bookConsultationRoutes = require('./src/routes/book-consultation.routes');
 const paymentRoutes = require('./src/routes/payment.routes');
+const galleryRoutes = require('./src/routes/gallery.routes');
+const teamRoutes = require('./src/routes/team.routes');
+const testimonialRoutes = require('./src/routes/testimonial.routes');
+const clientSuccessRoutes = require('./src/routes/client-success.routes');
+const blogRoutes = require('./src/routes/blog.routes');
+const faqRoutes = require('./src/routes/faq.routes');
+const serviceRoutes = require('./src/routes/service.routes');
+const cmsContentRoutes = require('./src/routes/cmsContent.routes');
 
 const app = express();
 
@@ -111,6 +119,14 @@ app.use('/api/videos', videoRoutes);
 app.use('/api/cms/seo', seoRoutes);
 app.use('/api/book-consultation', bookConsultationRoutes);
 app.use('/api/payment', paymentRoutes);
+app.use('/api/gallery', galleryRoutes);
+app.use('/api/team', teamRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/client-success', clientSuccessRoutes);
+app.use('/api/blogs', blogRoutes);
+app.use('/api/faqs', faqRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/cms/content', cmsContentRoutes);
 app.use('/api', analyticsRoutes);
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────

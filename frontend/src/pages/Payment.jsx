@@ -15,7 +15,7 @@ const Payment = () => {
   const [amount, setAmount] = useState('100.00');
   const [currency, setCurrency] = useState('USD');
   const [upiQrCode, setUpiQrCode] = useState('/upi-qr.svg');
-  const [supportEmail, setSupportEmail] = useState('support@sr4ipr.com');
+  const [supportEmail, setSupportEmail] = useState('support@rootsip.com');
   const [supportPhone, setSupportPhone] = useState('+1 (555) 012-3456');
   const [supportWhatsapp, setSupportWhatsapp] = useState('');
   const [upiInstructions, setUpiInstructions] = useState('After completing your UPI payment, please share your Transaction ID or payment screenshot with our office. Once your payment is verified, your consultation will be processed accordingly.');

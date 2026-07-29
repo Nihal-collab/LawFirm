@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import API from '../utils/api';
 import { aboutContent } from '../data/pageContent';
 import { Compass, Eye, Shield, Users } from 'lucide-react';
 
@@ -6,7 +7,13 @@ const About = () => {
   const [content, setContent] = useState(aboutContent);
 
   useEffect(() => {
-    setContent(aboutContent);
+    API.get('cms/content/about')
+      .then((res) => {
+        if (res.data && res.data.content && Object.keys(res.data.content).length > 0) {
+          setContent(res.data.content);
+        }
+      })
+      .catch((err) => console.error('Failed to fetch About Page CMS content:', err));
   }, []);
 
   return (

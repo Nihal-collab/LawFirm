@@ -170,7 +170,7 @@ const AdminDashboard = () => {
   const [consultationDailyLimit, setConsultationDailyLimit] = useState(3);
   const [consultationAmount, setConsultationAmount] = useState(100);
   const [consultationUpiQrCode, setConsultationUpiQrCode] = useState('/upi-qr.svg');
-  const [consultationSupportEmail, setConsultationSupportEmail] = useState('support@sr4ipr.com');
+  const [consultationSupportEmail, setConsultationSupportEmail] = useState('support@rootsip.com');
   const [consultationSupportPhone, setConsultationSupportPhone] = useState('+1 (555) 012-3456');
   const [consultationSupportWhatsapp, setConsultationSupportWhatsapp] = useState('');
   const [consultationUpiInstructions, setConsultationUpiInstructions] = useState('');
@@ -186,45 +186,81 @@ const AdminDashboard = () => {
     }
   };
 
+  const mapMongoId = (list) => {
+    if (!Array.isArray(list)) return [];
+    return list.map(item => ({ ...item, id: item.id || item._id }));
+  };
+
   // Fetch all management records
   const loadAdminData = async () => {
     setLoading(true);
     try {
-      const [consRes, videoRes, consultSettingsRes, analyticsRes] = await Promise.all([
+      const [
+        consRes, 
+        videoRes, 
+        consultSettingsRes, 
+        analyticsRes,
+        blogsRes,
+        faqsRes,
+        testimonialsRes,
+        teamRes,
+        servicesRes,
+        galleryRes,
+        successRes,
+        cmsHomeRes,
+        cmsAboutRes
+      ] = await Promise.all([
         API.get('consultations/'),
         API.get('videos/all').catch(() => ({ data: [] })),
         API.get('consultations/settings/').catch(() => ({ data: { dailyLimit: 3 } })),
-        API.get('admin/analytics').catch(() => ({ data: { today: 0, thisMonth: 0, thisYear: 0, totalVisitors: 0 } }))
+        API.get('admin/analytics').catch(() => ({ data: { today: 0, thisMonth: 0, thisYear: 0, totalVisitors: 0 } })),
+        API.get('blogs').catch(() => ({ data: [] })),
+        API.get('faqs').catch(() => ({ data: [] })),
+        API.get('testimonials').catch(() => ({ data: [] })),
+        API.get('team').catch(() => ({ data: [] })),
+        API.get('services').catch(() => ({ data: [] })),
+        API.get('gallery').catch(() => ({ data: [] })),
+        API.get('client-success').catch(() => ({ data: [] })),
+        API.get('cms/content/home').catch(() => ({ data: { content: staticHome } })),
+        API.get('cms/content/about').catch(() => ({ data: { content: staticAbout } })),
       ]);
+
+      const mappedBlogs = mapMongoId(blogsRes.data.length > 0 ? blogsRes.data : staticBlogs);
+      const mappedFaqs = mapMongoId(faqsRes.data.length > 0 ? faqsRes.data : staticFaqs);
+      const mappedTestimonials = mapMongoId(testimonialsRes.data.length > 0 ? testimonialsRes.data : staticTestimonials);
+      const mappedTeam = mapMongoId(teamRes.data.length > 0 ? teamRes.data : staticTeam);
+      const mappedServices = mapMongoId(servicesRes.data.length > 0 ? servicesRes.data : staticServices);
+      const mappedGallery = mapMongoId(galleryRes.data.length > 0 ? galleryRes.data : staticGallery);
+      const mappedSuccess = mapMongoId(successRes.data.length > 0 ? successRes.data : staticSuccess);
 
       setConsultations(consRes.data);
       setVideos(videoRes.data);
-      setBlogs(staticBlogs);
-      setFaqs(staticFaqs);
-      setTestimonials(staticTestimonials);
-      setTeam(staticTeam);
-      setServices(staticServices);
-      setGallery(staticGallery);
-      setSuccessStories(staticSuccess);
+      setBlogs(mappedBlogs);
+      setFaqs(mappedFaqs);
+      setTestimonials(mappedTestimonials);
+      setTeam(mappedTeam);
+      setServices(mappedServices);
+      setGallery(mappedGallery);
+      setSuccessStories(mappedSuccess);
       setAnalytics(analyticsRes.data);
 
       setCmsHome({
-        hero_title: staticHome.hero_title || '',
-        hero_subtitle: staticHome.hero_subtitle || '',
-        hero_image: staticHome.hero_image || '',
-        stats_claims_resolved: staticHome.stats_claims_resolved || '',
-        stats_patent_rate: staticHome.stats_patent_rate || '',
-        stats_active_clients: staticHome.stats_active_clients || '',
-        stats_countries: staticHome.stats_countries || '',
-        why_choose_title: staticHome.why_choose_title || '',
-        why_choose_desc: staticHome.why_choose_desc || ''
+        hero_title: cmsHomeRes.data.content?.hero_title || staticHome.hero_title || '',
+        hero_subtitle: cmsHomeRes.data.content?.hero_subtitle || staticHome.hero_subtitle || '',
+        hero_image: cmsHomeRes.data.content?.hero_image || staticHome.hero_image || '',
+        stats_claims_resolved: cmsHomeRes.data.content?.stats_claims_resolved || staticHome.stats_claims_resolved || '',
+        stats_patent_rate: cmsHomeRes.data.content?.stats_patent_rate || staticHome.stats_patent_rate || '',
+        stats_active_clients: cmsHomeRes.data.content?.stats_active_clients || staticHome.stats_active_clients || '',
+        stats_countries: cmsHomeRes.data.content?.stats_countries || staticHome.stats_countries || '',
+        why_choose_title: cmsHomeRes.data.content?.why_choose_title || staticHome.why_choose_title || '',
+        why_choose_desc: cmsHomeRes.data.content?.why_choose_desc || staticHome.why_choose_desc || ''
       });
 
       setCmsAbout({
-        company_overview: staticAbout.company_overview || '',
-        vision: staticAbout.vision || '',
-        mission: staticAbout.mission || '',
-        history_timeline: staticAbout.history_timeline || []
+        company_overview: cmsAboutRes.data.content?.company_overview || staticAbout.company_overview || '',
+        vision: cmsAboutRes.data.content?.vision || staticAbout.vision || '',
+        mission: cmsAboutRes.data.content?.mission || staticAbout.mission || '',
+        history_timeline: cmsAboutRes.data.content?.history_timeline || staticAbout.history_timeline || []
       });
 
       setSettingsEmail(staticSettings.email || '');
@@ -238,17 +274,17 @@ const AdminDashboard = () => {
       setConsultationDailyLimit(consultSettingsRes.data.dailyLimit || 3);
       setConsultationAmount(consultSettingsRes.data.amount !== undefined ? consultSettingsRes.data.amount : 100);
       setConsultationUpiQrCode(consultSettingsRes.data.upiQrCode || '/upi-qr.svg');
-      setConsultationSupportEmail(consultSettingsRes.data.supportEmail || 'support@sr4ipr.com');
+      setConsultationSupportEmail(consultSettingsRes.data.supportEmail || 'support@rootsip.com');
       setConsultationSupportPhone(consultSettingsRes.data.supportPhone || '+1 (555) 012-3456');
       setConsultationSupportWhatsapp(consultSettingsRes.data.supportWhatsapp || '');
       setConsultationUpiInstructions(consultSettingsRes.data.upiInstructions || '');
 
       setStats({
         consultations: consRes.data.length,
-        blogs: staticBlogs.length,
-        testimonials: staticTestimonials.length,
-        gallery: staticGallery.length,
-        success: staticSuccess.length,
+        blogs: mappedBlogs.length,
+        testimonials: mappedTestimonials.length,
+        gallery: mappedGallery.length,
+        success: mappedSuccess.length,
         videos: videoRes.data.length
       });
     } catch (err) {
@@ -289,22 +325,48 @@ const AdminDashboard = () => {
     }
   };
 
-  // 2. Manage Testimonial Approval (In-Memory Preview)
-  const handleApproveTestimonial = (id, approvedStatus) => {
-    setTestimonials(prev => prev.map(t => t.id === id ? { ...t, approved: approvedStatus } : t));
-    showToast(approvedStatus ? 'Testimonial approved (In-Memory Preview). Note: Edit testimonials.js for permanent changes.' : 'Testimonial hidden (In-Memory Preview). Note: Edit testimonials.js for permanent changes.', 'success');
+  // 2. Manage Testimonial Approval
+  const handleApproveTestimonial = async (id, approvedStatus) => {
+    try {
+      const existing = testimonials.find(t => t.id === id);
+      const payload = {
+        client_name: existing.client_name,
+        client_role: existing.client_role,
+        company: existing.company,
+        image_url: existing.image_url,
+        feedback: existing.feedback,
+        approved: approvedStatus
+      };
+      await API.put(`testimonials/${id}`, payload);
+      showToast(approvedStatus ? 'Testimonial approved successfully.' : 'Testimonial hidden successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to update testimonial status.', 'error');
+    }
   };
 
-  // 3. Update Homepage CMS values (In-Memory Preview)
-  const handleUpdateCmsHome = (e) => {
+  // 3. Update Homepage CMS values
+  const handleUpdateCmsHome = async (e) => {
     e.preventDefault();
-    showToast('Homepage copy updated (In-Memory Preview). Note: Edit pageContent.js for permanent changes.', 'success');
+    try {
+      await API.post('cms/content/home', { content: cmsHome });
+      showToast('Homepage copy updated successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to update homepage copy.', 'error');
+    }
   };
 
-  // 4. Update About Us CMS values (In-Memory Preview)
-  const handleUpdateCmsAbout = (e) => {
+  // 4. Update About Us CMS values
+  const handleUpdateCmsAbout = async (e) => {
     if (e) e.preventDefault();
-    showToast('About Us copy updated (In-Memory Preview). Note: Edit pageContent.js for permanent changes.', 'success');
+    try {
+      await API.post('cms/content/about', { content: cmsAbout });
+      showToast('About Us copy updated successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to update About Us copy.', 'error');
+    }
   };
 
   const handleAddTimelineItem = () => {
@@ -316,13 +378,13 @@ const AdminDashboard = () => {
     setCmsAbout({ ...cmsAbout, history_timeline: updatedTimeline });
     setNewTimelineYear('');
     setNewTimelineEvent('');
-    showToast('Milestone added (In-Memory Preview). Note: Edit pageContent.js for permanent changes.', 'info');
+    showToast('Milestone added locally. Remember to save changes.', 'info');
   };
 
   const handleRemoveTimelineItem = (idx) => {
     const updatedTimeline = cmsAbout.history_timeline.filter((_, i) => i !== idx);
     setCmsAbout({ ...cmsAbout, history_timeline: updatedTimeline });
-    showToast('Milestone removed (In-Memory Preview). Note: Edit pageContent.js for permanent changes.', 'info');
+    showToast('Milestone removed locally. Remember to save changes.', 'info');
   };
 
   // Export consultations leads to CSV
@@ -345,6 +407,7 @@ const AdminDashboard = () => {
   const filteredConsultations = getFilteredConsultations();
 
   // Service CRUD Handlers
+  // Service CRUD Handlers
   const handleSaveService = async (e) => {
     e.preventDefault();
     const servicePayload = {
@@ -357,20 +420,30 @@ const AdminDashboard = () => {
       details_list: serviceDetailsList.split('\n').map(l => l.trim()).filter(Boolean)
     };
 
-    if (isEditingService) {
-      setServices(prev => prev.map(s => s.slug === isEditingService.slug ? servicePayload : s));
-      showToast('Service updated (In-Memory Preview). Note: Edit services.js for permanent changes.', 'success');
-    } else {
-      setServices(prev => [...prev, servicePayload]);
-      showToast('Service created (In-Memory Preview). Note: Edit services.js for permanent changes.', 'success');
+    try {
+      if (isEditingService) {
+        await API.put(`services/${isEditingService.id}`, servicePayload);
+        showToast('Service updated successfully.', 'success');
+      } else {
+        await API.post('services', servicePayload);
+        showToast('Service created successfully.', 'success');
+      }
+      loadAdminData();
+      resetServiceForm();
+    } catch (err) {
+      showToast('Failed to save service.', 'error');
     }
-    resetServiceForm();
   };
 
-  const handleDeleteService = (slug) => {
+  const handleDeleteService = async (id) => {
     if (!window.confirm('Delete this service permanently?')) return;
-    setServices(prev => prev.filter(s => s.slug !== slug));
-    showToast('Service deleted (In-Memory Preview). Note: Edit services.js for permanent changes.', 'success');
+    try {
+      await API.delete(`services/${id}`);
+      showToast('Service deleted successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to delete service.', 'error');
+    }
   };
 
   const resetServiceForm = () => {
@@ -410,20 +483,30 @@ const AdminDashboard = () => {
       email: teamEmail || undefined
     };
 
-    if (isEditingTeam) {
-      setTeam(prev => prev.map(t => t.id === isEditingTeam.id ? { ...teamPayload, id: isEditingTeam.id } : t));
-      showToast('Team member updated (In-Memory Preview). Note: Edit team.js for permanent changes.', 'success');
-    } else {
-      setTeam(prev => [...prev, { ...teamPayload, id: Date.now() }]);
-      showToast('Team member added (In-Memory Preview). Note: Edit team.js for permanent changes.', 'success');
+    try {
+      if (isEditingTeam) {
+        await API.put(`team/${isEditingTeam.id}`, teamPayload);
+        showToast('Team member updated successfully.', 'success');
+      } else {
+        await API.post('team', teamPayload);
+        showToast('Team member added successfully.', 'success');
+      }
+      loadAdminData();
+      resetTeamForm();
+    } catch (err) {
+      showToast('Failed to save team member.', 'error');
     }
-    resetTeamForm();
   };
 
-  const handleDeleteTeamMember = (id) => {
+  const handleDeleteTeamMember = async (id) => {
     if (!window.confirm('Delete this lawyer profile permanently?')) return;
-    setTeam(prev => prev.filter(t => t.id !== id));
-    showToast('Team member deleted (In-Memory Preview). Note: Edit team.js for permanent changes.', 'success');
+    try {
+      await API.delete(`team/${id}`);
+      showToast('Team member deleted successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to delete team member.', 'error');
+    }
   };
 
   const resetTeamForm = () => {
@@ -467,20 +550,30 @@ const AdminDashboard = () => {
       status: blogStatus
     };
 
-    if (isEditingBlog) {
-      setBlogs(prev => prev.map(b => b.slug === isEditingBlog.slug ? blogPayload : b));
-      showToast('Blog article updated (In-Memory Preview). Note: Edit blogs.js for permanent changes.', 'success');
-    } else {
-      setBlogs(prev => [...prev, blogPayload]);
-      showToast('Blog article saved (In-Memory Preview). Note: Edit blogs.js for permanent changes.', 'success');
+    try {
+      if (isEditingBlog) {
+        await API.put(`blogs/${isEditingBlog.id}`, blogPayload);
+        showToast('Blog article updated successfully.', 'success');
+      } else {
+        await API.post('blogs', blogPayload);
+        showToast('Blog article saved successfully.', 'success');
+      }
+      loadAdminData();
+      resetBlogForm();
+    } catch (err) {
+      showToast('Failed to save blog article.', 'error');
     }
-    resetBlogForm();
   };
 
-  const handleDeleteBlog = (slug) => {
+  const handleDeleteBlog = async (id) => {
     if (!window.confirm('Delete this blog article permanently?')) return;
-    setBlogs(prev => prev.filter(b => b.slug !== slug));
-    showToast('Blog article deleted (In-Memory Preview). Note: Edit blogs.js for permanent changes.', 'success');
+    try {
+      await API.delete(`blogs/${id}`);
+      showToast('Blog article deleted successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to delete blog article.', 'error');
+    }
   };
 
   const resetBlogForm = () => {
@@ -520,20 +613,30 @@ const AdminDashboard = () => {
       order: galleryOrder
     };
 
-    if (isEditingGallery) {
-      setGallery(prev => prev.map(g => g.id === isEditingGallery.id ? { ...payload, id: isEditingGallery.id } : g));
-      showToast('Gallery item updated (In-Memory Preview). Note: Edit gallery.js for permanent changes.', 'success');
-    } else {
-      setGallery(prev => [...prev, { ...payload, id: Date.now() }]);
-      showToast('Gallery item created (In-Memory Preview). Note: Edit gallery.js for permanent changes.', 'success');
+    try {
+      if (isEditingGallery) {
+        await API.put(`gallery/${isEditingGallery.id}`, payload);
+        showToast('Gallery item updated successfully.', 'success');
+      } else {
+        await API.post('gallery', payload);
+        showToast('Gallery item created successfully.', 'success');
+      }
+      loadAdminData();
+      resetGalleryForm();
+    } catch (err) {
+      showToast('Failed to save gallery item.', 'error');
     }
-    resetGalleryForm();
   };
 
-  const handleDeleteGallery = (id) => {
+  const handleDeleteGallery = async (id) => {
     if (!window.confirm('Delete this gallery item?')) return;
-    setGallery(prev => prev.filter(g => g.id !== id));
-    showToast('Gallery item deleted (In-Memory Preview). Note: Edit gallery.js for permanent changes.', 'success');
+    try {
+      await API.delete(`gallery/${id}`);
+      showToast('Gallery item deleted successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to delete gallery item.', 'error');
+    }
   };
 
   const resetGalleryForm = () => {
@@ -566,20 +669,30 @@ const AdminDashboard = () => {
       image_url: successImageUrl || undefined
     };
 
-    if (isEditingSuccess) {
-      setSuccessStories(prev => prev.map(s => s.id === isEditingSuccess.id ? { ...payload, id: isEditingSuccess.id } : s));
-      showToast('Success story updated (In-Memory Preview). Note: Edit clientSuccess.js for permanent changes.', 'success');
-    } else {
-      setSuccessStories(prev => [...prev, { ...payload, id: Date.now() }]);
-      showToast('Success story created (In-Memory Preview). Note: Edit clientSuccess.js for permanent changes.', 'success');
+    try {
+      if (isEditingSuccess) {
+        await API.put(`client-success/${isEditingSuccess.id}`, payload);
+        showToast('Success story updated successfully.', 'success');
+      } else {
+        await API.post('client-success', payload);
+        showToast('Success story created successfully.', 'success');
+      }
+      loadAdminData();
+      resetSuccessForm();
+    } catch (err) {
+      showToast('Failed to save success story.', 'error');
     }
-    resetSuccessForm();
   };
 
-  const handleDeleteSuccessStory = (id) => {
+  const handleDeleteSuccessStory = async (id) => {
     if (!window.confirm('Delete this case study?')) return;
-    setSuccessStories(prev => prev.filter(s => s.id !== id));
-    showToast('Success story deleted (In-Memory Preview). Note: Edit clientSuccess.js for permanent changes.', 'success');
+    try {
+      await API.delete(`client-success/${id}`);
+      showToast('Success story deleted successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to delete success story.', 'error');
+    }
   };
 
   const resetSuccessForm = () => {
@@ -612,20 +725,30 @@ const AdminDashboard = () => {
       order: faqOrder
     };
 
-    if (isEditingFaq) {
-      setFaqs(prev => prev.map(f => f.id === isEditingFaq.id ? { ...payload, id: isEditingFaq.id } : f));
-      showToast('FAQ updated (In-Memory Preview). Note: Edit faqs.js for permanent changes.', 'success');
-    } else {
-      setFaqs(prev => [...prev, { ...payload, id: Date.now() }]);
-      showToast('FAQ created (In-Memory Preview). Note: Edit faqs.js for permanent changes.', 'success');
+    try {
+      if (isEditingFaq) {
+        await API.put(`faqs/${isEditingFaq.id}`, payload);
+        showToast('FAQ updated successfully.', 'success');
+      } else {
+        await API.post('faqs', payload);
+        showToast('FAQ created successfully.', 'success');
+      }
+      loadAdminData();
+      resetFaqForm();
+    } catch (err) {
+      showToast('Failed to save FAQ.', 'error');
     }
-    resetFaqForm();
   };
 
-  const handleDeleteFaq = (id) => {
+  const handleDeleteFaq = async (id) => {
     if (!window.confirm('Delete this FAQ permanently?')) return;
-    setFaqs(prev => prev.filter(f => f.id !== id));
-    showToast('FAQ deleted (In-Memory Preview). Note: Edit faqs.js for permanent changes.', 'success');
+    try {
+      await API.delete(`faqs/${id}`);
+      showToast('FAQ deleted successfully.', 'success');
+      loadAdminData();
+    } catch (err) {
+      showToast('Failed to delete FAQ.', 'error');
+    }
   };
 
   const resetFaqForm = () => {
@@ -765,7 +888,7 @@ const AdminDashboard = () => {
       setConsultationDailyLimit(res.data.dailyLimit);
       setConsultationAmount(res.data.amount !== undefined ? res.data.amount : 100);
       setConsultationUpiQrCode(res.data.upiQrCode || '/upi-qr.svg');
-      setConsultationSupportEmail(res.data.supportEmail || 'support@sr4ipr.com');
+      setConsultationSupportEmail(res.data.supportEmail || 'support@rootsip.com');
       setConsultationSupportPhone(res.data.supportPhone || '+1 (555) 012-3456');
       setConsultationSupportWhatsapp(res.data.supportWhatsapp || '');
       setConsultationUpiInstructions(res.data.upiInstructions || '');
@@ -1257,7 +1380,7 @@ const AdminDashboard = () => {
                           <Edit2 size={14} />
                         </button>
                         <button
-                          onClick={() => handleDeleteService(svc.slug)}
+                          onClick={() => handleDeleteService(svc.id)}
                           className="p-2 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
                         >
                           <Trash2 size={14} />
@@ -1584,7 +1707,7 @@ const AdminDashboard = () => {
                           <Edit2 size={14} />
                         </button>
                         <button
-                          onClick={() => handleDeleteBlog(bg.slug)}
+                          onClick={() => handleDeleteBlog(bg.id)}
                           className="p-2 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
                         >
                           <Trash2 size={14} />

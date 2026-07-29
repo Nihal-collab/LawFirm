@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { gallery as galleryData } from '../data/gallery';
+import API from '../utils/api';
 import { Award, Image as ImageIcon, Sparkles, Shield, Bookmark, ZoomIn, X } from 'lucide-react';
 
 const categoryIcons = {
@@ -16,7 +16,9 @@ const Gallery = () => {
   const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
-    setItems(galleryData);
+    API.get('gallery')
+      .then((res) => setItems(res.data))
+      .catch((err) => console.error('Failed to fetch gallery:', err));
   }, []);
 
   const categories = ['ALL', 'AWARD', 'RECOGNITION', 'CERTIFICATE', 'EVENT', 'ACHIEVEMENT'];

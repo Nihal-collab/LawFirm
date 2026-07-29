@@ -18,7 +18,7 @@ const consultationSettingsSchema = new mongoose.Schema(
     },
     supportEmail: {
       type: String,
-      default: 'support@sr4ipr.com',
+      default: 'support@rootsip.com',
     },
     supportPhone: {
       type: String,

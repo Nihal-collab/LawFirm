@@ -140,21 +140,30 @@ const Home = () => {
       recordVisit();
     }
 
-    setContent(homeContent);
-    setServices(servicesData);
-    setTeam(teamData);
-    setTestimonials(testimonialsData.slice(0, 3));
-    setBlogs(blogsData.slice(0, 2));
-
-    const fetchVideos = async () => {
+    const fetchHomeData = async () => {
       try {
-        const res = await API.get('videos');
-        setVideos(res.data);
+        const [servicesRes, teamRes, testimonialsRes, blogsRes, cmsRes, videosRes] = await Promise.all([
+          API.get('services').catch(() => ({ data: servicesData })),
+          API.get('team').catch(() => ({ data: teamData })),
+          API.get('testimonials').catch(() => ({ data: testimonialsData })),
+          API.get('blogs').catch(() => ({ data: blogsData })),
+          API.get('cms/content/home').catch(() => ({ data: { content: homeContent } })),
+          API.get('videos').catch(() => ({ data: [] }))
+        ]);
+
+        if (servicesRes.data && servicesRes.data.length > 0) setServices(servicesRes.data);
+        if (teamRes.data && teamRes.data.length > 0) setTeam(teamRes.data);
+        if (testimonialsRes.data) setTestimonials(testimonialsRes.data.slice(0, 3));
+        if (blogsRes.data) setBlogs(blogsRes.data.slice(0, 2));
+        if (cmsRes.data && cmsRes.data.content && Object.keys(cmsRes.data.content).length > 0) {
+          setContent(cmsRes.data.content);
+        }
+        if (videosRes.data) setVideos(videosRes.data);
       } catch (err) {
-        console.error('Failed to fetch videos from backend:', err);
+        console.error('Failed to fetch home page data:', err);
       }
     };
-    fetchVideos();
+    fetchHomeData();
   }, []);
 
   // Use DB videos if available, otherwise show fallback demo

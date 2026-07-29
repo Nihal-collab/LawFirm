@@ -3,10 +3,14 @@ const rateLimit = require('express-rate-limit');
 // General API limiter
 const apiLimiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100,
+  max: 1000, // Raised limit to prevent concurrent dashboard page loads from blocking
   standardHeaders: true,
   legacyHeaders: false,
   message: { message: 'Too many requests. Please try again after 15 minutes.' },
+  skip: (req) => {
+    // Skip rate limiting for authenticated/admin requests
+    return !!req.headers.authorization;
+  }
 });
 
 // Strict limiter for auth endpoints

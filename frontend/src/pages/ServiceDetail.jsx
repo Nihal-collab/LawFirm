@@ -12,7 +12,8 @@ const iconMap = {
   Scale: Scale,
 };
 
-// Seeding default contents in case DB fails or isn't connected
+import API from '../utils/api';
+
 const defaultServices = {
   "patent-services": {
     name: "Patent Prosecution & Drafting",
@@ -71,9 +72,16 @@ const ServiceDetail = () => {
 
   useEffect(() => {
     setLoading(true);
-    const foundService = servicesData.find((s) => s.slug === slug) || defaultServices[slug];
-    setService(foundService || null);
-    setLoading(false);
+    API.get('services')
+      .then((res) => {
+        const found = res.data.find((s) => s.slug === slug);
+        setService(found || defaultServices[slug] || null);
+      })
+      .catch((err) => {
+        console.error('Failed to fetch services:', err);
+        setService(defaultServices[slug] || null);
+      })
+      .finally(() => setLoading(false));
   }, [slug]);
 
   if (loading) {

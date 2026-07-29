@@ -1,5 +1,5 @@
-import React from 'react';
-import { team } from '../data/team';
+import React, { useState, useEffect } from 'react';
+import API from '../utils/api';
 import { Mail, Award, Clock } from 'lucide-react';
 
 const LinkedinIcon = ({ size = 16 }) => (
@@ -17,7 +17,15 @@ const TwitterIcon = ({ size = 16 }) => (
 );
 
 const Team = () => {
-  const displayMembers = team;
+  const [teamMembers, setTeamMembers] = useState([]);
+
+  useEffect(() => {
+    API.get('team')
+      .then((res) => setTeamMembers(res.data))
+      .catch((err) => console.error('Failed to fetch team members:', err));
+  }, []);
+
+  const displayMembers = teamMembers;
 
   return (
     <div className="page-enter py-24 bg-[#09111F] text-[#C8D3E2] min-h-screen">

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { blogs as blogData } from '../data/blogs';
+import API from '../utils/api';
 import { Search, Calendar, ChevronRight, BookOpen } from 'lucide-react';
 
 const BlogList = () => {
@@ -9,7 +9,9 @@ const BlogList = () => {
   const [category, setCategory] = useState('All');
 
   useEffect(() => {
-    setBlogs(blogData);
+    API.get('blogs')
+      .then((res) => setBlogs(res.data))
+      .catch((err) => console.error('Failed to fetch blogs:', err));
   }, []);
 
   const displayBlogs = blogs;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { faqs as faqData } from '../data/faqs';
+import API from '../utils/api';
 import { Search, ChevronDown, ChevronUp, HelpCircle } from 'lucide-react';
 
 const FaqList = () => {
@@ -9,7 +9,9 @@ const FaqList = () => {
   const [openIndex, setOpenIndex] = useState(null);
 
   useEffect(() => {
-    setFaqs(faqData);
+    API.get('faqs')
+      .then((res) => setFaqs(res.data))
+      .catch((err) => console.error('Failed to fetch FAQs:', err));
   }, []);
 
   const displayFaqs = faqs;

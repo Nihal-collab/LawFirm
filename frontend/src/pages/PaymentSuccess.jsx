@@ -77,7 +77,7 @@ export default function PaymentSuccess() {
             {error}
           </p>
           <p className="text-xs text-[#C8D3E2] leading-relaxed font-light">
-            If payment was deducted from your account, please reach out to us at support@sr4ipr.com with your transaction details.
+            If payment was deducted from your account, please reach out to us at support@rootsip.com with your transaction details.
           </p>
           <div className="flex flex-col gap-3 pt-2">
             <button
