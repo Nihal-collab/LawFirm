@@ -140,6 +140,7 @@
     display: grid;
     gap: 24px;
     grid-template-columns: repeat(1, minmax(0, 1fr));
+    align-items: start;
   }
 
   @media (min-width: 480px) {

@@ -83,7 +83,7 @@ const Home = () => {
       return word + " ";
     });
   };
-  
+
   const [services, setServices] = useState(servicesData);
   const [team, setTeam] = useState(teamData);
   const [testimonials, setTestimonials] = useState(testimonialsData.slice(0, 3));
@@ -179,15 +179,15 @@ const Home = () => {
 
   return (
     <div className="page-enter overflow-x-hidden bg-[#09111F] text-[#C8D3E2]">
-      
+
       {/* 1. Hero Section */}
-      <section 
+      <section
         className="relative min-h-screen flex items-center overflow-hidden hero-mobile-height"
         style={{
           background: 'linear-gradient(135deg, #09111F 0%, #06152E 35%, #08204A 70%, #0A4DFF 100%)'
         }}
       >
-        
+
         {/* Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.015)_1px,transparent_1px)] bg-[size:40px_40px] pointer-events-none" />
 
@@ -207,15 +207,15 @@ const Home = () => {
           <path d="M 400,250 L 350,320 L 950,480" stroke="rgba(10, 77, 255, 0.2)" strokeWidth="1" />
           <path d="M 650,280 L 350,320 L 200,300" stroke="rgba(0, 87, 217, 0.25)" strokeWidth="1.5" />
           <path d="M 950,480 L 1200,350 L 650,280" stroke="rgba(10, 77, 255, 0.25)" strokeWidth="1" />
-          
+
           {/* London Node */}
           <circle cx="650" cy="280" r="4" fill="#0A4DFF" />
           <circle cx="650" cy="280" r="12" stroke="#0A4DFF" strokeWidth="1.5" opacity="0.5" className="animate-ping" style={{ transformOrigin: '650px 280px' }} />
-          
+
           {/* New York Node */}
           <circle cx="350" cy="320" r="4" fill="#0A4DFF" />
           <circle cx="350" cy="320" r="12" stroke="#0A4DFF" strokeWidth="1.5" opacity="0.5" className="animate-ping" style={{ transformOrigin: '350px 320px' }} />
-          
+
           {/* Mumbai Node */}
           <circle cx="950" cy="480" r="4" fill="#0A4DFF" />
           <circle cx="950" cy="480" r="12" stroke="#0A4DFF" strokeWidth="1.5" opacity="0.5" className="animate-ping" style={{ transformOrigin: '950px 480px' }} />
@@ -258,7 +258,7 @@ const Home = () => {
         <div className="relative z-10 w-full max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 py-12 md:py-32 sm:py-36 lg:py-40 hero-mobile-container">
           <div className="max-w-3xl space-y-8 max-md:space-y-4 text-center mx-auto xl:max-w-4xl flex flex-col items-center">
             <div className="space-y-2 font-sans">
-              <motion.span 
+              <motion.span
                 initial={{ opacity: 0, y: isMobile ? 5 : 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
@@ -269,7 +269,7 @@ const Home = () => {
               <span className="text-[11px] sm:text-sm tracking-[0.3em] text-[#A7B2C3]/90 uppercase font-semibold block">Elite IP Rights Counsel</span>
             </div>
 
-            <motion.h1 
+            <motion.h1
               initial={{ opacity: 0, y: isMobile ? 10 : 25, filter: isMobile ? 'none' : 'blur(8px)' }}
               animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
               transition={{ duration: 0.8, delay: 0.1 }}
@@ -278,7 +278,7 @@ const Home = () => {
               Enterprise <span className="text-[#0A4DFF]">Intellectual Property Protection</span> Globally
             </motion.h1>
 
-            <motion.p 
+            <motion.p
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.2 }}
@@ -287,7 +287,7 @@ const Home = () => {
               {content.hero_subtitle}
             </motion.p>
 
-            <motion.div 
+            <motion.div
               initial={isMobile ? { opacity: 0 } : { opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.8, delay: 0.3 }}
@@ -298,7 +298,7 @@ const Home = () => {
               </Link>
             </motion.div>
 
-            <motion.div 
+            <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
               transition={{ duration: 0.8, delay: 0.4 }}
@@ -364,8 +364,8 @@ const Home = () => {
               {displayServices.map((s, idx) => {
                 const ServiceIcon = iconMap[s.icon] || ShieldCheck;
                 return (
-                  <motion.div 
-                    key={s.slug} 
+                  <motion.div
+                    key={s.slug}
                     initial={isMobile ? { opacity: 0 } : { opacity: 0, y: 30 }}
                     whileInView={{ opacity: 1, y: 0 }}
                     viewport={{ once: true }}
@@ -374,7 +374,7 @@ const Home = () => {
                     onClick={() => navigate(`/services/${s.slug}`)}
                   >
                     <div className="space-y-5 max-md:space-y-2">
-                       <div className="inline-flex p-3 max-md:p-2 bg-transparent text-[#0A4DFF] rounded-full border border-[#0A4DFF]/25 transition-all duration-300 group-hover:bg-[#0A4DFF] group-hover:text-white group-hover:shadow-[0_0_15px_rgba(10,77,255,0.6)]">
+                      <div className="inline-flex p-3 max-md:p-2 bg-transparent text-[#0A4DFF] rounded-full border border-[#0A4DFF]/25 transition-all duration-300 group-hover:bg-[#0A4DFF] group-hover:text-white group-hover:shadow-[0_0_15px_rgba(10,77,255,0.6)]">
                         <ServiceIcon size={isMobile ? 16 : 20} strokeWidth={1.5} />
                       </div>
                       <h3 className="text-[18px] max-md:text-[18px] md:text-xl lg:text-[1.35rem] font-serif font-medium text-white transition-colors duration-300 group-hover:text-[#0A4DFF]">{s.name}</h3>
@@ -396,7 +396,7 @@ const Home = () => {
       <section className="py-20 bg-[#0B132B] border-t border-white/8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
-            
+
             {/* Left Column Description */}
             <div className="lg:col-span-6 space-y-8 max-md:space-y-4">
               <span className="text-[#0A4DFF] uppercase tracking-widest text-xs font-semibold block font-sans">Technical Excellence</span>
@@ -406,7 +406,7 @@ const Home = () => {
               <p className="text-[#C8D3E2] leading-relaxed text-sm font-normal font-sans">
                 {content.why_choose_desc}
               </p>
-              
+
               <div className="space-y-6 max-md:space-y-3 pt-6 max-md:pt-3 border-t border-white/8 font-sans">
                 <div className="flex gap-4">
                   <div className="w-6 h-6 rounded-full border border-[#0A4DFF] text-[#0A4DFF] shadow-[0_0_10px_rgba(10,77,255,0.4)] flex items-center justify-center shrink-0 text-xs font-semibold mt-0.5">
@@ -455,7 +455,7 @@ const Home = () => {
       {/* 4. Statistics Section */}
       <section className="py-20 bg-[#09111F] border-t border-white/8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
-          <div 
+          <div
             className="p-10 lg:p-12 rounded-[24px] border border-white/8 relative overflow-hidden shadow-premium"
             style={{
               background: 'linear-gradient(180deg, #0B132B 0%, #08204A 100%)'
@@ -493,7 +493,7 @@ const Home = () => {
       <section className="py-20 bg-[#09111F] border-t border-white/8 transition-colors duration-300">
         <div className="max-w-7xl mx-auto px-6 sm:px-8">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
-            
+
             {/* Left sticky column description */}
             <div className="lg:col-span-5 lg:sticky lg:top-28 space-y-6 max-md:space-y-3">
               <span className="text-[#0A4DFF] uppercase tracking-[0.25em] font-semibold text-xs block font-sans">Operational Blueprint</span>
@@ -539,7 +539,7 @@ const Home = () => {
                   desc: "Upon official grant publication, we secure your intellectual asset parameters and monitor deadlines, opposition registers, and third-party renewals."
                 }
               ].map((item, idx) => (
-                <motion.div 
+                <motion.div
                   key={idx}
                   initial={isMobile ? { opacity: 0 } : { opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -577,12 +577,12 @@ const Home = () => {
           {/* Desktop static layout */}
           <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-6 lg:gap-8">
             {caseStudies.map((caseStudy, idx) => (
-              <motion.div 
-                key={caseStudy.title} 
-                initial={{ opacity: 0, y: 30 }} 
-                whileInView={{ opacity: 1, y: 0 }} 
-                viewport={{ once: true }} 
-                transition={{ duration: 0.6, delay: idx * 0.1 }} 
+              <motion.div
+                key={caseStudy.title}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: idx * 0.1 }}
                 className={`card-premium space-y-6 ${caseStudy.staggerClass || ''}`}
               >
                 <div className="space-y-4 font-sans">
@@ -635,7 +635,7 @@ const Home = () => {
                 </div>
               ))}
             </motion.div>
-            
+
             {/* Dots navigation */}
             <div className="flex justify-center gap-1.5 mt-4">
               {caseStudies.map((_, i) => (
@@ -668,7 +668,7 @@ const Home = () => {
           <div className="hidden md:grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {testimonials.length > 0 ? (
               testimonials.map((t, idx) => (
-                <motion.div 
+                <motion.div
                   key={t.client_name}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
@@ -745,7 +745,7 @@ const Home = () => {
                     </div>
                   ))}
                 </motion.div>
-                
+
                 {/* Dots navigation */}
                 <div className="flex justify-center gap-1.5 mt-4">
                   {testimonials.map((_, i) => (
@@ -779,8 +779,8 @@ const Home = () => {
           <div className="hidden md:grid grid-cols-1 md:grid-cols-3 gap-8">
             {team.length > 0 ? (
               team.map((t, idx) => (
-                <motion.div 
-                   key={t.name}
+                <motion.div
+                  key={t.name}
                   initial={{ opacity: 0, scale: 0.98 }}
                   whileInView={{ opacity: 1, scale: 1 }}
                   viewport={{ once: true }}
@@ -852,7 +852,7 @@ const Home = () => {
                     </div>
                   ))}
                 </motion.div>
-                
+
                 {/* Dots navigation */}
                 <div className="flex justify-center gap-1.5 mt-4">
                   {team.map((_, i) => (
@@ -898,10 +898,10 @@ const Home = () => {
                       <span className="font-sans text-xs tracking-widest text-[#0A4DFF] uppercase font-semibold">Q.</span>
                       {f.question}
                     </span>
-                    <ChevronRight 
-                      size={16} 
+                    <ChevronRight
+                      size={16}
                       strokeWidth={1.5}
-                      className={`text-[#94A3B8] shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-90 text-[#0A4DFF]' : ''}`} 
+                      className={`text-[#94A3B8] shrink-0 transition-transform duration-300 ${isOpen ? 'rotate-90 text-[#0A4DFF]' : ''}`}
                     />
                   </button>
                   {isOpen && (

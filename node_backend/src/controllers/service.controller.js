@@ -9,7 +9,7 @@ const listServices = asyncHandler(async (req, res) => {
 
 // POST /api/services (Admin only)
 const createService = asyncHandler(async (req, res) => {
-  const { name, slug, category, short_desc, long_desc, icon, details_list, order } = req.body;
+  const { name, slug, category, short_desc, long_desc, icon, details_list, order, trainingAvailable, trainingTitle, trainingDescription, trainingUrl } = req.body;
 
   if (!name || !short_desc || !category) {
     return res.status(400).json({ detail: 'Name, category, and short description are required.' });
@@ -32,6 +32,10 @@ const createService = asyncHandler(async (req, res) => {
     icon,
     details_list: Array.isArray(details_list) ? details_list : [],
     order: order || 0,
+    trainingAvailable: trainingAvailable === true || trainingAvailable === 'true',
+    trainingTitle: trainingTitle || '',
+    trainingDescription: trainingDescription || '',
+    trainingUrl: trainingUrl || '',
   });
 
   res.status(201).json(item);
@@ -39,7 +43,7 @@ const createService = asyncHandler(async (req, res) => {
 
 // PUT /api/services/:id (Admin only)
 const updateService = asyncHandler(async (req, res) => {
-  const { name, slug, category, short_desc, long_desc, icon, details_list, order } = req.body;
+  const { name, slug, category, short_desc, long_desc, icon, details_list, order, trainingAvailable, trainingTitle, trainingDescription, trainingUrl } = req.body;
 
   const item = await Service.findById(req.params.id);
   if (!item) {
@@ -53,6 +57,10 @@ const updateService = asyncHandler(async (req, res) => {
   if (icon !== undefined) item.icon = icon;
   if (details_list !== undefined) item.details_list = Array.isArray(details_list) ? details_list : [];
   if (order !== undefined) item.order = order;
+  if (trainingAvailable !== undefined) item.trainingAvailable = trainingAvailable === true || trainingAvailable === 'true';
+  if (trainingTitle !== undefined) item.trainingTitle = trainingTitle;
+  if (trainingDescription !== undefined) item.trainingDescription = trainingDescription;
+  if (trainingUrl !== undefined) item.trainingUrl = trainingUrl;
 
   if (slug !== undefined && slug !== item.slug) {
     const finalSlug = slug.toLowerCase().replace(/\s+/g, '-').replace(/[^\w\-]+/g, '');

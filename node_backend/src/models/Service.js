@@ -42,6 +42,22 @@ const serviceSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    trainingAvailable: {
+      type: Boolean,
+      default: false,
+    },
+    trainingTitle: {
+      type: String,
+      trim: true,
+    },
+    trainingDescription: {
+      type: String,
+      trim: true,
+    },
+    trainingUrl: {
+      type: String,
+      trim: true,
+    },
   },
   { timestamps: true }
 );

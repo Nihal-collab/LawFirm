@@ -302,6 +302,7 @@ The PCT is an international treaty with more than 150 contracting states. It is 
     }
 
     // 11. Seed Services
+    await Service.deleteMany({});
     const serviceCount = await Service.countDocuments();
     if (serviceCount === 0) {
       await Service.create([
@@ -319,7 +320,11 @@ The PCT is an international treaty with more than 150 contracting states. It is 
             "Office Action Analysis & Responses",
             "Patent Landscaping & Prior Art Searches"
           ],
-          order: 1
+          order: 1,
+          trainingAvailable: true,
+          trainingTitle: "Professional Training Available",
+          trainingDescription: "Learn directly from experienced IP Attorneys using practical case studies and real-world examples.",
+          trainingUrl: "/services/patent-services#training"
         },
         {
           name: "Trademark Portfolio Management",
@@ -335,7 +340,11 @@ The PCT is an international treaty with more than 150 contracting states. It is 
             "Trademark Monitoring & Enforcement",
             "Opposition & Rectification Proceedings"
           ],
-          order: 2
+          order: 2,
+          trainingAvailable: true,
+          trainingTitle: "Trademark Strategy Training",
+          trainingDescription: "Master clearance searches, class listings, international registrations, and trademark policing.",
+          trainingUrl: "/services/trademark-services#training"
         },
         {
           name: "Copyright Protection & Registration",
@@ -351,7 +360,11 @@ The PCT is an international treaty with more than 150 contracting states. It is 
             "Digital Millennium Copyright Act (DMCA) Take-Downs",
             "Copyright Infringement Remedies"
           ],
-          order: 3
+          order: 3,
+          trainingAvailable: true,
+          trainingTitle: "Software Copyright Workshops",
+          trainingDescription: "Hands-on guidance for securing codebase registrations, database rights, and licensing.",
+          trainingUrl: "/services/copyright-services#training"
         },
         {
           name: "Industrial Design Registration",
@@ -366,7 +379,11 @@ The PCT is an international treaty with more than 150 contracting states. It is 
             "Design Prosecution support",
             "Infringement Auditing"
           ],
-          order: 4
+          order: 4,
+          trainingAvailable: false,
+          trainingTitle: "",
+          trainingDescription: "",
+          trainingUrl: ""
         },
         {
           name: "Geographical Indication Registry",
@@ -380,7 +397,11 @@ The PCT is an international treaty with more than 150 contracting states. It is 
             "Association incorporation support",
             "Enforcement against generic label fraud"
           ],
-          order: 5
+          order: 5,
+          trainingAvailable: false,
+          trainingTitle: "",
+          trainingDescription: "",
+          trainingUrl: ""
         },
         {
           name: "IP Litigation & Enforcement",
@@ -396,7 +417,11 @@ The PCT is an international treaty with more than 150 contracting states. It is 
             "Custom Enforcement & Anti-Counterfeiting",
             "Trade Secret Protection & Auditing"
           ],
-          order: 6
+          order: 6,
+          trainingAvailable: false,
+          trainingTitle: "",
+          trainingDescription: "",
+          trainingUrl: ""
         }
       ]);
       console.log('✅ Services seeded successfully.');

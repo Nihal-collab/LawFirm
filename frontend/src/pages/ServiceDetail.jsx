@@ -109,7 +109,7 @@ const ServiceDetail = () => {
   return (
     <div className="page-enter py-24 bg-[#09111F] text-[#C8D3E2] min-h-screen">
       <div className="max-w-5xl mx-auto px-6 sm:px-8 space-y-8">
-        
+
         {/* Back Link */}
         <Link to="/services" className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wider text-[#94A3B8] hover:text-[#0A4DFF] transition-colors font-sans">
           <ArrowLeft size={14} /> Back to Practices
@@ -129,7 +129,7 @@ const ServiceDetail = () => {
 
         {/* Body columns */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
+
           {/* Main info */}
           <div className="lg:col-span-8 card-premium font-sans">
             <h3 className="text-2xl font-serif font-medium text-white border-b border-white/8 pb-3">Practice Overview</h3>

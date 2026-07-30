@@ -13,7 +13,11 @@ export const services = [
       "WIPO / PCT International Filing",
       "Office Action Analysis & Responses",
       "Patent Landscaping & Prior Art Searches"
-    ]
+    ],
+    trainingAvailable: true,
+    trainingTitle: "Professional Training Available",
+    trainingDescription: "Learn directly from experienced IP Attorneys using practical case studies and real-world examples.",
+    trainingUrl: "/services/patent-services#training"
   },
   {
     id: 2,
@@ -29,7 +33,11 @@ export const services = [
       "Filing & Prosecution Management",
       "Trademark Monitoring & Enforcement",
       "Opposition & Rectification Proceedings"
-    ]
+    ],
+    trainingAvailable: true,
+    trainingTitle: "Trademark Strategy Training",
+    trainingDescription: "Master clearance searches, class listings, international registrations, and trademark policing.",
+    trainingUrl: "/services/trademark-services#training"
   },
   {
     id: 3,
@@ -45,7 +53,11 @@ export const services = [
       "Licensing & Assignment Contracts",
       "Digital Millennium Copyright Act (DMCA) Take-Downs",
       "Copyright Infringement Remedies"
-    ]
+    ],
+    trainingAvailable: true,
+    trainingTitle: "Software Copyright Workshops",
+    trainingDescription: "Hands-on guidance for securing codebase registrations, database rights, and licensing.",
+    trainingUrl: "/services/copyright-services#training"
   },
   {
     id: 4,
@@ -60,7 +72,11 @@ export const services = [
       "Filing & Class Registrations",
       "Design Prosecution support",
       "Infringement Auditing"
-    ]
+    ],
+    trainingAvailable: false,
+    trainingTitle: "",
+    trainingDescription: "",
+    trainingUrl: ""
   },
   {
     id: 5,
@@ -74,7 +90,11 @@ export const services = [
       "GI clearance & historical audit",
       "Association incorporation support",
       "Enforcement against generic label fraud"
-    ]
+    ],
+    trainingAvailable: false,
+    trainingTitle: "",
+    trainingDescription: "",
+    trainingUrl: ""
   },
   {
     id: 6,
@@ -90,6 +110,10 @@ export const services = [
       "Patent & Trademark Litigation",
       "Custom Enforcement & Anti-Counterfeiting",
       "Trade Secret Protection & Auditing"
-    ]
+    ],
+    trainingAvailable: false,
+    trainingTitle: "",
+    trainingDescription: "",
+    trainingUrl: ""
   }
 ];
