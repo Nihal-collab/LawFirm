@@ -40,7 +40,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 border-b border-white/8 shadow-[0_8px_40px_rgba(0,0,0,0.35)] text-slate-100" style={{ background: 'rgba(5,10,25,.85)', backdropFilter: 'blur(18px)' }}>
+    <>
+      <nav className="fixed top-0 left-0 right-0 z-40 transition-all duration-300 border-b border-white/8 shadow-[0_8px_40px_rgba(0,0,0,0.35)] text-slate-100" style={{ background: 'rgba(5,10,25,.85)', backdropFilter: 'blur(18px)' }}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           {/* Logo Branding (left aligned) */}
@@ -142,26 +143,27 @@ const Navbar = () => {
           </div>
         </div>
       </div>
+    </nav>
 
-      {/* Mobile Menu Drawer Overlay */}
+    {/* Mobile Menu Drawer Overlay */}
+    <div
+      className={`xl:hidden fixed inset-0 z-50 transition-all duration-500 ease-in-out ${
+        menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+      }`}
+    >
+      {/* Backdrop */}
       <div
-        className={`xl:hidden fixed inset-0 z-50 transition-all duration-500 ease-in-out ${
-          menuOpen ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'
+        className="absolute inset-0 bg-black/60 backdrop-blur-sm z-40"
+        onClick={() => setMenuOpen(false)}
+      />
+      
+      {/* Drawer Content */}
+      <div
+        className={`absolute top-0 right-0 bottom-0 w-80 max-w-[85vw] p-6 max-sm:p-4 flex flex-col justify-between border-l border-white/8 bg-[#0B132B] shadow-2xl transition-transform duration-500 ease-in-out z-50 ${
+          menuOpen ? 'translate-x-0' : 'translate-x-full'
         }`}
+        style={{ backgroundColor: '#0B132B' }}
       >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/60 backdrop-blur-sm"
-          onClick={() => setMenuOpen(false)}
-        />
-        
-        {/* Drawer Content */}
-        <div
-          className={`absolute top-0 right-0 bottom-0 w-80 max-w-[85vw] p-6 max-sm:p-4 flex flex-col justify-between border-l border-white/8 shadow-2xl transition-transform duration-500 ease-in-out ${
-            menuOpen ? 'translate-x-0' : 'translate-x-full'
-          }`}
-          style={{ background: 'rgba(10, 18, 36, 0.95)', backdropFilter: 'blur(20px)' }}
-        >
           <div className="space-y-6 max-sm:space-y-4">
             <div className="flex items-center justify-between border-b border-white/8 pb-4 max-sm:pb-2">
               <div className="font-serif text-lg font-bold tracking-wider text-white">
@@ -225,7 +227,7 @@ const Navbar = () => {
           </div>
         </div>
       </div>
-    </nav>
+    </>
   );
 };
 

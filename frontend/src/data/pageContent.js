@@ -5,7 +5,8 @@ export const siteSettings = {
   liaison_address: "Canary Wharf, London E14, United Kingdom",
   copyright: "ROOTS-IP Partners. All Rights Reserved.",
   linkedin_url: "https://linkedin.com/company/rootsip",
-  twitter_url: "",
+  twitter_url: "https://x.com/rootsip",
+  instagram_url: "https://instagram.com/rootsip",
   facebook_url: "",
 };
 

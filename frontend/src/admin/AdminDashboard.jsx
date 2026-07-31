@@ -166,7 +166,7 @@ const AdminDashboard = () => {
   const [settingsCopyright, setSettingsCopyright] = useState('');
   const [settingsLinkedin, setSettingsLinkedin] = useState('');
   const [settingsTwitter, setSettingsTwitter] = useState('');
-  const [settingsFacebook, setSettingsFacebook] = useState('');
+  const [settingsInstagram, setSettingsInstagram] = useState('');
   const [consultationDailyLimit, setConsultationDailyLimit] = useState(3);
   const [consultationAmount, setConsultationAmount] = useState(100);
   const [consultationUpiQrCode, setConsultationUpiQrCode] = useState('/upi-qr.svg');
@@ -270,7 +270,7 @@ const AdminDashboard = () => {
       setSettingsCopyright(staticSettings.copyright || '');
       setSettingsLinkedin(staticSettings.linkedin_url || '');
       setSettingsTwitter(staticSettings.twitter_url || '');
-      setSettingsFacebook(staticSettings.facebook_url || '');
+      setSettingsInstagram(staticSettings.instagram_url || '');
       setConsultationDailyLimit(consultSettingsRes.data.dailyLimit || 3);
       setConsultationAmount(consultSettingsRes.data.amount !== undefined ? consultSettingsRes.data.amount : 100);
       setConsultationUpiQrCode(consultSettingsRes.data.upiQrCode || '/upi-qr.svg');
@@ -869,6 +869,14 @@ const AdminDashboard = () => {
   // Settings Handlers
   const handleSaveSettings = (e) => {
     e.preventDefault();
+    staticSettings.email = settingsEmail;
+    staticSettings.phone = settingsPhone;
+    staticSettings.hq_address = settingsHqAddress;
+    staticSettings.liaison_address = settingsLiaisonAddress;
+    staticSettings.copyright = settingsCopyright;
+    staticSettings.linkedin_url = settingsLinkedin;
+    staticSettings.twitter_url = settingsTwitter;
+    staticSettings.instagram_url = settingsInstagram;
     showToast('Global settings updated (In-Memory Preview). Note: Edit pageContent.js for permanent changes.', 'success');
   };
 
@@ -2526,11 +2534,11 @@ const AdminDashboard = () => {
                       />
                     </div>
                     <div className="space-y-1">
-                      <label className="text-[9px] uppercase font-bold text-slate-455">Facebook URL</label>
+                      <label className="text-[9px] uppercase font-bold text-slate-455">Instagram URL</label>
                       <input
                         type="url"
-                        value={settingsFacebook}
-                        onChange={(e) => setSettingsFacebook(e.target.value)}
+                        value={settingsInstagram}
+                        onChange={(e) => setSettingsInstagram(e.target.value)}
                         className="w-full px-2.5 py-1.5 bg-white dark:bg-navy dark:text-white border border-slate-300 dark:border-slate-700 rounded text-xs"
                       />
                     </div>
