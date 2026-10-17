@@ -14,7 +14,7 @@ export default function PaymentSuccess() {
   const [payment, setPayment] = useState(null);
   
   const bookingId = searchParams.get('bookingId');
-  const token = searchParams.get('token'); // PayPal Order ID
+  const token = searchParams.get('token'); // Transaction reference token
   
   const hasCaptured = useRef(false);
 
@@ -39,7 +39,7 @@ export default function PaymentSuccess() {
         showToast('Payment verified successfully!', 'success');
       } catch (err) {
         console.error('Payment verification error:', err);
-        setError(err.response?.data?.detail || 'Failed to verify payment with PayPal.');
+        setError(err.response?.data?.detail || 'Failed to verify transaction.');
         showToast(err.response?.data?.detail || 'Verification failed.', 'error');
       } finally {
         setLoading(false);
@@ -58,7 +58,7 @@ export default function PaymentSuccess() {
           </div>
           <h2 className="text-2xl font-serif font-medium text-white">Verifying Transaction</h2>
           <p className="text-sm text-[#C8D3E2] leading-relaxed font-light">
-            We are securely confirming your transaction details with PayPal. Please do not close or refresh this page.
+            We are securely confirming your transaction details. Please do not close or refresh this page.
           </p>
         </div>
       </div>
@@ -115,9 +115,7 @@ export default function PaymentSuccess() {
           )}
           <div><strong className="font-medium text-white">Payer Name:</strong> {payment?.name}</div>
           <div><strong className="font-medium text-white">Payer Email:</strong> {payment?.payerEmail || payment?.email}</div>
-          <div><strong className="font-medium text-white">Amount Paid:</strong> {currencySymbol}{payment?.paymentAmount?.toFixed(2)} {payment?.paymentCurrency || 'USD'}</div>
-          <div><strong className="font-medium text-white">Transaction ID:</strong> {payment?.paypalTransactionId}</div>
-          <div><strong className="font-medium text-white">Order ID:</strong> {payment?.paypalOrderId}</div>
+          <div><strong className="font-medium text-white">Transaction ID:</strong> {payment?.transactionId || payment?.paypalTransactionId || 'N/A'}</div>
         </div>
 
         <p className="text-[10px] text-[#94A3B8] text-center font-light pt-2">

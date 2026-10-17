@@ -32,16 +32,19 @@ const contactSchema = new mongoose.Schema(
     assigned_lawyer: { type: String, trim: true },
     notes: { type: String, trim: true },
     
-    // PayPal Payment Fields
-    paypalTransactionId: { type: String },
-    paypalOrderId: { type: String },
+    // Payment Fields
+    transactionId: { type: String },
     paymentStatus: { type: String },
-    paymentMethod: { type: String, default: 'PayPal' },
+    paymentMethod: { type: String },
     paymentAmount: { type: Number },
     paymentCurrency: { type: String },
     paymentDate: { type: Date },
     payerName: { type: String },
     payerEmail: { type: String },
+
+    // Legacy fields preserved for existing database records
+    paypalTransactionId: { type: String },
+    paypalOrderId: { type: String },
     paypalCaptureId: { type: String },
   },
   { timestamps: true }
@@ -50,7 +53,6 @@ const contactSchema = new mongoose.Schema(
 // Indexes for query optimization
 contactSchema.index({ type: 1, consultationDate: 1, consultationTime: 1 });
 contactSchema.index({ email: 1, type: 1 });
-contactSchema.index({ paypalOrderId: 1 });
 contactSchema.index({ type: 1, createdAt: -1 });
 
 module.exports = mongoose.model('Contact', contactSchema);

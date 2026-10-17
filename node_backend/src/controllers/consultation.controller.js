@@ -2,7 +2,6 @@ const Contact = require('../models/Contact');
 const ConsultationSettings = require('../models/ConsultationSettings');
 const asyncHandler = require('../utils/asyncHandler');
 const { sendContactNotification, sendDirectBookingNotification } = require('../services/email.service');
-const paypalService = require('../services/paypal.service');
 
 const ACTIVE_CONSULTATION_STATUSES = ['NEW', 'PENDING', 'CONTACTED', 'COMPLETED', 'Payment Successful'];
 
@@ -33,9 +32,8 @@ const mapConsultation = (doc) => {
     createdAt: doc.createdAt,
     updatedAt: doc.updatedAt,
     
-    // PayPal Payment Fields
-    paypalTransactionId: doc.paypalTransactionId,
-    paypalOrderId: doc.paypalOrderId,
+    // Payment Fields
+    transactionId: doc.transactionId || doc.paypalTransactionId,
     paymentStatus: doc.paymentStatus,
     paymentMethod: doc.paymentMethod,
     paymentAmount: doc.paymentAmount,
@@ -43,7 +41,6 @@ const mapConsultation = (doc) => {
     paymentDate: doc.paymentDate,
     payerName: doc.payerName,
     payerEmail: doc.payerEmail,
-    paypalCaptureId: doc.paypalCaptureId,
   };
 };
 
@@ -106,13 +103,12 @@ const createConsultation = asyncHandler(async (req, res) => {
     });
   }
 
-  let consultation;
   try {
     const settings = await ConsultationSettings.getSingleton();
     const amountVal = settings.amount !== undefined ? settings.amount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
-    const currencyVal = process.env.CONSULTATION_CURRENCY || 'USD';
+    const currencyVal = process.env.CONSULTATION_CURRENCY || 'INR';
 
-    consultation = await Contact.create({
+    const consultation = await Contact.create({
       name,
       email: normalizedEmail,
       phone,
@@ -122,32 +118,23 @@ const createConsultation = asyncHandler(async (req, res) => {
       serviceArea: service,
       message,
       type: 'CONSULTATION',
-      status: 'Pending Payment', // Consultations start as Pending Payment
+      status: 'NEW',
       paymentAmount: amountVal,
       paymentCurrency: currencyVal
     });
 
-    const frontendOrigin = process.env.FRONTEND_ORIGIN || req.headers.origin || 'http://localhost:5173';
-    const returnUrl = `${frontendOrigin}/book-consultation/success?bookingId=${consultation._id}`;
-    const cancelUrl = `${frontendOrigin}/book-consultation/cancel?bookingId=${consultation._id}`;
-
-    // Initiate PayPal checkout order
-    const paypalOrder = await paypalService.createPayPalOrder(amountVal.toFixed(2), currencyVal, returnUrl, cancelUrl);
-
-    consultation.paypalOrderId = paypalOrder.id;
-    await consultation.save();
+    // Send direct booking emails (async, non-blocking)
+    sendDirectBookingNotification(consultation).catch((err) => {
+      console.error('Failed to send consultation confirmation emails:', err);
+    });
 
     res.status(201).json({
       booking: mapConsultation(consultation),
-      approveUrl: paypalOrder.approveUrl,
+      detail: 'Consultation request submitted successfully.'
     });
   } catch (error) {
-    console.error('Failed to initiate consultation booking payment:', error);
-    if (consultation) {
-      consultation.status = 'Payment Failed';
-      await consultation.save().catch(() => {});
-    }
-    res.status(500).json({ detail: error.message || 'Failed to initiate PayPal checkout. Please try again.' });
+    console.error('Failed to create consultation booking:', error);
+    res.status(500).json({ detail: error.message || 'Failed to submit consultation request. Please try again.' });
   }
 });
 
@@ -162,7 +149,7 @@ const getConsultationAvailability = asyncHandler(async (req, res) => {
   const settings = await ConsultationSettings.getSingleton();
   const dailyLimit = Math.max(Number(settings.dailyLimit) || 1, 1);
   const amount = settings.amount !== undefined ? settings.amount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
-  const currency = process.env.CONSULTATION_CURRENCY || 'USD';
+  const currency = process.env.CONSULTATION_CURRENCY || 'INR';
 
   const fifteenMinutesAgo = new Date(Date.now() - 15 * 60 * 1000);
 
@@ -190,96 +177,9 @@ const getConsultationAvailability = asyncHandler(async (req, res) => {
   });
 });
 
-// POST /api/consultations/capture (public — verifies payment from PayPal)
+// POST /api/consultations/capture (public — legacy endpoint)
 const captureConsultationPayment = asyncHandler(async (req, res) => {
-  const { orderId, bookingId } = req.body;
-
-  if (!orderId || !bookingId) {
-    return res.status(400).json({ detail: 'Order ID and Booking ID are required.' });
-  }
-
-  const booking = await Contact.findOne({ _id: bookingId, type: 'CONSULTATION' });
-  if (!booking) {
-    return res.status(404).json({ detail: 'Booking not found.' });
-  }
-
-  // Prevent duplicate capturing
-  if (booking.status === 'Payment Successful') {
-    return res.status(200).json({
-      detail: 'Payment already verified.',
-      booking: mapConsultation(booking)
-    });
-  }
-
-  // Verify booking orderId matches the captured orderId (PayPal Order ID validation)
-  if (booking.paypalOrderId !== orderId) {
-    return res.status(400).json({ detail: 'PayPal Order ID mismatch.' });
-  }
-
-  try {
-    const captureResult = await paypalService.capturePayPalOrder(orderId);
-
-    // Verify successful status
-    const status = captureResult.status;
-    if (status !== 'COMPLETED') {
-      booking.status = 'Payment Failed';
-      await booking.save();
-      return res.status(400).json({ detail: `PayPal order status is ${status}. Capture failed.` });
-    }
-
-    // Extract payment details safely
-    const purchaseUnit = captureResult.purchaseUnits?.[0] || {};
-    const capture = purchaseUnit.payments?.captures?.[0] || {};
-    const payer = captureResult.payer || {};
-
-    const expectedAmount = booking.paymentAmount !== undefined ? booking.paymentAmount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
-    const expectedCurrency = booking.paymentCurrency || process.env.CONSULTATION_CURRENCY || 'USD';
-    const actualAmount = parseFloat(capture.amount?.value || 0);
-    const actualCurrency = capture.amount?.currencyCode || 'USD';
-
-    // Validate Payment Amount and Currency (Parameter Tampering Protection)
-    if (Math.abs(actualAmount - expectedAmount) > 0.01) {
-      return res.status(400).json({ detail: `Incorrect payment amount. Expected: ${expectedAmount}, Received: ${actualAmount}` });
-    }
-    if (actualCurrency !== expectedCurrency) {
-      return res.status(400).json({ detail: `Incorrect payment currency. Expected: ${expectedCurrency}, Received: ${actualCurrency}` });
-    }
-
-    // Validate that transaction ID isn't reused on another booking (Transaction Replay Protection)
-    const duplicatePayment = await Contact.findOne({ paypalTransactionId: capture.id });
-    if (duplicatePayment) {
-      return res.status(400).json({ detail: 'This transaction ID has already been used for another booking.' });
-    }
-
-    booking.paypalTransactionId = capture.id;
-    booking.paypalOrderId = captureResult.id;
-    booking.paymentStatus = 'Successful';
-    booking.paymentMethod = 'PayPal';
-    booking.paymentAmount = actualAmount;
-    booking.paymentCurrency = actualCurrency;
-    booking.paymentDate = new Date(capture.createTime || Date.now());
-    booking.payerName = `${payer.name?.givenName || ''} ${payer.name?.surname || ''}`.trim() || 'N/A';
-    booking.payerEmail = payer.emailAddress || 'N/A';
-    booking.paypalCaptureId = capture.id;
-
-    booking.status = 'Payment Successful';
-    await booking.save();
-
-    // Send confirmation emails (async, non-blocking but handled here now)
-    sendContactNotification(booking).catch((err) => {
-      console.error('Failed to send consultation confirmation emails:', err);
-    });
-
-    res.status(200).json({
-      detail: 'Payment verified and consultation booked successfully.',
-      booking: mapConsultation(booking)
-    });
-  } catch (error) {
-    console.error('Payment capture failed:', error);
-    booking.status = 'Payment Failed';
-    await booking.save();
-    res.status(500).json({ detail: error.message || 'Payment capture failed.' });
-  }
+  res.status(400).json({ detail: 'Online PayPal payment capture has been removed.' });
 });
 
 // POST /api/consultations/cancel (public — marks booking payment cancelled)
@@ -328,8 +228,8 @@ const exportConsultationsCSV = asyncHandler(async (req, res) => {
     const status = item.status || '';
     const paymentStatus = item.paymentStatus || '';
     const amount = item.paymentAmount || 0;
-    const currency = item.paymentCurrency || 'USD';
-    const txnId = item.paypalTransactionId || '';
+    const currency = item.paymentCurrency || 'INR';
+    const txnId = item.transactionId || item.paypalTransactionId || '';
     const createdAt = item.createdAt ? item.createdAt.toISOString() : '';
 
     csv += `${id},${name},${email},${phone},${company},${date},${time},${service},${status},${paymentStatus},${amount},${currency},${txnId},${createdAt}\n`;
@@ -514,7 +414,7 @@ const createDirectBooking = asyncHandler(async (req, res) => {
 
   const settings = await ConsultationSettings.getSingleton();
   const amountVal = settings.amount !== undefined ? settings.amount : parseFloat(process.env.CONSULTATION_FEE || '100.00');
-  const currencyVal = process.env.CONSULTATION_CURRENCY || 'USD';
+  const currencyVal = process.env.CONSULTATION_CURRENCY || 'INR';
 
   const consultation = await Contact.create({
     name,

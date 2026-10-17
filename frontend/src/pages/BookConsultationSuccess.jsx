@@ -14,7 +14,7 @@ export default function BookConsultationSuccess() {
   const [booking, setBooking] = useState(null);
   
   const bookingId = searchParams.get('bookingId');
-  const token = searchParams.get('token'); // PayPal Order ID
+  const token = searchParams.get('token'); // Transaction reference token
   
   const hasCaptured = useRef(false);
 
@@ -39,7 +39,7 @@ export default function BookConsultationSuccess() {
         showToast('Payment verified successfully!', 'success');
       } catch (err) {
         console.error('Verification error:', err);
-        setError(err.response?.data?.detail || 'Failed to verify payment with PayPal.');
+        setError(err.response?.data?.detail || 'Failed to verify payment.');
         showToast(err.response?.data?.detail || 'Verification failed.', 'error');
       } finally {
         setLoading(false);
@@ -58,7 +58,7 @@ export default function BookConsultationSuccess() {
           </div>
           <h2 className="text-2xl font-serif font-medium text-white">Verifying Payment</h2>
           <p className="text-sm text-[#C8D3E2] leading-relaxed font-light">
-            We are securely confirming your transaction details with PayPal. Please do not close or refresh this page.
+            We are securely confirming your transaction details. Please do not close or refresh this page.
           </p>
         </div>
       </div>
@@ -117,9 +117,8 @@ export default function BookConsultationSuccess() {
         <div className="bg-[#0B132B] p-5 rounded-[12px] text-left text-xs space-y-3 border border-white/8 text-[#C8D3E2] shadow-premium">
           <h3 className="font-semibold text-white uppercase tracking-wider text-[10px] pb-1 border-b border-white/5">Payment Invoice</h3>
           <div><strong className="font-medium text-white">Payment Status:</strong> Successful</div>
-          <div><strong className="font-medium text-white">Payment Method:</strong> PayPal</div>
-          <div><strong className="font-medium text-white">Transaction ID:</strong> {booking?.paypalTransactionId}</div>
-          <div><strong className="font-medium text-white">Order ID:</strong> {booking?.paypalOrderId}</div>
+          <div><strong className="font-medium text-white">Payment Method:</strong> {booking?.paymentMethod || 'Online'}</div>
+          <div><strong className="font-medium text-white">Transaction ID:</strong> {booking?.transactionId || booking?.paypalTransactionId || 'N/A'}</div>
           <div><strong className="font-medium text-white">Amount Paid:</strong> {currencySymbol}{booking?.paymentAmount} {booking?.paymentCurrency}</div>
           <div><strong className="font-medium text-white">Payer Email:</strong> {booking?.payerEmail}</div>
         </div>

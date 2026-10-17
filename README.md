@@ -56,7 +56,7 @@ Navigate to `node_backend/` and copy the configuration environment file:
 ```bash
 cd node_backend
 # Configure your .env parameters:
-# PORT, MONGODB_URI, JWT_SECRET, PAYPAL_CLIENT_ID, PAYPAL_CLIENT_SECRET, etc.
+# PORT, MONGO_URI, JWT_SECRET, etc.
 npm install
 npm run dev
 ```

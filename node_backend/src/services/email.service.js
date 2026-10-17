@@ -58,17 +58,16 @@ const formatPaymentDetails = (contact) => {
     dateStr = `${day}/${month}/${year} ${hours}:${minutes}`;
   }
 
-  const currencySymbol = contact.paymentCurrency === 'INR' ? 'INR ' : '$';
+  const currencySymbol = contact.paymentCurrency === 'USD' ? '$' : '₹';
 
   return `
 Payment Details
 -------------------------
 Payment Status : Successful
-Payment Method : ${contact.paymentMethod || 'PayPal'}
-Transaction ID : ${contact.paypalTransactionId || 'N/A'}
-Order ID       : ${contact.paypalOrderId || 'N/A'}
+Payment Method : ${contact.paymentMethod || 'Online'}
+Transaction ID : ${contact.transactionId || contact.paypalTransactionId || 'N/A'}
 Amount Paid    : ${currencySymbol}${contact.paymentAmount || '0'}
-Currency       : ${contact.paymentCurrency || 'USD'}
+Currency       : ${contact.paymentCurrency || 'INR'}
 Payment Date   : ${dateStr}
 Payer Email    : ${contact.payerEmail || 'N/A'}
 `.trim();
@@ -287,7 +286,7 @@ https://www.rootsip.com
 };
 
 const sendPaymentConfirmationNotification = async (booking) => {
-  const currencySymbol = booking.paymentCurrency === 'INR' ? 'INR ' : '$';
+  const currencySymbol = booking.paymentCurrency === 'USD' ? '$' : '₹';
   
   const adminSubject = `Payment Confirmed: ${booking.name} — ${booking.serviceArea || 'General'}`;
   const adminText = `
@@ -296,10 +295,9 @@ Payment confirmation received for booking ${booking._id}.
 Payment Details:
 - Customer Name: ${booking.name}
 - Email: ${booking.email}
-- Amount: ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'}
-- Payment Method: ${booking.paymentMethod || 'PayPal'}
-- Transaction ID: ${booking.paypalTransactionId || 'N/A'}
-- Order ID: ${booking.paypalOrderId || 'N/A'}
+- Amount: ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'INR'}
+- Payment Method: ${booking.paymentMethod || 'Online'}
+- Transaction ID: ${booking.transactionId || booking.paypalTransactionId || 'N/A'}
 - Date: ${booking.paymentDate || new Date()}
 
 ROOTS-ip Admin Portal Automation
@@ -309,12 +307,12 @@ ROOTS-ip Admin Portal Automation
   const clientText = `
 Dear ${booking.name},
 
-Thank you for choosing Roots-IP. We have successfully received your payment of ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'} for Booking Reference ID: ${booking._id}.
+Thank you for choosing Roots-IP. We have successfully received your payment of ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'INR'} for Booking Reference ID: ${booking._id}.
 
 Payment Details:
 - Reference ID: ${booking._id}
-- Transaction ID: ${booking.paypalTransactionId || 'N/A'}
-- Amount: ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'USD'}
+- Transaction ID: ${booking.transactionId || booking.paypalTransactionId || 'N/A'}
+- Amount: ${currencySymbol}${booking.paymentAmount} ${booking.paymentCurrency || 'INR'}
 - Date: ${booking.paymentDate || new Date()}
 
 Sincerely,

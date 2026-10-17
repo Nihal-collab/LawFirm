@@ -2164,7 +2164,7 @@ const AdminDashboard = () => {
                         <div className="font-semibold text-slate-800 dark:text-slate-100">{c.name}</div>
                         <div className="text-[10px] text-slate-450">{c.email} • {c.phone}</div>
 
-                        {(c.message || c.paypalTransactionId) && (
+                        {(c.message || c.transactionId || c.paypalTransactionId) && (
                           <button
                             onClick={() => toggleConsultation(c.id)}
                             className="mt-1 text-[10px] font-semibold text-[#0A4DFF] hover:underline flex items-center gap-1 cursor-pointer focus:outline-none"
@@ -2181,10 +2181,10 @@ const AdminDashboard = () => {
                                 "{c.message}"
                               </div>
                             )}
-                            {c.paypalTransactionId && (
+                            {(c.transactionId || c.paypalTransactionId) && (
                               <div className="pt-2 border-t border-slate-100 dark:border-slate-800/60 text-[10px] text-slate-500 space-y-0.5">
-                                <div className="font-semibold text-[#0A4DFF]">PayPal Payment Details:</div>
-                                <div>Transaction ID: <span className="font-mono">{c.paypalTransactionId}</span></div>
+                                <div className="font-semibold text-[#0A4DFF]">Payment Details:</div>
+                                <div>Transaction ID: <span className="font-mono">{c.transactionId || c.paypalTransactionId}</span></div>
                                 <div>Amount: {c.paymentCurrency === 'INR' ? 'INR ' : '$'}{c.paymentAmount} {c.paymentCurrency}</div>
                                 {c.payerEmail && <div>Payer: {c.payerEmail}</div>}
                               </div>

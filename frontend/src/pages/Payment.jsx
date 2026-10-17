@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import API from '../utils/api';
 import { useToast } from '../context/ToastContext';
-import { CreditCard, QrCode, Search, Mail, Phone, ShieldCheck, CheckCircle2, AlertCircle } from 'lucide-react';
+import { QrCode, Search, Mail, Phone, ShieldCheck, CheckCircle2, AlertCircle } from 'lucide-react';
 
 const Payment = () => {
   const { showToast } = useToast();
@@ -13,7 +13,7 @@ const Payment = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [amount, setAmount] = useState('100.00');
-  const [currency, setCurrency] = useState('USD');
+  const [currency, setCurrency] = useState('INR');
   const [upiQrCode, setUpiQrCode] = useState('/upi-qr.svg');
   const [supportEmail, setSupportEmail] = useState('support@rootsip.com');
   const [supportPhone, setSupportPhone] = useState('+1 (555) 012-3456');
@@ -24,14 +24,13 @@ const Payment = () => {
   const [loadingBooking, setLoadingBooking] = useState(false);
   const [bookingVerified, setBookingVerified] = useState(false);
   const [bookingError, setBookingError] = useState('');
-  const [initiatingPaypal, setInitiatingPaypal] = useState(false);
 
   // Fetch settings for default amount
   useEffect(() => {
     API.get('payment/settings')
       .then((res) => {
         setAmount(res.data.amount.toFixed(2));
-        setCurrency(res.data.currency || 'USD');
+        setCurrency(res.data.currency || 'INR');
         if (res.data.upiQrCode) setUpiQrCode(res.data.upiQrCode);
         if (res.data.supportEmail) setSupportEmail(res.data.supportEmail);
         if (res.data.supportPhone) setSupportPhone(res.data.supportPhone);
@@ -89,52 +88,31 @@ const Payment = () => {
     }
   };
 
-  const handlePayWithPaypal = async () => {
-    setInitiatingPaypal(true);
-    try {
-      const res = await API.post('payment/create', {
-        bookingId: bookingId || null,
-        amount: parseFloat(amount),
-      });
-
-      if (res.data.approveUrl) {
-        window.location.href = res.data.approveUrl;
-      } else {
-        showToast('Initiating payment failed.', 'error');
-      }
-    } catch (err) {
-      console.error(err);
-      showToast(err.response?.data?.detail || 'Failed to connect to PayPal. Please try again.', 'error');
-    } finally {
-      setInitiatingPaypal(false);
-    }
-  };
-
   return (
-    <div className="page-enter py-12 sm:py-16 bg-[#09111F] text-[#C8D3E2] min-h-screen font-sans">
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 space-y-10">
+    <div className="page-enter py-10 sm:py-14 bg-[#09111F] text-[#C8D3E2] min-h-screen font-sans">
+      <div className="max-w-xl mx-auto px-4 space-y-6">
         
         {/* Header */}
-        <div className="text-center space-y-2">
-          <span className="text-[#0A4DFF] uppercase tracking-[0.25em] text-xs font-semibold block">Secure Gateway</span>
-          <h1 className="text-3xl sm:text-4xl font-serif font-medium text-white">Secure Payment</h1>
-          <p className="text-[#C8D3E2] text-xs sm:text-sm max-w-xl mx-auto leading-relaxed">
-            Complete your consultation payment securely using PayPal for international cards or scan the UPI QR Code for Indian domestic payments.
+        <div className="text-center space-y-1.5">
+          <span className="text-[#0A4DFF] uppercase tracking-[0.25em] text-[10px] font-semibold block">Scan & Pay</span>
+          <h1 className="text-2xl sm:text-3xl font-serif font-medium text-white">Scan UPI QR Code</h1>
+          <p className="text-[#C8D3E2] text-xs max-w-sm mx-auto leading-relaxed">
+            Scan the official QR code below using any UPI app to complete your consultation payment.
           </p>
         </div>
 
         {/* Booking Lookup & Details Card */}
-        <div className="bg-[#111827] border border-white/8 rounded-xl p-5 sm:p-6 shadow-2xl space-y-4 max-w-3xl mx-auto">
-          <h2 className="text-lg font-serif font-medium text-white flex items-center gap-2">
-            <ShieldCheck className="text-[#0A4DFF]" size={20} />
-            Payment Information
+        <div className="bg-[#111827] border border-white/8 rounded-xl p-4 sm:p-5 shadow-2xl space-y-3.5 max-w-sm sm:max-w-md mx-auto">
+          <h2 className="text-sm font-serif font-medium text-white flex items-center gap-1.5">
+            <ShieldCheck className="text-[#0A4DFF]" size={16} />
+            Booking & Consultation Details
           </h2>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Booking Reference ID */}
             <div className="space-y-1 relative">
-              <label className="text-xs font-semibold text-[#94A3B8] uppercase tracking-wide block">
-                Booking Reference ID (Optional)
+              <label className="text-[10px] font-semibold text-[#94A3B8] uppercase tracking-wide block">
+                Booking ID (Optional)
               </label>
               <div className="relative">
                 <input
@@ -143,36 +121,36 @@ const Payment = () => {
                   onChange={(e) => setBookingId(e.target.value)}
                   onBlur={handleBookingIdBlur}
                   placeholder="e.g. 64b1f4..."
-                  className="w-full pl-4 pr-10 py-2.5 text-sm bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
+                  className="w-full pl-3 pr-8 py-2 text-xs bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
                 />
                 <button
                   type="button"
                   onClick={() => verifyBooking(bookingId)}
-                  className="absolute right-2.5 top-2.5 text-[#94A3B8] hover:text-white cursor-pointer"
+                  className="absolute right-2 top-2 text-[#94A3B8] hover:text-white cursor-pointer"
                   title="Verify Booking ID"
                 >
-                  <Search size={16} />
+                  <Search size={14} />
                 </button>
               </div>
               {loadingBooking && (
-                <span className="text-[10px] text-[#0A4DFF] block mt-1">Verifying booking ID...</span>
+                <span className="text-[9px] text-[#0A4DFF] block mt-0.5">Verifying booking ID...</span>
               )}
               {bookingVerified && (
-                <span className="text-[10px] text-emerald-400 flex items-center gap-1 mt-1 font-semibold">
-                  <CheckCircle2 size={12} /> Reference ID verified. Customer details pre-filled.
+                <span className="text-[9px] text-emerald-400 flex items-center gap-1 mt-0.5 font-semibold">
+                  <CheckCircle2 size={11} /> Reference verified.
                 </span>
               )}
               {bookingError && (
-                <span className="text-[10px] text-rose-500 flex items-center gap-1 mt-1 font-semibold">
-                  <AlertCircle size={12} /> {bookingError}
+                <span className="text-[9px] text-rose-500 flex items-center gap-1 mt-0.5 font-semibold">
+                  <AlertCircle size={11} /> {bookingError}
                 </span>
               )}
             </div>
 
             {/* Amount */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#94A3B8] uppercase tracking-wide block">
-                Payment Amount ({currency})
+              <label className="text-[10px] font-semibold text-[#94A3B8] uppercase tracking-wide block">
+                Amount ({currency === 'USD' ? 'USD' : 'INR (₹)'})
               </label>
               <input
                 type="number"
@@ -180,15 +158,15 @@ const Payment = () => {
                 value={amount}
                 onChange={(e) => setAmount(e.target.value)}
                 placeholder="100.00"
-                className="w-full px-4 py-2.5 text-sm bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
+                className="w-full px-3 py-2 text-xs bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
               />
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Payer Name */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#94A3B8] uppercase tracking-wide block">
+              <label className="text-[10px] font-semibold text-[#94A3B8] uppercase tracking-wide block">
                 Full Name
               </label>
               <input
@@ -196,13 +174,13 @@ const Payment = () => {
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 placeholder="Enter name"
-                className="w-full px-4 py-2.5 text-sm bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
+                className="w-full px-3 py-2 text-xs bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
               />
             </div>
 
             {/* Payer Email */}
             <div className="space-y-1">
-              <label className="text-xs font-semibold text-[#94A3B8] uppercase tracking-wide block">
+              <label className="text-[10px] font-semibold text-[#94A3B8] uppercase tracking-wide block">
                 Email Address
               </label>
               <input
@@ -210,109 +188,70 @@ const Payment = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="name@example.com"
-                className="w-full px-4 py-2.5 text-sm bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
+                className="w-full px-3 py-2 text-xs bg-[#0B132B] text-white border border-white/8 rounded focus:outline-hidden focus:border-[#0A4DFF]"
               />
             </div>
           </div>
         </div>
 
-        {/* Payment Methods Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto items-stretch">
-          
-          {/* Card 1: PayPal International */}
-          <div className="bg-[#111827] border border-white/8 rounded-xl p-6 shadow-2xl flex flex-col justify-between hover:border-[#0A4DFF] transition-all transform hover:-translate-y-1">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-[#0A4DFF]/10 text-[#0A4DFF] rounded-lg">
-                  <CreditCard size={24} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-serif font-bold text-white leading-tight">Option 1: PayPal</h3>
-                  <span className="text-[10px] uppercase tracking-widest text-[#94A3B8] font-semibold">International Customers</span>
-                </div>
-              </div>
-              
-              <p className="text-xs text-[#C8D3E2] leading-relaxed">
-                Pay using your Credit/Debit Card or PayPal account balance. Transactions are processed securely in USD/USD equivalents.
-              </p>
-
-              {/* Supported payment mock representations */}
-              <div className="flex gap-2.5 pt-2">
-                <span className="px-2.5 py-1 bg-[#0B132B] border border-white/5 rounded text-[10px] font-medium text-[#A7B2C3]">Visa</span>
-                <span className="px-2.5 py-1 bg-[#0B132B] border border-white/5 rounded text-[10px] font-medium text-[#A7B2C3]">Mastercard</span>
-                <span className="px-2.5 py-1 bg-[#0B132B] border border-white/5 rounded text-[10px] font-medium text-[#A7B2C3]">Amex</span>
-                <span className="px-2.5 py-1 bg-[#0B132B] border border-white/5 rounded text-[10px] font-medium text-[#A7B2C3]">PayPal</span>
-              </div>
+        {/* QR Code Scanner Card (Compact Small Size) */}
+        <div className="bg-[#111827] border border-white/8 rounded-2xl p-4 sm:p-5 shadow-2xl text-center space-y-3.5 hover:border-[#0A4DFF]/40 transition-all max-w-sm mx-auto">
+          <div className="flex flex-col items-center gap-1">
+            <div className="p-2 bg-[#0A4DFF]/10 text-[#0A4DFF] rounded-lg">
+              <QrCode size={20} />
             </div>
+            <h3 className="text-lg font-serif font-bold text-white leading-tight">
+              Scan to Pay
+            </h3>
+            <p className="text-[10.5px] text-[#94A3B8] max-w-xs leading-relaxed">
+              Use Google Pay, PhonePe, Paytm, BHIM, or any UPI app to scan.
+            </p>
+          </div>
 
-            <div className="pt-8">
-              <button
-                onClick={handlePayWithPaypal}
-                disabled={initiatingPaypal || !name || !email}
-                className="w-full py-3.5 bg-gradient-to-r from-[#0057D9] to-[#0A4DFF] text-white shadow-[0_12px_35px_rgba(10,77,255,0.40)] font-sans text-xs font-semibold tracking-widest uppercase rounded-full transition-all duration-300 transform hover:-translate-y-0.5 hover:scale-[1.02] hover:shadow-[0_12px_35px_rgba(10,77,255,0.60)] whitespace-nowrap cursor-pointer text-center disabled:opacity-50 disabled:pointer-events-none flex items-center justify-center gap-2"
-              >
-                {initiatingPaypal ? 'Redirecting to PayPal...' : `Pay $${parseFloat(amount).toFixed(2)} with PayPal`}
-              </button>
-              {(!name || !email) && (
-                <p className="text-[10px] text-rose-400 text-center mt-2 font-medium">
-                  Please fill in your name and email to proceed.
-                </p>
-              )}
+          {/* Amount Badge */}
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#0B132B] border border-[#0A4DFF]/30 text-white font-medium text-xs">
+            <span className="text-[#94A3B8] text-[10px]">Payable:</span>
+            <span className="text-emerald-400 font-bold font-mono text-xs">
+              {currency === 'USD' ? '$' : '₹'}{parseFloat(amount || 0).toFixed(2)} {currency === 'USD' ? 'USD' : 'INR'}
+            </span>
+          </div>
+
+          {/* QR Code Container (Small Size) */}
+          <div className="flex justify-center">
+            <div className="p-2 bg-[#0B132B] rounded-xl border border-[#0A4DFF]/30 shadow-[0_0_20px_rgba(10,77,255,0.12)] inline-block">
+              <img
+                src={upiQrCode}
+                alt="UPI QR Code"
+                className="w-36 h-36 sm:w-40 sm:h-40 object-contain rounded-lg"
+              />
             </div>
           </div>
 
-          {/* Card 2: UPI Indian Customers */}
-          <div className="bg-[#111827] border border-white/8 rounded-xl p-6 shadow-2xl flex flex-col justify-between hover:border-[#0A4DFF] transition-all transform hover:-translate-y-1">
-            <div className="space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="p-3 bg-[#0A4DFF]/10 text-[#0A4DFF] rounded-lg">
-                  <QrCode size={24} />
-                </div>
-                <div>
-                  <h3 className="text-xl font-serif font-bold text-white leading-tight">Option 2: Scan QR Code</h3>
-                  <span className="text-[10px] uppercase tracking-widest text-[#94A3B8] font-semibold">Indian Customers</span>
-                </div>
-              </div>
-
-              <p className="text-xs text-[#C8D3E2] leading-relaxed">
-                Scan the official QR code below using Google Pay, PhonePe, Paytm, BHIM UPI, or any UPI-enabled application.
-              </p>
-
-              {/* QR Image Area */}
-              <div className="flex justify-center py-3 bg-[#0B132B] rounded-lg border border-white/5 max-w-[200px] mx-auto overflow-hidden">
-                <img
-                  src={upiQrCode}
-                  alt="UPI QR Code"
-                  className="w-40 h-40 object-contain rounded-md"
-                />
-              </div>
-
-              {/* UPI Logos */}
-              <div className="flex justify-center gap-3 text-[9px] font-bold text-[#A7B2C3] uppercase tracking-wider">
-                <span>GPay</span>
-                <span>•</span>
-                <span>PhonePe</span>
-                <span>•</span>
-                <span>Paytm</span>
-                <span>•</span>
-                <span>BHIM</span>
-              </div>
-            </div>
-
-            <div className="pt-6 border-t border-white/5 space-y-3">
-              <div className="text-[11px] text-[#C8D3E2] leading-relaxed bg-[#0B132B] p-3 rounded-lg border border-[#0A4DFF]/25 font-light">
-                <strong>UPI Instructions:</strong> {upiInstructions}
-              </div>
-            </div>
+          {/* Supported Apps Pills */}
+          <div className="flex flex-wrap justify-center items-center gap-1.5 text-[8.5px] font-semibold text-[#A7B2C3] uppercase tracking-wider">
+            <span className="px-2 py-0.5 bg-[#0B132B] border border-white/5 rounded-full">Google Pay</span>
+            <span className="px-2 py-0.5 bg-[#0B132B] border border-white/5 rounded-full">PhonePe</span>
+            <span className="px-2 py-0.5 bg-[#0B132B] border border-white/5 rounded-full">Paytm</span>
+            <span className="px-2 py-0.5 bg-[#0B132B] border border-white/5 rounded-full">BHIM</span>
+            <span className="px-2 py-0.5 bg-[#0B132B] border border-white/5 rounded-full">Cred</span>
           </div>
 
+          {/* Instructions box */}
+          <div className="text-[10.5px] text-[#C8D3E2] leading-relaxed bg-[#0B132B] p-2.5 rounded-lg border border-[#0A4DFF]/20 text-left space-y-1">
+            <div className="font-semibold text-white flex items-center gap-1.5 text-[10.5px]">
+              <CheckCircle2 size={12} className="text-[#0A4DFF]" /> Verification Steps:
+            </div>
+            <p className="text-[9.5px] text-[#94A3B8] font-light leading-relaxed">
+              {upiInstructions}
+            </p>
+          </div>
         </div>
 
         {/* Support Section */}
         <div className="bg-[#111827]/40 border border-white/5 rounded-xl p-5 max-w-xl mx-auto flex flex-col sm:flex-row items-center justify-between text-xs gap-3">
           <div className="text-center sm:text-left space-y-1">
             <h4 className="font-semibold text-white">Need Assistance?</h4>
-            <p className="text-[#94A3B8] font-light">Contact our billing team for payment issues or wire instructions.</p>
+            <p className="text-[#94A3B8] font-light">Contact our billing team for payment verification or questions.</p>
           </div>
           <div className="flex flex-col sm:flex-row gap-4 text-[#A7B2C3] font-medium font-sans items-center">
             <a href={`mailto:${supportEmail}`} className="flex items-center gap-1.5 hover:text-[#0A4DFF]">
