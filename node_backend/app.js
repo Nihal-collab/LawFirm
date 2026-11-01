@@ -33,7 +33,7 @@ app.set('strict routing', false);  // Allow trailing slashes (e.g., /api/videos/
 app.set('case sensitive routing', false);
 
 // ── Security Middleware ──────────────────────────────────────────────────────
-const cspConnectSrc = ["'self'"];
+const cspConnectSrc = ["'self'", "https://*.vercel.app"];
 if (process.env.NODE_ENV !== 'production') {
   cspConnectSrc.push("http://localhost:5000", "http://localhost:5173", "http://127.0.0.1:5173");
 }
@@ -124,10 +124,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 // ── Global Rate Limiter ───────────────────────────────────────────────────────
-app.use('/api', apiLimiter);
+app.use(['/api', '/'], apiLimiter);
 
 // ── Health Check ─────────────────────────────────────────────────────────────
-app.get('/api/health', (req, res) => {
+app.get(['/', '/health', '/api', '/api/health'], (req, res) => {
   res.status(200).json({
     status: 'ok',
     service: 'SR4IPR Partners API',
@@ -136,23 +136,23 @@ app.get('/api/health', (req, res) => {
   });
 });
 
-// ── API Routes ────────────────────────────────────────────────────────────────
-app.use('/api/auth', authRoutes);
-app.use('/api/contact', contactRoutes);
-app.use('/api/consultations', consultationRoutes);
-app.use('/api/videos', videoRoutes);
-app.use('/api/cms/seo', seoRoutes);
-app.use('/api/book-consultation', bookConsultationRoutes);
-app.use('/api/payment', paymentRoutes);
-app.use('/api/gallery', galleryRoutes);
-app.use('/api/team', teamRoutes);
-app.use('/api/testimonials', testimonialRoutes);
-app.use('/api/client-success', clientSuccessRoutes);
-app.use('/api/blogs', blogRoutes);
-app.use('/api/faqs', faqRoutes);
-app.use('/api/services', serviceRoutes);
-app.use('/api/cms/content', cmsContentRoutes);
-app.use('/api', analyticsRoutes);
+// ── API Routes (Support both /api/... and direct /... paths) ──────────────────
+app.use(['/api/auth', '/auth'], authRoutes);
+app.use(['/api/contact', '/contact'], contactRoutes);
+app.use(['/api/consultations', '/consultations'], consultationRoutes);
+app.use(['/api/videos', '/videos'], videoRoutes);
+app.use(['/api/cms/seo', '/cms/seo'], seoRoutes);
+app.use(['/api/book-consultation', '/book-consultation'], bookConsultationRoutes);
+app.use(['/api/payment', '/payment'], paymentRoutes);
+app.use(['/api/gallery', '/gallery'], galleryRoutes);
+app.use(['/api/team', '/team'], teamRoutes);
+app.use(['/api/testimonials', '/testimonials'], testimonialRoutes);
+app.use(['/api/client-success', '/client-success'], clientSuccessRoutes);
+app.use(['/api/blogs', '/blogs'], blogRoutes);
+app.use(['/api/faqs', '/faqs'], faqRoutes);
+app.use(['/api/services', '/services'], serviceRoutes);
+app.use(['/api/cms/content', '/cms/content'], cmsContentRoutes);
+app.use(['/api', '/'], analyticsRoutes);
 
 // ── 404 Handler ───────────────────────────────────────────────────────────────
 app.use((req, res) => {
