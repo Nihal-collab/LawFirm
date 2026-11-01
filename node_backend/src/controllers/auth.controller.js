@@ -13,7 +13,8 @@ const login = asyncHandler(async (req, res) => {
   }
 
   // Explicitly select password (it is excluded by default)
-  const user = await User.findOne({ email: email.toLowerCase() }).select('+password');
+  const cleanEmail = email.trim().toLowerCase();
+  const user = await User.findOne({ email: cleanEmail }).select('+password');
 
   if (!user || !(await user.comparePassword(password))) {
     return res.status(401).json({ detail: 'Invalid email or password.' });

@@ -18,7 +18,7 @@ const Login = ({ adminOnly = false }) => {
     e.preventDefault();
     setLoading(true);
 
-    const res = await login(email, password);
+    const res = await login(email.trim(), password);
     setLoading(false);
 
     if (res.success) {

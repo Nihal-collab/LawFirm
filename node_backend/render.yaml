@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: sr4ipr-api
+    runtime: node
+    region: oregon
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: JWT_REFRESH_SECRET
+        generateValue: true
+      - key: JWT_EXPIRES_IN
+        value: 1d
+      - key: JWT_REFRESH_EXPIRES_IN
+        value: 7d
+      - key: GROQ_API_KEY
+        sync: false
+      - key: GROQ_MODEL
+        value: llama3-8b-8192
+      - key: FRONTEND_ORIGIN
+        sync: false
+    healthCheckPath: /api/health
+    autoDeploy: true

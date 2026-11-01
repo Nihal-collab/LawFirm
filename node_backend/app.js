@@ -13,7 +13,6 @@ const authRoutes = require('./src/routes/auth.routes');
 const contactRoutes = require('./src/routes/contact.routes');
 const consultationRoutes = require('./src/routes/consultation.routes');
 const videoRoutes = require('./src/routes/video.routes');
-const analyticsRoutes = require('./src/routes/analytics.routes');
 const seoRoutes = require('./src/routes/seo.routes');
 const bookConsultationRoutes = require('./src/routes/book-consultation.routes');
 const paymentRoutes = require('./src/routes/payment.routes');
@@ -25,6 +24,7 @@ const blogRoutes = require('./src/routes/blog.routes');
 const faqRoutes = require('./src/routes/faq.routes');
 const serviceRoutes = require('./src/routes/service.routes');
 const cmsContentRoutes = require('./src/routes/cmsContent.routes');
+const analyticsRoutes = require('./src/routes/analytics.routes');
 
 const app = express();
 
@@ -33,6 +33,14 @@ app.set('strict routing', false);  // Allow trailing slashes (e.g., /api/videos/
 app.set('case sensitive routing', false);
 
 // ── Security Middleware ──────────────────────────────────────────────────────
+const cspConnectSrc = ["'self'"];
+if (process.env.NODE_ENV !== 'production') {
+  cspConnectSrc.push("http://localhost:5000", "http://localhost:5173", "http://127.0.0.1:5173");
+}
+if (process.env.FRONTEND_ORIGIN) {
+  cspConnectSrc.push(process.env.FRONTEND_ORIGIN);
+}
+
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -42,7 +50,7 @@ app.use(
         styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
         fontSrc: ["'self'", "https://fonts.gstatic.com"],
         imgSrc: ["'self'", "data:", "https://images.unsplash.com"],
-        connectSrc: ["'self'", "http://localhost:5000", "http://localhost:5173"],
+        connectSrc: cspConnectSrc,
       },
     },
   })
@@ -65,24 +73,41 @@ app.set('trust proxy', 1); // Required for rate limiting behind proxies
 
 // ── CORS ──────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
-  process.env.FRONTEND_ORIGIN || 'http://localhost:5174',
+  process.env.FRONTEND_ORIGIN,
   'http://localhost:5173',
+  'http://localhost:5174',
   'http://localhost:3000',
-];
+  'http://127.0.0.1:5173',
+  'http://127.0.0.1:5174',
+  'http://127.0.0.1:3000',
+].filter(Boolean);
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      // Allow requests with no origin (e.g., curl, mobile apps)
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error(`CORS blocked: ${origin}`));
+      // Allow requests with no origin (e.g., curl, mobile apps, Postman)
+      if (!origin) return callback(null, true);
+
+      // In development, allow any localhost or 127.0.0.1 origin
+      const isLocalhost = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/.test(origin);
+      if (process.env.NODE_ENV !== 'production' && isLocalhost) {
+        return callback(null, true);
       }
+
+      try {
+        const host = new URL(origin).hostname;
+        if (host.endsWith('.vercel.app')) return callback(null, true);
+      } catch (e) {}
+
+      if (allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+
+      return callback(null, false);
     },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept'],
   })
 );
 
