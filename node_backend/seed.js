@@ -18,7 +18,8 @@ const CmsContent = require('./src/models/CmsContent');
 
 const seed = async () => {
   try {
-    await mongoose.connect(process.env.MONGO_URI);
+    const mongoUri = process.env.MONGO_URI || process.env.ATLAS_MONGO_URI;
+    await mongoose.connect(mongoUri);
     console.log('✅ Connected to MongoDB');
 
     // 1. Create SuperAdmin
