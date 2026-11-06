@@ -9,6 +9,7 @@ process.on("uncaughtException", (err) => {
 const app = require("./app");
 const connectDB = require("./src/config/db");
 const mongoose = require("mongoose");
+const { startKeepAlive } = require("./src/services/keepAlive.service");
 
 const PORT = process.env.PORT || 5000;
 let server;
@@ -25,6 +26,9 @@ const startServer = async () => {
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(`📡 API: http://localhost:${PORT}`);
       console.log("=================================");
+
+      // Start automatic keep-alive ping for Render free tier
+      startKeepAlive();
     });
   } catch (error) {
     console.error("❌ Failed to start server:", error);
