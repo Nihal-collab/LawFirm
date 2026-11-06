@@ -1,7 +1,20 @@
 import axios from 'axios';
 
 const getBaseURL = () => {
-  let url = (import.meta.env.VITE_API_URL || 'https://lawfirm-5e2a.onrender.com/api/').trim();
+  // If explicitly specified in environment (e.g. Vercel dashboard environment variables)
+  let url = import.meta.env.VITE_API_URL;
+
+  if (!url) {
+    // In local development (npm run dev), use local backend
+    if (import.meta.env.DEV) {
+      url = 'http://localhost:5000/api/';
+    } else {
+      // In production builds (Vercel deployment), default to live Render backend
+      url = 'https://roots-ip1.onrender.com/api/';
+    }
+  }
+
+  url = url.trim();
   if (!url.endsWith('/')) url += '/';
   if (!url.endsWith('/api/')) {
     url = url.replace(/\/+$/, '') + '/api/';

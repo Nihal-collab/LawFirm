@@ -9,7 +9,7 @@ function startKeepAlive() {
   const targetUrl =
     process.env.RENDER_EXTERNAL_URL ||
     process.env.BACKEND_URL ||
-    'https://lawfirm-5e2a.onrender.com';
+    'https://roots-ip1.onrender.com';
 
   if (!targetUrl || process.env.NODE_ENV !== 'production') {
     return;
