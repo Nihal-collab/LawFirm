@@ -85,7 +85,7 @@ const Home = () => {
   };
 
   const [services, setServices] = useState(servicesData);
-  const [team, setTeam] = useState(teamData);
+  const [team, setTeam] = useState([]);
   const [testimonials, setTestimonials] = useState(testimonialsData.slice(0, 3));
   const [blogs, setBlogs] = useState(blogsData.slice(0, 2));
 
@@ -144,7 +144,7 @@ const Home = () => {
       try {
         const [servicesRes, teamRes, testimonialsRes, blogsRes, cmsRes, videosRes] = await Promise.all([
           API.get('services').catch(() => ({ data: servicesData })),
-          API.get('team').catch(() => ({ data: teamData })),
+          API.get('team').catch(() => ({ data: [] })),
           API.get('testimonials').catch(() => ({ data: testimonialsData })),
           API.get('blogs').catch(() => ({ data: blogsData })),
           API.get('cms/content/home').catch(() => ({ data: { content: homeContent } })),
@@ -152,7 +152,7 @@ const Home = () => {
         ]);
 
         if (servicesRes.data && servicesRes.data.length > 0) setServices(servicesRes.data);
-        if (teamRes.data && teamRes.data.length > 0) setTeam(teamRes.data);
+        if (Array.isArray(teamRes.data)) setTeam(teamRes.data);
         if (testimonialsRes.data) setTestimonials(testimonialsRes.data.slice(0, 3));
         if (blogsRes.data) setBlogs(blogsRes.data.slice(0, 2));
         if (cmsRes.data && cmsRes.data.content && Object.keys(cmsRes.data.content).length > 0) {

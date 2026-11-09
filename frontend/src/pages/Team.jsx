@@ -48,7 +48,12 @@ const Team = () => {
 
         {/* Members Grid */}
         <div className="outcomes-grid pt-4">
-          {displayMembers.map((m) => {
+          {displayMembers.length === 0 ? (
+            <div className="col-span-full text-center text-[#94A3B8] py-16 bg-[#111827] border border-white/8 rounded-[20px] text-xs uppercase tracking-wider font-sans">
+              Our attorney roster is currently being updated.
+            </div>
+          ) : (
+            displayMembers.map((m) => {
             const isExpanded = !!expandedBios[m.name];
             return (
               <div 
@@ -126,7 +131,7 @@ const Team = () => {
 
               </div>
             );
-          })}
+          }))}
         </div>
       </div>
     </div>
