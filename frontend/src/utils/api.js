@@ -9,8 +9,8 @@ const getBaseURL = () => {
     if (import.meta.env.DEV) {
       url = 'http://localhost:5000/api/';
     } else {
-      // In production builds (Vercel deployment), default to live Render backend
-      url = 'https://roots-ip1.onrender.com/api/';
+      // In production builds (Vercel deployment), default to custom domain backend
+      url = 'https://api.rootsip.com/api/';
     }
   }
 

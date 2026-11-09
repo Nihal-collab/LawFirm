@@ -390,7 +390,7 @@ const AdminDashboard = () => {
   // Export consultations leads to CSV
   const handleExportCSV = () => {
     const accessToken = localStorage.getItem('access_token');
-    window.open(`http://localhost:5000/api/consultations/export_csv/?token=${accessToken}`, '_blank');
+    window.open(`${API.defaults.baseURL}consultations/export_csv/?token=${accessToken}`, '_blank');
   };
 
   const getFilteredConsultations = () => {
@@ -501,11 +501,17 @@ const AdminDashboard = () => {
   const handleDeleteTeamMember = async (id) => {
     if (!window.confirm('Delete this lawyer profile permanently?')) return;
     try {
+      if (typeof id === 'number' || (typeof id === 'string' && id.length !== 24)) {
+        setTeam((prev) => prev.filter((item) => item.id !== id));
+        showToast('Demo profile removed locally. Run seed script or create a new member to save in MongoDB.', 'info');
+        return;
+      }
       await API.delete(`team/${id}`);
       showToast('Team member deleted successfully.', 'success');
       loadAdminData();
     } catch (err) {
-      showToast('Failed to delete team member.', 'error');
+      const msg = err.response?.data?.detail || err.response?.data?.message || 'Failed to delete team member.';
+      showToast(msg, 'error');
     }
   };
 

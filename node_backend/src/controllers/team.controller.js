@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const Team = require('../models/Team');
 const asyncHandler = require('../utils/asyncHandler');
 
@@ -32,9 +33,14 @@ const createTeamMember = asyncHandler(async (req, res) => {
 
 // PUT /api/team/:id (Admin only)
 const updateTeamMember = asyncHandler(async (req, res) => {
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({ detail: `Invalid team member ID: "${id}". A valid 24-character MongoDB ObjectId is required.` });
+  }
+
   const { name, role, image_url, bio, qualifications, experience, linkedin_url, twitter_url, email } = req.body;
 
-  const member = await Team.findById(req.params.id);
+  const member = await Team.findById(id);
   if (!member) {
     return res.status(404).json({ detail: 'Team member not found.' });
   }
@@ -55,9 +61,16 @@ const updateTeamMember = asyncHandler(async (req, res) => {
 
 // DELETE /api/team/:id (Admin only)
 const deleteTeamMember = asyncHandler(async (req, res) => {
-  const member = await Team.findByIdAndDelete(req.params.id);
+  const { id } = req.params;
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(400).json({
+      detail: `Invalid team member ID: "${id}". MongoDB requires a 24-character hexadecimal ObjectId. If this is a static demo member (e.g. ID 1), run the database seed script to populate real records in MongoDB.`
+    });
+  }
+
+  const member = await Team.findByIdAndDelete(id);
   if (!member) {
-    return res.status(404).json({ detail: 'Team member not found.' });
+    return res.status(404).json({ detail: 'Team member not found in database.' });
   }
   res.status(200).json({ detail: 'Team member deleted successfully.' });
 });

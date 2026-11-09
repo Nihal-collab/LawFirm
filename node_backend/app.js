@@ -33,7 +33,13 @@ app.set('strict routing', false);  // Allow trailing slashes (e.g., /api/videos/
 app.set('case sensitive routing', false);
 
 // ── Security Middleware ──────────────────────────────────────────────────────
-const cspConnectSrc = ["'self'", "https://*.vercel.app"];
+const cspConnectSrc = [
+  "'self'",
+  "https://*.vercel.app",
+  "https://rootsip.com",
+  "https://www.rootsip.com",
+  "https://api.rootsip.com",
+];
 if (process.env.NODE_ENV !== 'production') {
   cspConnectSrc.push("http://localhost:5000", "http://localhost:5173", "http://127.0.0.1:5173");
 }
@@ -74,6 +80,9 @@ app.set('trust proxy', 1); // Required for rate limiting behind proxies
 // ── CORS ──────────────────────────────────────────────────────────────────────
 const allowedOrigins = [
   process.env.FRONTEND_ORIGIN,
+  'https://rootsip.com',
+  'https://www.rootsip.com',
+  'https://api.rootsip.com',
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:3000',
@@ -97,6 +106,7 @@ app.use(
       try {
         const host = new URL(origin).hostname;
         if (host.endsWith('.vercel.app')) return callback(null, true);
+        if (host === 'rootsip.com' || host.endsWith('.rootsip.com')) return callback(null, true);
       } catch (e) {}
 
       if (allowedOrigins.includes(origin)) {
