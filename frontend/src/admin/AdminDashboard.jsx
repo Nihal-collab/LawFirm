@@ -225,13 +225,13 @@ const AdminDashboard = () => {
         API.get('cms/content/about').catch(() => ({ data: { content: staticAbout } })),
       ]);
 
-      const mappedBlogs = mapMongoId(blogsRes.data.length > 0 ? blogsRes.data : staticBlogs);
-      const mappedFaqs = mapMongoId(faqsRes.data.length > 0 ? faqsRes.data : staticFaqs);
-      const mappedTestimonials = mapMongoId(testimonialsRes.data.length > 0 ? testimonialsRes.data : staticTestimonials);
-      const mappedTeam = mapMongoId(teamRes.data.length > 0 ? teamRes.data : staticTeam);
-      const mappedServices = mapMongoId(servicesRes.data.length > 0 ? servicesRes.data : staticServices);
-      const mappedGallery = mapMongoId(galleryRes.data.length > 0 ? galleryRes.data : staticGallery);
-      const mappedSuccess = mapMongoId(successRes.data.length > 0 ? successRes.data : staticSuccess);
+      const mappedBlogs = mapMongoId(blogsRes.data || []);
+      const mappedFaqs = mapMongoId(faqsRes.data || []);
+      const mappedTestimonials = mapMongoId(testimonialsRes.data || []);
+      const mappedTeam = mapMongoId(teamRes.data || []);
+      const mappedServices = mapMongoId(servicesRes.data || []);
+      const mappedGallery = mapMongoId(galleryRes.data || []);
+      const mappedSuccess = mapMongoId(successRes.data || []);
 
       setConsultations(consRes.data);
       setVideos(videoRes.data);
@@ -1523,42 +1523,48 @@ const AdminDashboard = () => {
               <div className="lg:col-span-7 space-y-4">
                 <h2 className="text-lg font-serif font-bold text-navy dark:text-white">Attorney Roster</h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-                  {team.map((member) => (
-                    <div key={member.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex flex-col justify-between gap-4 text-xs">
-                      <div className="flex gap-3">
-                        {member.image_url ? (
-                          <img src={member.image_url} alt={member.name} className="w-12 h-12 rounded-full object-cover shrink-0" />
-                        ) : (
-                          <div className="w-12 h-12 bg-slate-100 dark:bg-navy text-slate-400 rounded-full flex items-center justify-center font-bold text-sm shrink-0">
-                            {member.name.split(' ').map(n => n[0]).join('')}
-                          </div>
-                        )}
-                        <div>
-                          <h4 className="font-serif font-bold text-sm text-navy dark:text-white">{member.name}</h4>
-                          <p className="text-xs text-gold font-semibold">{member.role}</p>
-                          <p className="text-[10px] text-slate-400 mt-1">{member.experience} • {member.qualifications}</p>
-                        </div>
-                      </div>
-                      <p className="text-[11px] text-slate-500 line-clamp-3 italic">"{member.bio}"</p>
-                      <div className="flex justify-between items-center border-t pt-2 border-slate-100 dark:border-slate-850">
-                        <span className="text-[10px] text-slate-450 truncate max-w-[130px] sm:max-w-[150px]">{member.email}</span>
-                        <div className="flex gap-1.5">
-                          <button
-                            onClick={() => startEditTeam(member)}
-                            className="p-1.5 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
-                          >
-                            <Edit2 size={12} />
-                          </button>
-                          <button
-                            onClick={() => handleDeleteTeamMember(member.id)}
-                            className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
-                          >
-                            <Trash2 size={12} />
-                          </button>
-                        </div>
-                      </div>
+                  {team.length === 0 ? (
+                    <div className="col-span-full p-8 text-center bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg text-slate-400 text-xs">
+                      No team members in database. Add a new attorney using the form on the right.
                     </div>
-                  ))}
+                  ) : (
+                    team.map((member) => (
+                      <div key={member.id} className="p-4 bg-white dark:bg-navy-accent border border-slate-200 dark:border-slate-800 rounded-lg shadow-sm flex flex-col justify-between gap-4 text-xs">
+                        <div className="flex gap-3">
+                          {member.image_url ? (
+                            <img src={member.image_url} alt={member.name} className="w-12 h-12 rounded-full object-cover shrink-0" />
+                          ) : (
+                            <div className="w-12 h-12 bg-slate-100 dark:bg-navy text-slate-400 rounded-full flex items-center justify-center font-bold text-sm shrink-0">
+                              {member.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                          )}
+                          <div>
+                            <h4 className="font-serif font-bold text-sm text-navy dark:text-white">{member.name}</h4>
+                            <p className="text-xs text-gold font-semibold">{member.role}</p>
+                            <p className="text-[10px] text-slate-400 mt-1">{member.experience} • {member.qualifications}</p>
+                          </div>
+                        </div>
+                        <p className="text-[11px] text-slate-500 line-clamp-3 italic">"{member.bio}"</p>
+                        <div className="flex justify-between items-center border-t pt-2 border-slate-100 dark:border-slate-850">
+                          <span className="text-[10px] text-slate-450 truncate max-w-[130px] sm:max-w-[150px]">{member.email}</span>
+                          <div className="flex gap-1.5">
+                            <button
+                              onClick={() => startEditTeam(member)}
+                              className="p-1.5 text-slate-500 hover:text-gold rounded border border-slate-200 dark:border-slate-800"
+                            >
+                              <Edit2 size={12} />
+                            </button>
+                            <button
+                              onClick={() => handleDeleteTeamMember(member.id)}
+                              className="p-1.5 text-rose-500 hover:bg-rose-500/10 rounded border border-rose-500/10"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+                    ))
+                  )}
                 </div>
               </div>
 
